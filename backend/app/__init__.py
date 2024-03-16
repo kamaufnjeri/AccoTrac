@@ -6,7 +6,9 @@ from config import Config
 
 """Set up flask"""
 app = Flask(__name__)
-db = SQLAlchemy(app)
 app.config.from_object(Config)
+db = SQLAlchemy(app)
 cors = CORS(app, origins="http://localhost")
 migrate = Migrate(app, db)
+
+from app.routes import *

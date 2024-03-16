@@ -1,38 +1,27 @@
 from app import db
-from base import Base, user_company_association
+from datetime import datetime
+import uuid
+from .user_company import UserCompanyAssociation
 
 
-class User(db.Model, Base):
-    __tablename__ = 'users'
-
-    username = db.Column(db.String(64), nullable=False, unique=True)
+class User(db.Model):
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    companies = db.relationship('Company', secondary=user_company_association, backref='users')
+    accounts = db.relationship('Account', backref='users', lazy=True)
+
+
+    def __init__(self, **kwargs):
+        self.id = str(uuid.uuid4())
+        super(User, self).__init__(**kwargs)
 
     def get_role_for_company(self, company_id):
         """get role of user for a specific company"""
-        association = user_company_association.query.filter_by(
+        association = UserCompanyAssociation.query.filter_by(
             user_id=self.id,
             company_id=company_id
         ).first()
         return association.role if association else None
     
-    def set_user_role(self, user_id, is_admin=False):
-        """get the association from database to see if it exists"""   
-        association = user_company_association.query.filter_by(
-            user_id=user_id,
-            company_id=self.id
-        ).first()
-
-        if association:
-            """if association is present then update"""
-            association.is_admin = is_admin
-        else:
-            """if it does not exist then we create a new one"""
-            association = user_company_association.insert().values(
-                user_id=user_id,
-                company_id=self.id,
-                is_admin=is_admin
-            )
-        db.session.execute(association)
-        db.session.commit()
