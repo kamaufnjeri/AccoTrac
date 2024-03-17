@@ -1,7 +1,6 @@
 from app.models import User, Account, Company, db
 
 
-
 chart_of_accounts = {
     'asset': {
         'cash': ['Cash'],

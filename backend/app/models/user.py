@@ -10,7 +10,10 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    accounts = db.relationship('Account', backref='users', lazy=True)
+    accounts = db.relationship('Account', backref='user', lazy=True)
+    transactions = db.relationship('Transaction', backref='user', lazy=True)
+    stocks = db.relationship('Stock', backref='user', lazy=True)
+    stock_entries = db.relationship('StockEntry', backref='account', lazy=True)
 
 
     def __init__(self, **kwargs):

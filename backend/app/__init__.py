@@ -12,3 +12,5 @@ cors = CORS(app, origins="http://localhost")
 migrate = Migrate(app, db)
 
 from app.routes import *
+app.register_blueprint(transaction_bp)
+app.register_blueprint(stock_bp)

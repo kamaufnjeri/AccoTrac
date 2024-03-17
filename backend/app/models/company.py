@@ -9,6 +9,9 @@ class Company(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     name = db.Column(db.String(128), nullable=False, unique=True)
     accounts = db.relationship('Account', backref='company', lazy=True)
+    transactions = db.relationship('Transaction', backref='company', lazy=True)
+    stocks = db.relationship('Stock', backref='company', lazy=True)
+
 
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
