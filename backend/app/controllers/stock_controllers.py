@@ -32,6 +32,7 @@ class StockControllers:
 
     def get_all_stocks(self, company_id):
         company = Company.query.filter_by(id=company_id).first()
+        print(company)
 
         if not company:
             raise Exception(f"The company ID {company_id} doesn't exist")

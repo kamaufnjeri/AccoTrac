@@ -11,7 +11,7 @@ class Stock(db.Model):
     total_quantity = db.Column(db.Integer, default=0)
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
-    entries = db.relationship('StockEntries', backref='stock')
+    entries = db.relationship('StockEntries', backref='stock', lazy=True)
 
     def get_sorted_purchase_entries(self):
         non_zero_entries = [

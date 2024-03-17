@@ -42,9 +42,12 @@ class PurchaseTransactionControllers:
                         raise ValueError("The entry is not a purchase")
                 
                 for stock_data in stocks:
-                    stock = Stock.query.get(stock_data.get("stock_id"))
-                    if not stock:
-                        raise ValueError(f"Stock with ID {stock.get('stock_id')} not found.")
+                    stock = Stock.query.filter_by(
+                        id=stock_data.get("stock_id"),
+                        company_id=company_id
+                    ).first()
+                    if not None:
+                        raise ValueError(f"Stock with ID {stock_data.get('stock_id')} not found.")
                     
                     inventory_account_id = data.get("entries")[0].get("account_id")
                     inventory_account = Account.query.filter_by(
@@ -82,6 +85,4 @@ class PurchaseTransactionControllers:
         except ValueError as e:
             db.session.rollback()
             return "Error entering the purchase transaction", 400, str(e)
-        except Exception as e:
-            db.session.rollback()
-            return "Unxepected error when entering purchase transaction", 500, str(e)
+        
