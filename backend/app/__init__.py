@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
 from config import Config
+from flask_login import LoginManager
 
 """Set up flask"""
 app = Flask(__name__)
@@ -10,5 +11,6 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 cors = CORS(app, origins="http://localhost")
 migrate = Migrate(app, db)
+login = LoginManager(app)
 
 from app.routes import *
