@@ -13,4 +13,5 @@ cors = CORS(app, origins="http://localhost")
 migrate = Migrate(app, db)
 login = LoginManager(app)
 
+
 from app.routes import *
