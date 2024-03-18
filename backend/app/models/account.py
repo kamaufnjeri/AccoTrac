@@ -28,7 +28,7 @@ class Account(db.Model):
             "category": self.category,
             "sub_category": self.sub_category,
             "id": self.id,
-            "company_id": self.id,
+            "company_id": self.company_id,
             "debit_total": self.debit_total,
             "credit_total": self.credit_total,
             "entries": [

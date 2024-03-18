@@ -34,5 +34,27 @@ def add_sales_transaction(company_id):
         return "", 204
     else:
         message, code, response_item = sales_transaction_controllers.create_sales_journal(company_id, data)
+        return jsonify({"message": message, "response": response_item}), code
+    
+    
+@transaction_bp.route('/<string:company_id>/purchasereturn', methods=['POST'])
+def purchase_return_transaction(company_id):
+    data = request.get_json()
+    if not data:
+        return "", 204
+    else:
+        message, code, response_item = purchase_transacton_controllers.purchase_return_journal(company_id, data)
+
+        return jsonify({"message": message, "response": response_item}), code
+    
+    
+@transaction_bp.route('/<string:company_id>/salesreturn', methods=['POST'])
+def sales_return_transaction(company_id):
+    data = request.get_json()
+    if not data:
+        return "", 204
+    else:
+        message, code, response_item = sales_transaction_controllers.sales_return_journal(company_id, data)
         print(message)
         return jsonify({"message": message, "response": response_item}), code
+    

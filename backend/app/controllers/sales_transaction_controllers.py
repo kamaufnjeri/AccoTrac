@@ -1,10 +1,12 @@
 from app import db
 from app.models import Stock, StockEntries, Account
 from .general_transaction_controllers import GeneralTransactionControllers
+from app.utils import TransactionUtils
 from datetime import datetime
 
 
 transaction = GeneralTransactionControllers()
+sales_utils = TransactionUtils()
 
 
 class SalesTransactionControllers:
@@ -113,34 +115,26 @@ class SalesTransactionControllers:
                     if not cogs:
                         raise ValueError("Insufficient inventory to sell the specified quantity")
                     total_cost_goods_sold += cogs
-                    sales_account_id = data.get('entries')[-1].get('account_id')
-                    
-                    sales_account = Account.query.filter_by(
-                        id=sales_account_id,
-                        company_id=company_id
-                    ).first()
-
-                    if (not sales_account) or (
-                        sales_account.category != "revenue"
-                        and sales_account.sub_category != "sales_revenue"
-                    ):
-
-                        raise ValueError("The account is not a sales revenue account")
+        
+                    receipt_account = sales_utils.get_stock_entries_account(
+                        company_id, data.get('entries'), data.get('category')
+                    )
+                    if not receipt_account:
+                        raise ValueError("The Cash, Bank or Account Receivable accounts not found")
                     
                     stock_entry = StockEntries(
                         stock_id=stock.id,
-                        account_id=sales_account.id,
+                        account_id=receipt_account.id,
                         quantity=stock_data.get("units"),
                         remaining_quantity=0,
                         price=stock_data.get("price", 0),
                         category=data.get("category"),
+                        cogs=cogs,
                         date=datetime.strptime(data.get("date"), '%Y-%m-%d')
                     )
                     db.session.add(stock_entry)
 
             credit_totals = sum(entry.get("credit", 0.0) for entry in data.get("entries", []))
-
-            print(total_sales_price, credit_totals, total_cost_goods_sold)
 
             if credit_totals != total_sales_price:
                 raise ValueError("Credit totals do not match calculated sales price.")
@@ -192,3 +186,125 @@ class SalesTransactionControllers:
         except Exception as e:
             db.session.rollback()
             return "Unexpected error entering transaction", 500, str(e)
+
+    def sales_return_journal(self, company_id, data):
+        """
+        Recording return of stocks to supplier or correcting a wrong
+        purchase entry
+        {
+            "date": "2023-10-27",
+            "description": "return of goods sod from mr kaseem on cash",
+            "category": "purchase return",
+            "stock_entry_id": 4,
+            "units": 5
+        }
+        """
+        try:
+            stock_entry_id = data.get('stock_entry_id')
+            stock_entry = StockEntries.query.filter_by(
+                id=stock_entry_id
+            ).first()
+            return_units = data.get('units')
+            
+            if data.get("category") != "sales return":
+                raise ValueError("The transaction is not a sales return")
+            
+            if not stock_entry:
+                raise ValueError(f"The stock entry of ID {stock_entry.id} was not found")
+
+            if stock_entry.category != "sales":
+                raise ValueError(f"Stock entry ID {stock_entry.id} is not a sales")
+            
+            stock = Stock.query.filter_by(
+                id=stock_entry.stock_id,
+                company_id=company_id
+            ).first()
+
+            if not stock:
+                raise ValueError(f"The stock of ID {stock.id} was not found")
+
+            
+            if stock_entry.quantity < return_units or (
+                (stock_entry.remaining_quantity + return_units) >
+                stock_entry.quantity
+            ):
+                raise ValueError(
+                    f"Returned items {return_units} exceeds items sold {stock_entry.quantity}"
+                )
+
+            stock.total_quantity += return_units
+            print(stock_entry.to_dict())
+            stock_entry.remaining_quantity += return_units
+            total_sales = return_units * stock_entry.price
+
+            cogs = stock_entry.cogs / stock_entry.quantity * return_units
+            new_stock_entry = StockEntries(
+                stock_id=stock.id,
+                account_id=stock_entry.account_id,
+                quantity=return_units,
+                remaining_quantity=0,
+                price=stock_entry.price,
+                category=data.get("category"),
+                date=datetime.strptime(data.get("date"), '%Y-%m-%d'),
+                cogs=cogs
+            )
+            db.session.add(new_stock_entry)
+            sales_account = Account.query.filter_by(
+                company_id=company_id,
+                category="revenue",
+                sub_category="sales_revenue"
+            ).first()
+            receipt_account = Account.query.filter_by(
+                company_id=company_id,
+                id=stock_entry.account_id
+            ).first()
+
+            if not sales_account or not receipt_account:
+                raise ValueError("The accounts needed to adjust the sales return not found")
+            
+            data = {
+                "date": data.get('date'),
+                "description": data.get('description'),
+                "entries": [
+                    {"account_id": sales_account.id, "debit": total_sales, "credit": 0},
+                    {"account_id": receipt_account.id, "debit": 0, "credit": total_sales}
+                ]
+            }
+            message, code, resp_item = transaction.create_general_journal(company_id, data)
+            if code != 201:
+                raise ValueError(resp_item)
+            
+            inventory_account = Account.query.filter_by(
+                company_id=company_id,
+                category="asset",
+                sub_category="inventory"
+            ).first()
+            cogs_account = Account.query.filter_by(
+                company_id=company_id,
+                category="expense",
+                sub_category="cost_of_goods_sold"
+            ).first()
+            if not cogs_account or not inventory_account:
+                raise ValueError("The accounts needed to adjust the sales return not found")
+            
+            cogs_data = {
+                "date": data.get('date'),
+                "description": data.get('description'),
+                "entries": [
+                {"account_id": inventory_account.id, "debit": cogs, "credit": 0},
+                    {"account_id": cogs_account.id, "debit": 0, "credit": cogs}
+                ]
+            }
+            adj_msg, adj_code, adj_item = transaction.create_general_journal(company_id, cogs_data)
+            if adj_code != 201:
+                raise ValueError(adj_item)
+
+            db.session.commit()
+            return "Sales return entry was successful", 201, resp_item
+                
+        except ValueError as ve:
+            db.session.rollback()
+            return "Error when entering sales return", 400, str(ve)
+        except Exception as e:
+            db.session.rollback()
+            return "Unexpected error entering sales return", 500, str(e)

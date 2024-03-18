@@ -20,10 +20,6 @@ chart_of_accounts = {
     },
     'expense': {
         'cost_of_goods_sold': ['Cost of Goods Sold']
-    },
-    'contra': {
-        'sales_returns': ['Sales Returns'],
-        'purchase_returns': ['Purchase returns']
     }
 }
 
@@ -44,6 +40,7 @@ def create_user_company(company_name, user_email, username):
         db.session.add(user)
         db.session.add(company)
         company.set_user_role(user.id, is_admin=True)
+        print(company.id)
         
         for category, subcategories in chart_of_accounts.items():
             for subcategory, accounts in subcategories.items():

@@ -12,10 +12,9 @@ class StockControllers:
         
         try:
             quantity = 0
+            name = data.get("name")
 
             if name:
-                name = data.get("name")
-
                 new_stock = Stock(
                     company_id=company_id,
                     name=name,
@@ -46,3 +45,12 @@ class StockControllers:
 
         except Exception as e:
             return "Error fetching stocks! Try again later!", 500, str(e)
+        
+    def update_stock(company_id, stock_id, data):
+        pass
+
+    def delete_stock(company_id, stock_id):
+        pass
+
+    def get_stock(company_id, stock_id):
+        pass
