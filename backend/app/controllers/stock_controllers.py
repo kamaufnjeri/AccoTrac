@@ -19,7 +19,7 @@ class StockControllers:
             if name:
                 new_stock = Stock(
                     company_id=company_id,
-                    user_id=user_id
+                    user_id=user_id,
                     name=name,
                     total_quantity=quantity
                 )
@@ -27,6 +27,8 @@ class StockControllers:
                 db.session.commit()
 
                 return "Stock added successful", 201, new_stock.to_dict()
+            else:
+                raise Exception("Name field is required for creating a stock item")
         
         except Exception as e:
             db.session.rollback()
@@ -47,7 +49,7 @@ class StockControllers:
         except Exception as e:
             return "Error fetching stocks! Try again later!", 500, str(e)
         
-   def update_stock(self, company_id, stock_id, data):
+    def update_stock(self, company_id, stock_id, data):
         try:
             company = Company.query.filter_by(id=company_id).first()
             stock = Stock.query.filter_by(id=stock_id).first()
@@ -57,7 +59,11 @@ class StockControllers:
             if not stock:
                 raise Exception(f"The stock ID {stock_id} doesn't exist")
             
-            stock.name = data.get("name")
+            name = data.get("name")
+            if name is not None:
+                stock.name = name
+            else:
+                raise Exception("Name field is required for updating a stock item")
             
             db.session.commit()
             return "Successfully updated stock", 200, stock
@@ -89,7 +95,7 @@ class StockControllers:
             return "Error deleting stock", 500, str(e)
 
 
-    def get_stock(self, company, stock_id):
+    def get_stock(self, company_id, stock_id):
         try:
             company = Company.query.filter_by(id=company_id).first()
             stock = Stock.query.filter_by(id=stock_id).first()
