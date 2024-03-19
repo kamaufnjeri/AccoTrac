@@ -1,11 +1,12 @@
 from app.models.user import User
 from app.models.account import db
 from flask_login import current_user, login_user
+from typing import Tuple, Union
 
 
 """create a user"""
-def register_user(firstname, lastname, user_email, password):
-    """returns result either a userID or an error and a status code"""
+def register_user(firstname: str, lastname:str, user_email:str, password:str) -> Tuple[Union[str, User], int]:
+    """returns new user or error with appropriate status code"""
     try:
         user_exist = User.query.filter_by(email=user_email).first()
         if user_exist:
@@ -19,10 +20,10 @@ def register_user(firstname, lastname, user_email, password):
         return newuser, 200
     except Exception as e:
         db.session.rollback()
-        return str(e), 400
+        return (str(e), 400)
 
-def get_user(user_email, password):
-    """returns result user if exist, and status code or error"""
+def get_user(user_email:str, password:str) -> Tuple[Union[str, User], int]:
+    """returns user if exist or error with appropriate status code"""
     try:
         user = User.query.filter_by(email=user_email).first()
         if not user:
@@ -31,7 +32,7 @@ def get_user(user_email, password):
         if not valid_password:
             raise ValueError('Wrong password')
         login_user(user)
-        return f'{current_user.firstname} logged in', 200
+        return current_user, 200
     except Exception as e:
         db.session.rollback()
-        return str(e), 400
+        return (str(e), 400)
