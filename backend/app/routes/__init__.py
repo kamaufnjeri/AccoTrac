@@ -1,8 +1,8 @@
 from app import app
 from app.utils.accountsutils import create_user_company
-from app.utils.userutils import register_user, get_user
+from app.utils.userutils import register_user, get_user, update_userinfo
 from flask import request, jsonify
-from flask_login import current_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from typing import Tuple, Union
 
 
@@ -29,7 +29,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
         return jsonify({'result': result}), code
 
     if request.method == 'GET':
-        message = {'message': 'HTML signup page coming soon'}
+        message = {'message': 'Signup page coming soon'}
         return jsonify(message), 200
 
 @app.route('/createcompany', methods=['POST'], strict_slashes=False)
@@ -61,12 +61,19 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
         password = data.get('password')
         if not email or not password:
             return jsonify(message), 404
-        user, code = get_user(email, password)
+        user, code = get_user(user_email=email, password=password)
+        if isinstance(user, str):
+            # means there was an error
+            error = user
+            message = {'error': error}
+            return jsonify(message), code
+        login_user(user)
         message = {'Logged in': f'{user.is_authenticated}',
+                   'userID': f'{user.id}',
                        'user': f'{user.firstname}'}
         return jsonify(message), code
     elif request.method == 'GET':
-        message = {"Message": "Login HTML coming soon"}
+        message = {"Message": "Login Page coming soon"}
         return jsonify(message), 200
 
 @app.route('/logout', methods=['POST'], strict_slashes=False)
@@ -77,3 +84,27 @@ def logout() -> Union[jsonify, Tuple[dict, int]]:
     logout_user()
     message = {'Logged in': f'{current_user.is_authenticated}'}
     return jsonify(message), 200
+
+
+@app.route('/updateuser/<id>', methods=['GET', 'PUT'], strict_slashes=False)
+@login_required
+def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
+    """updates user information
+    PUT: Returns username and updated information
+    GET: Returns update page
+    """
+    if request.method == 'PUT':
+        if current_user.id == id:
+            user, code = get_user(user_email=current_user.email)
+            data = request.get_json()
+            if not data:
+                message = {'message': 'provide information to update'}
+                return jsonify(message), 400
+            user, code = update_userinfo(user, data)
+            return jsonify(user.to_dict()), code
+        else:
+            message = {'message': 'You are not allowed to update this user information'}
+            return jsonify(message), 401
+    elif request.method == 'GET':
+        message = {"Message": "Update Page coming soon"}
+        return jsonify(message), 200
