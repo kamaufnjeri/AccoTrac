@@ -16,6 +16,7 @@ class StockEntries(db.Model):
     date = db.Column(db.Date)
     category = db.Column(db.String(255))
     cogs = db.Column(db.Integer, default=0)
+    description = db.Column(db.String(255))
 
 
     def to_dict(self):
@@ -27,5 +28,6 @@ class StockEntries(db.Model):
             "price": self.price,
             "date": self.date,
             "category": self.category,
+            "description": self.description,
             "cost_of_goods_sold": self.cogs
         }
