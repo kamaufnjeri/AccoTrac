@@ -69,7 +69,7 @@ class SalesTransactionControllers:
                             "description": "Sales to customer x",
                             "category": "sales",
                             "entries": [
-                                {"account_id": 1, "debit": 1000.0, "credit": 0.0},  # Inventory
+                                {"account_id": 1, "debit": 1000.0, "credit": 0.0},  #
                                 {"account_id": 2, "debit": 0.0, "credit": 1000.0},  # Accounts Payable
                             ],
                             "stocks": [

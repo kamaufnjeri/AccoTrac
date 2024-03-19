@@ -30,7 +30,7 @@ class GeneralTransactionControllers:
                 "description": "Salary Payment",
                 "entries": [
                     {"account_id": 1, "debit": 0.0, "credit": 1000.0},
-                    {"account_id": 2, "debit": 1000.0, "credit": 0.0}
+                    {"account_id": 2, "debit": 1000.0, "credit": 0.0},
                 ]
             }
 
