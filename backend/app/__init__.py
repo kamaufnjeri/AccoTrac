@@ -15,3 +15,8 @@ login = LoginManager(app)
 
 
 from app.routes import *
+# handle 401 error
+@app.errorhandler(401)
+def custom_401(error):
+    message = {'error': str(error)}
+    return jsonify(message), 401

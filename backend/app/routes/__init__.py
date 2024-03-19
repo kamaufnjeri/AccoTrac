@@ -1,10 +1,14 @@
 from app import app
-from app.utils.accountsutils import create_user_company
+from app.utils.companyutils import create_new_company, get_company_by_user_id
 from app.utils.userutils import register_user, get_user, update_userinfo
 from flask import request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from typing import Tuple, Union
 
+
+@app.route('/', methods=['GET', 'POST'], strict_slashes=False)
+def home():
+    return('<h1> AccoTrac Coming soon</h1>')
 
 @app.route('/createuser', methods=['GET', 'POST'], strict_slashes=False)
 def create_user() -> Union[jsonify, Tuple[dict, int]]:
@@ -31,13 +35,6 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
     if request.method == 'GET':
         message = {'message': 'Signup page coming soon'}
         return jsonify(message), 200
-
-@app.route('/createcompany', methods=['POST'], strict_slashes=False)
-def create_company():
-    data = request.get_json()
-    message, code = create_user_company(data['company_name'], data['user_email'], data['user_name'])
-
-    return jsonify({ "message": message}), code
 
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login()-> Union[jsonify, Tuple[dict, int]]:
@@ -74,7 +71,7 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
         return jsonify(message), code
     elif request.method == 'GET':
         message = {"Message": "Login Page coming soon"}
-        return jsonify(message), 200
+        return (jsonify(message), 200)
 
 @app.route('/logout', methods=['POST'], strict_slashes=False)
 def logout() -> Union[jsonify, Tuple[dict, int]]:
@@ -107,4 +104,23 @@ def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
             return jsonify(message), 401
     elif request.method == 'GET':
         message = {"Message": "Update Page coming soon"}
+        return jsonify(message), 200
+
+@app.route('/createcompany', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def create_company():
+    if request.method == 'POST':
+        data = request.get_json()
+        company_name = data.get('company_name')
+        user_id = current_user.id
+        if not company_name:
+            message = {'message': 'company_name is required'}
+            return jsonify(message), 400
+        message, code = create_new_company(company_name, user_id)
+        return jsonify({ "message": message}), code
+    elif request.method == 'GET':
+        # get companies associated with current user
+        companies = get_company_by_user_id(current_user.id)
+        # message = {"Message": "Create company Page coming soon"}
+        message = {"Message": companies}
         return jsonify(message), 200
