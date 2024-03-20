@@ -1,5 +1,7 @@
 from app.models import StockEntries, Company
-class SockEntriesControllers:
+
+
+class StockEntriesControllers:
     def get_entries_by_category(company_id, category):
         try:
             company = Company.query.filter_by(id=company_id).first()
@@ -21,3 +23,7 @@ class SockEntriesControllers:
 
         except Exception as e:
             return "Error fetching stock entries", 500, str(e)
+
+
+    def get_stock_entries_by_date():
+        pass

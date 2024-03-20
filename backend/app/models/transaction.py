@@ -11,7 +11,8 @@ class Transaction(db.Model):
     description = db.Column(db.Text)
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
-    entries = db.relationship('JournalEntry', backref='transaction', lazy=True)
+    journal_entries = db.relationship('JournalEntry', backref='transaction', lazy=True)
+    stock_entries = db.relationship('StockEntry', backref='transaction', lazy=True)
     
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
@@ -24,5 +25,5 @@ class Transaction(db.Model):
             "date": self.date,
             "user_id": self.user_id,
             "company_id": self.company_id,
-            "entries": [entry.to_dict() for entry in self.entries]
+            "entries": [entry.to_dict() for entry in self.journal_entries]
         }

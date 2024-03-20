@@ -1,4 +1,4 @@
-from app.models import Company, Stock
+from app.models import Company, Stock, User
 from app import db
 
 
@@ -35,11 +35,11 @@ class StockControllers:
             return "Unexpected error adding stock", 500, str(e)
 
     def get_all_stocks(self, company_id):
-        company = Company.query.filter_by(id=company_id).first()
-        if not company:
-            raise Exception(f"The company ID {company_id} doesn't exist")
-        
         try:
+            company = Company.query.filter_by(id=company_id).first()
+            if not company:
+                raise Exception(f"The company ID {company_id} doesn't exist")
+        
             stocks = Stock.query.all()
 
             stocks_list = [stock.to_dict() for stock in stocks]

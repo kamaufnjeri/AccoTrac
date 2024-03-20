@@ -13,7 +13,7 @@ class User(db.Model):
     accounts = db.relationship('Account', backref='user', lazy=True)
     transactions = db.relationship('Transaction', backref='user', lazy=True)
     stocks = db.relationship('Stock', backref='user', lazy=True)
-    stock_entries = db.relationship('StockEntries', backref='user', lazy=True)
+    stock_entry = db.relationship('StockEntry', backref='user', lazy=True)
 
 
     def __init__(self, **kwargs):

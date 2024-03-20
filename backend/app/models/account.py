@@ -15,7 +15,7 @@ class Account(db.Model):
     credit_total = db.Column(db.Integer, default=0)
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
-    stock_entries =db.relationship('StockEntries', backref='account', lazy=True)
+    stock_entries =db.relationship('StockEntry', backref='account', lazy=True)
     journal_entries = db.relationship('JournalEntry', backref='account', lazy=True)
 
     def __init__(self, **kwargs):
@@ -31,6 +31,7 @@ class Account(db.Model):
             "company_id": self.company_id,
             "debit_total": self.debit_total,
             "credit_total": self.credit_total,
+            "user_id": self.user_id,
             "entries": [
                 entry.to_dict() for entry in self.journal_entries
             ]
