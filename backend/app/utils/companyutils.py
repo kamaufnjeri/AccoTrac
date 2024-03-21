@@ -33,14 +33,14 @@ chart_of_accounts = {
 
 
 """trial method to create a user, company and accounts"""
-def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
+def create_new_company(company_name: str, company_email: str, user_id: str) -> Tuple[str, int]:
     try:
         company_exist = Company.query.filter_by(
-            name=company_name
+            email=company_email
         ).first()
         if company_exist:
             raise ValueError('Company already exists')
-        company = Company(name=company_name)
+        company = Company(name=company_name, email=company_email)
         db.session.add(company)
         company.set_user_role(user_id, is_admin=True)
 
@@ -57,15 +57,51 @@ def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
                     )
                     db.session.add(account)
         db.session.commit()
-        return "Successfully created company", 201
+        return f"Successfully created {company_name} company", 201
     except Exception as e:
         db.session.rollback()
         return str(e), 400
+
+def get_company(company_id: str) -> Union[Company, None]:
+    """returns a company or none"""
+    company = Company.query.filter_by(id=company_id).first()
+    return company
 
 def get_company_by_user_id(user_id:str) -> Tuple[Union[List, None], int]:
     """Return a list of companies associated with user_id
     or None"""
     companies = UserCompanyAssociation.query.filter_by(user_id=user_id).all()
-    company_names = [company.company.name for company in companies]
-    print(company_names)
-    return company_names
+    new_companies = [company.company.to_dict() for company in companies]
+    return new_companies
+
+def update_companyinfo(company: Company, user:User, data: dict) -> Tuple[Union[str, Company], int]:
+    """updates company information
+    Returns company or error with updated information and appropriate status code
+    """
+    try:
+        # make sure its the admin who created the company updating the company info
+        current_company = UserCompanyAssociation.query.filter_by(company_id=company.id, user_id=user.id).first()
+        if current_company and current_company.user_id == user.id:
+            for key, value in data.items():
+                if key != 'id':
+                    setattr(company, key, value)
+            db.session.commit()
+            return (company, 200)
+        else:
+            return ('you are not allowed to update this company info', 401)
+    except Exception as e:
+        db.session.rollback()
+        return (str(e), 400)
+
+def delete_company(company_id:str):
+    """delete a company"""
+    try:
+        company = get_company(company_id)
+        if not company:
+            return 'company was deleted', 404
+        db.session.delete(company)
+        db.session.commit()
+        return f'{is_deleted} company  deleted successfully', 204
+    except Exception as error:
+        db.session.rollback()
+        return str(error), 400

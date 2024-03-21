@@ -11,7 +11,7 @@ class UserCompanyAssociation(db.Model):
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     user = db.relationship('User', backref=db.backref('user_companies', lazy=True))
-    company = db.relationship('Company', backref=db.backref('company_users', lazy=True))
+    company = db.relationship('Company', backref=db.backref('company_users', lazy=True), cascade="all,delete")
 
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
