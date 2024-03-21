@@ -122,6 +122,9 @@ def logout() -> Union[jsonify, Tuple[dict, int]]:
     """Destroys the Session of current logged in user
     Returns status of current login user
     """
+    if not current_user.is_authenticated:
+        message = {"Message": "Not logged in"}
+        return jsonify(message), 400
     userFirstName = current_user.firstname
     logout_user()
     message = {'Message': 'Logged out Successfully',
@@ -138,14 +141,26 @@ def create_company():
         user_id = current_user.id
         company_name = data.get('company_name')
         if not company_name:
-            message = {'message': 'company_name is required'}
+            message = {'Message': 'company_name is required'}
             return jsonify(message), 400
         company_email = data.get('company_email')
         if not company_email:
-            message = {'message': 'company_email is required'}
+            message = {'Message': 'company_email is required'}
             return jsonify(message), 400
-        message, code = create_new_company(company_name=company_name, company_email=company_email, user_id=user_id)
-        return jsonify({ "message": message}), code
+        company_country = data.get('company_country')
+        if not company_country:
+            message = {'Message': 'company_country is required'}
+            return jsonify(message), 400
+        company_currency = data.get('company_currency')
+        if not company_currency:
+            message = {'Message': 'company_currency is required'}
+            return jsonify(message), 400
+        message, code = create_new_company(company_name=company_name,
+                                           company_email=company_email,
+                                           company_country=company_country,
+                                           company_currency=company_currency,
+                                           user_id=user_id)
+        return jsonify({ "Message": message}), code
     elif request.method == 'GET':
         # get companies associated with current user
         companies = get_company_by_user_id(current_user.id)

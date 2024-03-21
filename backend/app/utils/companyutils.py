@@ -25,7 +25,7 @@ chart_of_accounts = {
     'Expenses': {
         'cost_of_goods_sold': ['Cost of Goods Sold']
     },
-    'Contra': {
+    'Contract': {
         'sales_returns': ['Sales Returns'],
         'purchase_returns': ['Purchase returns']
     }
@@ -33,14 +33,17 @@ chart_of_accounts = {
 
 
 """trial method to create a user, company and accounts"""
-def create_new_company(company_name: str, company_email: str, user_id: str) -> Tuple[str, int]:
+def create_new_company(company_name: str, company_email: str, company_country:str, company_currency:str, user_id: str) -> Tuple[str, int]:
     try:
         company_exist = Company.query.filter_by(
             email=company_email
         ).first()
         if company_exist:
             raise ValueError('Company already exists')
-        company = Company(name=company_name, email=company_email)
+        company = Company(name=company_name,
+                          email=company_email,
+                          country=company_country,
+                          currency=company_currency)
         db.session.add(company)
         company.set_user_role(user_id, is_admin=True)
 
