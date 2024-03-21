@@ -96,7 +96,7 @@ def update_companyinfo(company: Company, user:User, data: dict) -> Tuple[Union[s
         db.session.rollback()
         return (str(e), 400)
 
-def delete_company(company_id:str, user:User):
+def delete_company(company_id:str, user:User) -> Tuple[str, int]:
     """delete a company"""
     try:
         # company = get_company(company_id)

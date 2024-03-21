@@ -8,13 +8,14 @@ from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    admin_id = db.Column(db.String(36), nullable=False, default='0')
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     firstname = db.Column(db.String(256), nullable=False)
     lastname = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password_hash = db.Column(db.String(256), nullable=False)
-    accounts = db.relationship('Account', backref='users', lazy=True)
+    accounts = db.relationship('Account', backref='users', lazy=True, cascade="all,delete")
 
 
     def __init__(self, **kwargs):

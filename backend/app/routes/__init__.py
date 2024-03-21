@@ -1,6 +1,6 @@
 from app import app
 from app.utils.companyutils import create_new_company, get_company, get_company_by_user_id, update_companyinfo, delete_company
-from app.utils.userutils import register_user, get_user, update_userinfo
+from app.utils.userutils import register_user, get_user, update_userinfo, delete_userinfo
 from flask import request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from typing import Tuple, Union
@@ -74,6 +74,27 @@ def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
     elif request.method == 'GET':
         message = {"Message": "Update Page coming soon"}
         return jsonify(message), 200
+
+@app.route('/user/<admin_id>', methods=['DELETE'], strict_slashes=False)
+@login_required
+def delete_user(admin_id:str) -> Union[jsonify, Tuple[dict, int]]:
+    """admin can delete users who he invited"""
+    if request.method == 'DELETE':
+        if request.content_type == 'application/json':
+            data = request.get_json()
+            if not data:
+                message = {"Message": "Missing Required fields",
+                       "Required": "user_id"}
+                return jsonify(message), 400
+            user_id = data.get(user_id)
+            if not user_id:
+                message = {"Message": "You did not provide user_id"}
+                return jsonify(message), 400
+        else:
+            user_id = admin_id
+            result, code = delete_userinfo(admin_user_id=admin_id, user_id=user_id)
+            message = {"Message": result}
+            return jsonify(message), code
 
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login()-> Union[jsonify, Tuple[dict, int]]:
@@ -169,12 +190,11 @@ def create_company():
         return jsonify(message), 200
 
 
-@app.route('/company/<company_id>', methods=['DELETE', 'PUT'], strict_slashes=False)
+@app.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
 @login_required
 def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
     """updates company information
     PUT: Returns company and updated information
-    GET: Returns update page
     """
     if request.method == 'PUT':
         data = request.get_json()
@@ -193,6 +213,10 @@ def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
                        "Error": error}
             return jsonify(message), code
         return jsonify(company.to_dict()), code
+
+@app.route('/company/<company_id>', methods=['DELETE'], strict_slashes=False)
+@login_required
+def delete_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
     if request.method == 'DELETE':
         result, code = delete_company(company_id, current_user)
         message = {"Message": result}
