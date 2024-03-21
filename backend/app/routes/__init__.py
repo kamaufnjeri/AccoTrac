@@ -194,6 +194,6 @@ def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
             return jsonify(message), code
         return jsonify(company.to_dict()), code
     if request.method == 'DELETE':
-        result, code = delete_company(company_id)
+        result, code = delete_company(company_id, current_user)
         message = {"Message": result}
         return jsonify(message), code
