@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import UpperHeader from '../components/UpperHeader';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [data, setData] = useState({
     firstname: '',
     lastname: '',
@@ -10,9 +14,37 @@ const Signup = () => {
     password: ''
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(data)
+    if (confirmPassword !== data.password) {
+      toast.error("The two passwords don't match")
+    }
+
+    else {
+      try {
+        const response = await axios.post('http://localhost:5000/createuser', data);
+
+        if (response.status === 201) {
+          toast.success("User created successfully");
+          if (response.data.message) {
+            toast.error(response.data.message);
+          }
+          navigate('/mydashboard');
+        }
+        else {
+          toast.error(response.data.result);
+        }
+        // You can perform additional actions here based on the response
+      } catch (error) {
+          console.log("Error response:", error.response);
+          if (error.response && error.response.data) {
+            toast.error(error.response.data.result);
+          } else {
+            toast.error("Unexpected error creating company: " + error);
+          }
+        }
+    }
+
   };
 
   return (
@@ -27,10 +59,14 @@ const Signup = () => {
       <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
       <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
       <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+      <div className="slid-containerww bg-primary">
+     <UpperHeader />
+      </div>
       <div className="container-fluid ">
         <div className="container ">
           <div className="row cdvfdfd">
             <div className="col-lg-10 col-md-12 login-box">
+            
               <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="col-lg-6 col-md-6 log-det">
@@ -54,7 +90,7 @@ const Signup = () => {
                           aria-label="First Name"
                           aria-describedby="basic-addon1"
                           value={data.firstname}
-                          onChange={(e) => setData({...data, firstname: e.target.value})}
+                          onChange={(e) => setData({ ...data, firstname: e.target.value })}
                           required
                         />
                       </div>
@@ -71,7 +107,7 @@ const Signup = () => {
                           aria-label="Last Name"
                           aria-describedby="basic-addon1"
                           value={data.lastname}
-                          onChange={(e) => setData({...data, lastname: e.target.value})}
+                          onChange={(e) => setData({ ...data, lastname: e.target.value })}
                           required
                         />
                       </div>
@@ -88,7 +124,7 @@ const Signup = () => {
                           aria-label="Email Address"
                           aria-describedby="basic-addon1"
                           value={data.email}
-                          onChange={(e) => setData({...data, email: e.target.value})}
+                          onChange={(e) => setData({ ...data, email: e.target.value })}
                           required
                         />
                       </div>
@@ -105,7 +141,24 @@ const Signup = () => {
                           aria-label="Password"
                           aria-describedby="basic-addon1"
                           value={data.password}
-                          onChange={(e) => setData({...data, password: e.target.value})}
+                          onChange={(e) => setData({ ...data, password: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="input-group mb-3">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text" id="basic-addon1">
+                            <i className="fas fa-lock" />
+                          </span>
+                        </div>
+                        <input
+                          type="password"
+                          className="form-control"
+                          placeholder="Confirm Password"
+                          aria-label="Confirm Password"
+                          aria-describedby="basic-addon1"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                           required
                         />
                       </div>

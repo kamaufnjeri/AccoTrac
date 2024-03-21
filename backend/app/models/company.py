@@ -11,6 +11,7 @@ class Company(db.Model):
     accounts = db.relationship('Account', backref='company', lazy=True)
     transactions = db.relationship('Transaction', backref='company', lazy=True)
     stocks = db.relationship('Stock', backref='company', lazy=True)
+    selected_company = db.relationship('User', backref='selected_company', lazy=True)
 
 
     def __init__(self, **kwargs):
@@ -45,3 +46,9 @@ class Company(db.Model):
             )
         db.session.add(association)
         db.session.commit()
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "accounts": [account.to_dict() for account in self.accounts]
+        }
