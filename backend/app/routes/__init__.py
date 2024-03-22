@@ -279,12 +279,58 @@ def reset_password():
             }
             return jsonify(message), 400
         token, message, code = create_token(user_email=user.email)
-        url = request.url_root[:-1] + url_for('create_user') + '/' + token
+        url = request.url_root[:-1] + url_for('update_password', token=token)
         message = {'Message': message,
                     "token": token,
                     "link": url}
         return jsonify(message), code
 
+@app.route('/update_password/<token>', methods=['PUT', 'GET'], strict_slashes=False)
+def update_password(token:str):
+    if request.method == 'PUT':
+        if request.content_type != 'application/json':
+            message = {'Message': "expected json object"}
+            return jsonify(message), 400
+        required_fields = ["password", "confirm_password"]
+        data = request.get_json()
+        if not data:
+            message = {"Message": "Missing required fields",
+                       "Required": required_fields}
+            return jsonify(message), 400
+        for field in required_fields:
+            if field not in data:
+                message = {"Message": f"{field} is required"}
+                return jsonify(message), 400
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+        if password != confirm_password:
+            message = {"Message": "password must match with confirm_password"}
+            return jsonify(message), 400
+        token_data, message, code = get_data_from_token(token)
+        if not token_data:
+            return jsonify(token_data), code
+        user_email = token_data.get('user_email')
+        if not user_email:
+            message = {"Message": "user_email data not found"}
+            return jsonify(message), 400
+        user, code = get_user(user_email=user_email)
+        if code != 200:
+            error = user
+            message = {"Message": "Something went wrong",
+                       "Error": error}
+            return jsonify(message), code
+        data = {"password":password}
+        user, code = update_userinfo(user, data)
+        if code != 200:
+            error = user
+            message = {"Message": "Something went wrong",
+                       "Error": error}
+            return jsonify(message), code
+        message = {"Message": "Password eas updated successfully"}
+        return jsonify(message), code
+    elif request.method == 'GET':
+        message = {"Message": "Change your password page coming up soon"}
+        return jsonify(message), 200
 
 
 @app.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
