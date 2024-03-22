@@ -1,8 +1,10 @@
 from app import app
 from app.utils.companyutils import create_new_company, get_company, get_company_by_user_id, update_companyinfo, delete_company
-from app.utils.userutils import register_user, get_user, update_userinfo, delete_userinfo
-from flask import request, jsonify
+from app.utils.userutils import register_user, get_user, update_userinfo, delete_userinfo, get_user_by_company_association
+from app.utils.apputils import create_token, get_data_from_token
+from flask import request, jsonify, url_for
 from flask_login import current_user, login_user, logout_user, login_required
+
 from typing import Tuple, Union
 
 
@@ -113,15 +115,15 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
                 'Message': 'Missing Some Fields',
                 "required_Fields" : "email, password"
             }
-            return jsonify(message), 404
+            return jsonify(message), 400
         email = data.get('email')
         if not email:
             message = {'Message': 'email is Required'}
-            return jsonify(message), 404
+            return jsonify(message), 400
         password = data.get('password')
         if not password:
             message = {'Message': 'password is Required'}
-            return jsonify(message), 404
+            return jsonify(message), 400
         user, code = get_user(user_email=email, password=password)
         if isinstance(user, str):
             # means there was an error
@@ -159,6 +161,12 @@ def logout() -> Union[jsonify, Tuple[dict, int]]:
 def create_company():
     if request.method == 'POST':
         data = request.get_json()
+        if not data:
+            message = {
+                'Message': 'Missing Some Fields',
+                "required_Fields" : "company_name, company_email, company_country, company_currency"
+            }
+            return jsonify(message), 400
         user_id = current_user.id
         company_name = data.get('company_name')
         if not company_name:
@@ -188,6 +196,95 @@ def create_company():
         message = {"Message": "Here is a list of your companies",
                    "companies": companies}
         return jsonify(message), 200
+    else:
+        message = {"Message": "only admins can create a company"}
+        return jsonify(message), 404
+
+@app.route('/invite_user', methods=['GET', 'POST'], strict_slashes=False)
+@login_required
+def invite_user() -> Union[jsonify, Tuple[dict, int]]:
+    if request.method == 'POST':
+        if not request.content_type == 'application/json':
+            message = {'Message': 'Json object was expected'}
+            return jsonify(message), 400
+        data = request.get_json()
+        if not data:
+            message = {
+                'Message': 'Missing Some Fields',
+                "required_Fields" : "company_id"
+            }
+            return jsonify(message), 400
+        company_id = data.get('company_id')
+        if not company_id:
+            message = {
+                'Message': 'Missing Some Fields',
+                "required_Fields" : "company_id"
+            }
+            return jsonify(message), 400
+        user, code = get_user_by_company_association(user_id=current_user.id, company_id=company_id)
+        if isinstance(user, str):
+            error = user
+            message = {"Message": "something went wrong",
+                       "Error": error}
+            return jsonify(message), code
+        if not user.is_admin:
+            message = {"Message": "only admins can invite users"}
+            return jsonify(message), 404
+        admin_id = user.user_id
+        token, message, code = create_token(admin_id=admin_id, company_id=company_id)
+        url = request.url_root[:-1] + url_for('invite_user_register', token=token)
+        message = {'Message': message,
+                    "token": token,
+                    "link": url}
+        return jsonify(message), code
+    elif request.method == 'GET':
+        message = {'Message': 'invite_user page coming soon'}
+        return jsonify(message), 200
+
+@app.route('/invite_user/register/<token>', methods=['GET', 'POST'], strict_slashes=False)
+def invite_user_register(token):
+    if request.method == 'GET':
+        data, message, code = get_data_from_token(token)
+        message = {"Message": message,
+                "data": data}
+        return jsonify(message), code
+    # register user
+    # connect user to the company using (company_id in the data)
+    # connect user with the admin who invited them (admin_id in the data)
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def reset_password():
+    if request.method == 'POST':
+        if not request.content_type == 'application/json':
+            message = {"Message": "expected json object"}
+            return jsonify(message), 400
+        data = request.get_json()
+        if not data:
+            message = {
+                'Message': 'Missing Some Fields',
+                "required_Fields" : "user_email"
+            }
+            return jsonify(message), 400
+        user_email = data.get('user_email')
+        if not user_email:
+            message = {
+                'Message': 'Missing Some Fields',
+                "required_Fields" : "user_email is required"
+            }
+            return jsonify(message), 400
+        user, code = get_user(user_email)
+        if code != 200:
+            message = {
+                'Message': 'user does not exist'
+            }
+            return jsonify(message), 400
+        token, message, code = create_token(user_email=user.email)
+        url = request.url_root[:-1] + url_for('create_user') + '/' + token
+        message = {'Message': message,
+                    "token": token,
+                    "link": url}
+        return jsonify(message), code
+
 
 
 @app.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)

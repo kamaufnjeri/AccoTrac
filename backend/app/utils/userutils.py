@@ -36,6 +36,17 @@ def get_user(user_email:str, password:str = None) -> Tuple[Union[str, User], int
     except Exception as e:
         return (str(e), 400)
 
+def get_user_by_company_association(user_id:str, company_id:str) -> Tuple[Union[str, User], int]:
+    """returns user if exist or error with appropriate status code"""
+    try:
+        user = UserCompanyAssociation.query.filter_by(user_id=user_id, company_id=company_id).first()
+        if not user:
+            raise ValueError('User does not exists')
+        else:
+            return user, 200
+    except Exception as e:
+        return (str(e), 400)
+
 def update_userinfo(user: User, data: dict) -> Tuple[Union[str, User], int]:
     """updates user information
     Returns user or error with updated information and appropriate status code
