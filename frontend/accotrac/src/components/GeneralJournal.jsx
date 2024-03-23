@@ -4,11 +4,9 @@ import RequestHandler from '../methods/HandleApiRequests';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+axios.defaults.withCredentials = true
 const GeneralJournal = () => {
-  const [entries, setEntries] = useState([
-    { account_id: '', debit: '', credit: '' },
-    { account_id: '', debit: '', credit: '' }
-  ]);
+  const [entries, setEntries] = useState([]);
 
   const [data, setData] = useState({
     date: '',
@@ -86,8 +84,19 @@ const GeneralJournal = () => {
       try {
 
         const response = await axios.post('http://localhost:5000/addtransaction', data);
-        console.log(response);
-        toast.success(response.data.message);
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          setData({
+            date: '',
+            description: '',
+            entries: []
+          });
+          setEntries([
+          ]);
+          setTotalCredit(0);
+          setTotalDebit(0);
+        }
+       throw new Error(response.data.response);
       } catch (error) {
         console.log(error)
         if (error.response) {
@@ -141,6 +150,7 @@ const GeneralJournal = () => {
                   index={index}
                   handleChange={handleChange}
                   removeRow={removeRow}
+                  
                 />
               ))}
             </tbody>

@@ -7,20 +7,20 @@ export const UserContext = createContext(null);
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [company, setCompany] = useState();
-  const [isLoading, setIsLoading] = useState(true); // Initial loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        setIsLoading(true); // Set loading state to true
+        setIsLoading(true); 
         const response = await RequestHandler.handleGetRequest('/protected');
         setUser(response.response);
         setCompany(response.response.selected_company);
-        setIsLoading(false); // Set loading state to false on success
+        setIsLoading(false);
       } catch (error) {
-        setError(error); // Handle any errors
-        setIsLoading(false); // Set loading state to false on error
+        setError(error);
+        setIsLoading(false);
       }
     };
 

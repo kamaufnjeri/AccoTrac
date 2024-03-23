@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import DashBoard from './pages/DashBoard'
 import UserProvider from './components/UserContext'
+import AddAccountPage from './pages/AddAccountPage'
+import ChartsOfAccountPage from './pages/ChartsOfAccountPage'
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
       <Route path='/signup' element={<Signup/>}/>
       <Route path='/dashboard' element={<DashBoard/>}/>
       <Route path='/addorganization' element={<AddUserOrganization/>}/>
+      <Route path='/addaccount' element={<AddAccountPage/>}/>
+      <Route path='/chartsofaccount' element={<ChartsOfAccountPage/>}/>
       <Route path='/generaljournal' element={<GeneralJournalPage/>}/>
       <Route path='/forgotpassword' element={<Forgotpassword/>}/>
     </Routes>

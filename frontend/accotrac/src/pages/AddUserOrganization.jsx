@@ -1,65 +1,42 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import React from 'react';
+import AddOrganization from '../components/AddOrganization';
+import UpperHeader from '../components/UpperHeader';
+import LowerHeader from '../components/LowerHeader';
+
 
 function AddUserOrganization() {
-  const [data, setData] = useState({
-    company_name: '',
-  });
-  const navigate = useNavigate();
-
-  const handleChange = (event, key) => {
-    setData({ ...data, [key]: event.target.value });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    
-    try {
-      const response = await axios.post("http://localhost:5000/createcompany", data);
-      console.log(response);
-      if (response.status === 201 && response.data) {
-       
-        toast.success(response.data.message);
-        navigate("/dashboard");
-      }
-      else if (response.data) {
-        toast.error(response.data.message);
-      }
-      else {
-        throw new Error(response);
-      }
-    } catch (error) {
-      console.log("Error response:", error.response);
-      if (error.response && error.response.data) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Unexpected error creating company: " + error);
-      }
-    }
-  };
 
   return (
-    <div className="user-profile">
-      <h2>Add Company</h2>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="form-group">
-          <label htmlFor="organization">Organization name:</label>
-          <input
-            type="text"
-            id="organization"
-            name="company_name"
-            value={data.company_name}
-            onChange={(e) => handleChange(e, 'company_name')}
-          />
-        </div>
-       
-        <button type="submit" className="save-button">
-          Save
-        </button>
-      </form>
+    <div><>
+    <meta charSet="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Dashboard</title>
+    <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="assets/images/fav.jpg" />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <div className="slid-containerww bg-primary">
+   <UpperHeader />
     </div>
+    <div className="slid-containerww bg-primary">
+     <LowerHeader/>
+    </div>
+    <div className="container-fluid vh-100 d-flex flex-column">
+      <AddOrganization/>
+    </div>
+  </>
+  </div>
   );
 }
 

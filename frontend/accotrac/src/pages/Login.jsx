@@ -10,7 +10,7 @@ import { UserContext } from '../components/UserContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUser, setCompany } = useContext(UserContext);
+  const { user, setUser, setCompany } = useContext(UserContext);
 
   const [data, setData] = useState({
     email: "",

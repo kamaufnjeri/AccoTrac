@@ -10,7 +10,7 @@ class Company(db.Model):
     name = db.Column(db.String(128), nullable=False, unique=True)
     accounts = db.relationship('Account', backref='company', lazy=True)
     transactions = db.relationship('Transaction', backref='company', lazy=True)
-    stocks = db.relationship('Stock', backref='company', lazy=True)
+    #stocks = db.relationship('Stock', backref='company', lazy=True)
     selected_company = db.relationship('User', backref='selected_company', lazy=True)
 
 

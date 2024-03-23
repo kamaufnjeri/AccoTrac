@@ -10,11 +10,12 @@ chart_of_accounts = {
         'cash': ['Cash'],
         'bank': ['Bank'],
         'accounts_receivable': [],
+        'fixed_asset': [],
         'inventory': ['Inventory']
     },
     'liability': {
         'accounts_payable': [],
-        'loans_payable': [],
+        'long_term_loans': [],
     },
     'capital': {
         'capital': ['Capital']

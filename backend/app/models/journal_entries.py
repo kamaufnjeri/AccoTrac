@@ -20,6 +20,7 @@ class JournalEntry(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "account_name": self.account.name,
             "debit": self.debit,
             "credit": self.credit,
         }

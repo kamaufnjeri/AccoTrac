@@ -6,7 +6,7 @@ import { UserContext } from './UserContext';
 
 const MenuItems = () => {
     const navigate = useNavigate();
-    const { user, setUser } = useContext(UserContext);
+    const { setCompany, setUser, user } = useContext(UserContext);
     console.log('menu', user);
     const logoutUser = async () => {
         try {
@@ -15,7 +15,8 @@ const MenuItems = () => {
             if (response.status === 200) {
                 toast.success('Successfully logged out');
                 setUser(null);
-                navigate('/home'); // Redirect to login page after logout
+                setCompany(null);
+                navigate('/home');
             } else {
                 toast.error(response.data.error);
             }
