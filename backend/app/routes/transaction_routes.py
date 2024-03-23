@@ -1,5 +1,6 @@
 from app.controllers import GeneralTransactionControllers, PurchaseTransactionControllers, SalesTransactionControllers
 from flask import request, jsonify, Blueprint
+from flask_login import current_user
 
 
 transaction_bp = Blueprint("transaction_bp", __name__)
@@ -7,14 +8,14 @@ general_transaction_controllers = GeneralTransactionControllers()
 purchase_transacton_controllers = PurchaseTransactionControllers()
 sales_transaction_controllers = SalesTransactionControllers()
 
-@transaction_bp.route('/<string:user_id>/<string:company_id>/addtransaction', methods=['POST'])
-def add_general_transaction(company_id, user_id):
+@transaction_bp.route('/addtransaction', methods=['POST'])
+def add_general_transaction():
     data = request.get_json()
 
     if not data:
         return "", 204
     else:
-        message, code, response_item = general_transaction_controllers.create_general_journal(company_id, user_id, data)
+        message, code, response_item = general_transaction_controllers.create_general_journal(current_user.selected_company_id, current_user.id, data)
         return jsonify({"message": message, "response": response_item}), code
 
 

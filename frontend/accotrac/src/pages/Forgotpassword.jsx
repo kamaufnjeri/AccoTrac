@@ -1,4 +1,6 @@
 import React from 'react'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 function forgotpassword() {
   return (
@@ -13,6 +15,7 @@ function forgotpassword() {
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
     <div className="container-fluid ">
       <div className="container ">
         <div className="row cdvfdfd">
@@ -102,6 +105,7 @@ function forgotpassword() {
       </div>
     </div>
   </>
+  <Footer/>
   </div>
   )
 }

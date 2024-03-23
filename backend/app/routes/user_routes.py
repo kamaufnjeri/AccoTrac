@@ -19,7 +19,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
     if request.method == 'POST':
         data = request.get_json()
         message = {
-                'Error': 'Missing Some Fields',
+                'error': 'Missing Some Fields',
                 "required_Fields" : "firstname, lastname, email, password"
                 }
         if not data:
@@ -28,11 +28,16 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
         lastname = data.get('lastname')
         email = data.get('email')
         password = data.get('password')
-        if not firstname or not lastname or not email or not password :
+        company_name = data.get('company_name')
+
+        if not firstname or not lastname or not email or not password or not company_name:
             return jsonify(message), 404
-        result, code = register_user(firstname, lastname, email, password)
         
-        return jsonify({'result': result}), code
+        result, code = register_user(firstname, lastname, email, password, company_name)
+        if code == 201:
+
+            return jsonify({'result': result}), code
+        return jsonify({'error': result}), code
 
     if request.method == 'GET':
         message = {'message': 'Signup page coming soon'}
@@ -47,11 +52,11 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
     """
     if request.method == 'POST':
         if current_user.is_authenticated:
-            message = {"message": f"{current_user.firstname} Already logged in"}
+            message = {"message": f"{current_user.email} already logged in"}
             return jsonify(message), 200
         data = request.get_json()
         message = {
-                'Error': 'Missing Some Fields',
+                'message': 'Missing Some Fields',
                 "required_Fields" : "email, password"
             }
         if not data:
@@ -61,12 +66,13 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
         if not email or not password:
             return jsonify(message), 404
         user, code = get_user(user_email=email, password=password)
+        print(user)
         if code != 200:
             # means there was an error
             error = user
-            message = {'error': error}
+            message = {'message': error}
             return jsonify(message), code
-        print(user)
+        user = {**current_user.to_dict(), **{"authenticated": current_user.is_authenticated}}
         message = {"result": user}
         return jsonify(message), code
     
@@ -131,14 +137,23 @@ def create_company():
         return jsonify(message), 200
     
 
+@app.route('/<string:user_id>/getcompanies', methods=['GET'])
+def get_companies_by_user_id(user_id):
+    message, code, company_names = get_company_by_user_id(user_id=user_id)
+    return jsonify({"message": message, "response": company_names}), code
+
+
+
 @app.route('/protected', methods=['GET'])
 def protected():
     if current_user.is_authenticated:
-        return jsonify({"message": "User is authenticated", "response": current_user.to_dict()}), 200
+        user = {**current_user.to_dict(), **{"authenticated": current_user.is_authenticated}}
+        return jsonify({"message": "User is authenticated", "response": user}), 200
     
-    return jsonify({"message": "User not authenticated"}), 401
+    return jsonify({"message": "User not authenticated", "response": current_user.is_authenticated}), 401
 
-@app.route('/<string:company_id>/select_organization')
+@app.route('/<string:company_id>/select_organization', methods=['PUT'])
+@login_required
 def add_selected_organization(company_id):
     try:
         user = User.query.filter_by(id=current_user.id).first()
@@ -150,8 +165,3 @@ def add_selected_organization(company_id):
         db.session.rollback()
         return jsonify({"message": str(e)}), 500
     
-@app.route('/getcurrentuser', methods=['GET'])
-def get_current_user():
-    if current_user.is_authenticated:
-        return jsonify({"message": "User is authenticated", "response": current_user.to_dict()})
-    return jsonify({"message": "User is not authenticated"})

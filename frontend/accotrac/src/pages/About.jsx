@@ -1,4 +1,7 @@
 import React from 'react'
+import MenuItems from '../components/MenuItems'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 function about() {
   return (
@@ -21,6 +24,7 @@ function about() {
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
     <div className="slid-containerww bg-primary">
       <div className="inner">
         <div className="nav-col">
@@ -39,28 +43,7 @@ function about() {
                 </a>
               </div>
               <div id="menu" className="col-lg-9 d-none d-lg-block">
-                <ul className="float-end mul fs-7 text-white d-inline-block">
-                  <li className="float-md-start p-4">
-                    <a className="text-white fw-bold" href="/home">
-                      Home
-                    </a>
-                  </li>
-                  <li className="float-md-start p-4">
-                    <a className="text-white fw-bold" href="/about">
-                      About US
-                    </a>
-                  </li>
-                  <li className="float-md-start p-4">
-                    <a className="text-white fw-bold" href="/dashboard">
-                      Dashboard
-                    </a>
-                  </li>
-                  <li className="float-md-start p-4">
-                    <a className="text-white fw-bold" href="/contact">
-                      Contact US
-                    </a>
-                  </li>
-                </ul>
+                <MenuItems/>
               </div>
             </div>
           </div>
@@ -202,7 +185,9 @@ function about() {
         </div>
       </div>
     </div>
+  
     {/*  ************************* Footer Starts Here ************************** */}
+    <Footer/>
     </>
   </div>
   )

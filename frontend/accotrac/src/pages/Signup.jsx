@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import UpperHeader from '../components/UpperHeader';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { UserContext } from '../components/UserContext';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -11,8 +14,10 @@ const Signup = () => {
     firstname: '',
     lastname: '',
     email: '',
-    password: ''
+    password: '',
+    company_name: ""
   });
+  const { setUser, setCompany } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,20 +30,24 @@ const Signup = () => {
         const response = await axios.post('http://localhost:5000/createuser', data);
 
         if (response.status === 201) {
-          toast.success("User created successfully");
+          if (response.data.result) {
+            const user = response.data.result;
+            toast.success(`Success creating account ${user.email}`);
+            setUser(user);
+            setCompany(user.selected_company);
+            navigate(`/dashboard`);
+          }
           if (response.data.message) {
             toast.error(response.data.message);
           }
-          navigate('/mydashboard');
         }
         else {
-          toast.error(response.data.result);
+          toast.error(response.data.error);
         }
-        // You can perform additional actions here based on the response
       } catch (error) {
           console.log("Error response:", error.response);
           if (error.response && error.response.data) {
-            toast.error(error.response.data.result);
+            toast.error(error.response.data.error);
           } else {
             toast.error("Unexpected error creating company: " + error);
           }
@@ -59,6 +68,7 @@ const Signup = () => {
       <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
       <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
       <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+      <Header/>
       <div className="slid-containerww bg-primary">
      <UpperHeader />
       </div>
@@ -108,6 +118,23 @@ const Signup = () => {
                           aria-describedby="basic-addon1"
                           value={data.lastname}
                           onChange={(e) => setData({ ...data, lastname: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="input-group mb-3">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text" id="basic-addon1">
+                            <i className="fas fa-building" />
+                          </span>
+                        </div>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Organization Name"
+                          aria-label="Organization Name"
+                          aria-describedby="basic-addon1"
+                          value={data.company_name}
+                          onChange={(e) => setData({ ...data, company_name: e.target.value })}
                           required
                         />
                       </div>
@@ -197,6 +224,7 @@ const Signup = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

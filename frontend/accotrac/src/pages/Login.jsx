@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import UpperHeader from '../components/UpperHeader';
+import RequestHandler from '../methods/HandleApiRequests';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import { UserContext } from '../components/UserContext';
 
 
 const Login = () => {
   const navigate = useNavigate();
-  
+  const { setUser, setCompany } = useContext(UserContext);
+
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -17,40 +21,29 @@ const Login = () => {
     event.preventDefault();
 
     if (data) {
-      try {
-        const response = await axios.post('http://localhost:5000/login', data);
-        console.log(response)
-        if (response.status === 200) {
-          if (response.data.result) {
-            toast.success("Succcessfull logged in as " + response.data.result.name)
-            if (!response.data.result.selected_organizaton) {
-              navigate('/mydashboard');
-            }
-    
-            navigate('/dashboard')
-          }
-          else if (response.data.message) {
-            toast.error(response.data.message);
-          }
-          
-        }
-        
-        else {
-          throw new Error(response.data.error)
-        }
-        // You can perform additional actions here based on the response
-      } catch (error) {
-        if (error.response.data) {
-          console.log(error.response.data)
-          toast.error('Error Login in: ' + error.response.data.error)
+      RequestHandler.handlePostRequest('/login', data)
+        .then(response => {
+          if (response && response.result) {
+            const user = response.result;
+            toast.success("Successfully logged in as " + user.email);
+            setUser(user);
+            setCompany(user.selected_company);
+            navigate(`/dashboard`);
+          } else if (response && response.message) {
 
-        }
-        else {
-          toast.error('Error login in: ' + error)
-        }
-      }
+            toast.error(response.message);
+          }
+        })
+        .catch(error => {
+          if (error.message) {
+            console.error('Error logging in:', error);
+            toast.error('Error logging in:' + error.message);
+          } else {
+            console.error('Error logging in: ', error);
+            toast.error('Error logging in');
+          }
+        });
     }
-
   };
 
   return (
@@ -65,11 +58,11 @@ const Login = () => {
       <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
       <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
       <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
-     
+      <Header />
       <div className="container-fluid ">
-      <div className="slid-containerww bg-primary">
-     <UpperHeader />
-      </div>
+        <div className="slid-containerww bg-primary">
+          <UpperHeader />
+        </div>
         <div className="container ">
           <div className="row cdvfdfd">
             <div className="col-lg-10 col-md-12 login-box">
@@ -163,6 +156,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

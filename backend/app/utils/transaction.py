@@ -19,7 +19,7 @@ class TransactionUtils:
                 return False, balance
         elif category == "liability" or category == "revenue" or category == "capital":
             balance = account.credit_total - account.debit_total
-            if credit == 0 and debit!= 0 and balance >= debit:
+            if credit == 0 and debit != 0 and balance >= debit:
                 return True, balance
             elif credit != 0 and debit == 0:
                 return True, balance
@@ -33,11 +33,14 @@ class TransactionUtils:
         user = self.get_by_id(user_id, User, "User")
 
         self.check_entries_structure(data.get("entries", []))
-        debit_totals = sum(entry.get("debit", 0) for entry in data.get("entries", []))
-        credit_totals = sum(entry.get("credit", 0) for entry in data.get("entries", []))
+        debit_totals = sum(int(entry.get("debit", 0)) for entry in data.get("entries", []))
+        credit_totals = sum(int(entry.get("credit", 0)) for entry in data.get("entries", []))
+
 
         """change code if an account they enter both"""
         if debit_totals != credit_totals or debit_totals == 0 or credit_totals == 0:
+            print('debit', debit_totals)
+            print('credit', credit_totals)
             raise ValueError("The debit and credit amounts must be equal.")
 
         entries = data.get("entries", [])
@@ -56,20 +59,19 @@ class TransactionUtils:
             self.process_entry(entry, new_transaction_id, company_id)
     
     def process_entry(self, entry, new_transaction_id, company_id):
-
         account = self.get_by_id(entry.get("account_id"), Account, "Account")
-       
-        is_balance_enough, balance = self.is_account_balance_enough(
-            account, entry
-        )
+        is_balance_enough, balance = self.is_account_balance_enough(account, entry)
+        
         if entry.get('debit') != 0 and entry.get('credit') != 0:
-            raise ValueError("Can't give a debit and credit value for one account")
-                
+            raise ValueError("Can't give both debit and credit values for one account")
+
         if not is_balance_enough:
             raise ValueError(f"Account {account.name} has insufficient balance of {balance}")
 
-        debit = entry.get('debit')
-        credit = entry.get('credit')
+        # Convert debit and credit to integers
+        debit = int(entry.get('debit', 0))
+        credit = int(entry.get('credit', 0))
+
         new_entry = JournalEntry(
             transaction_id=new_transaction_id,
             account_id=account.id,
@@ -78,6 +80,13 @@ class TransactionUtils:
         )
         account.debit_total += debit
         account.credit_total += credit
+
+        # Check if the same account ID has already been added to the transaction
+        existing_entries = JournalEntry.query.filter_by(transaction_id=new_transaction_id).all()
+        for existing_entry in existing_entries:
+            if existing_entry.account_id == account.id:
+                raise ValueError(f"Account {account.name} is already present in the transaction")
+
         db.session.add(new_entry)
 
     def validate_data(self, data, is_general=True):
@@ -88,6 +97,17 @@ class TransactionUtils:
         if not is_general:
             if not "category" in data:
                 raise ValueError("The category field is required")
+        
+        # Convert debit and credit to integers
+        if "entries" in data:
+            for entry in data["entries"]:
+                if "debit" in entry:
+                    entry["debit"] = int(entry["debit"])
+                if "credit" in entry:
+                    entry["credit"] = int(entry["credit"])
+
+                if entry["debit"] != 0 and entry["credit"] != 0:
+                    raise ValueError("Can't give both debit and credit values for one account")
 
     def get_by_id(self, id, class_obj, class_name):
         obj = class_obj.query.filter_by(id=id).first()
@@ -103,4 +123,3 @@ class TransactionUtils:
         for entry in entries:
             if not all(key in entry for key in ("account_id", "debit", "credit")):
                 raise ValueError("Invalid entry structure in purchase data")
-            

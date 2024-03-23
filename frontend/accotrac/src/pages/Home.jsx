@@ -1,11 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import MenuItems from '../components/MenuItems'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 function Home() {
   return (
     <div>
       <>
-  <meta charSet="utf-8" />
+      <meta charSet="utf-8" />
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -23,6 +26,7 @@ function Home() {
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
   />
   <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+  <Header/>
   <div className="slid-container">
     <div className="inner-lay">
       <div className="nav-col">
@@ -41,28 +45,7 @@ function Home() {
               </a>
             </div>
             <div id="menu" className="col-lg-9 d-none d-lg-block">
-              <ul className="float-end mul fs-7 text-white d-inline-block">
-                <li className="float-md-start p-4">
-                  <a className="text-white fw-bold" href="/home">
-                    Home
-                  </a>
-                </li>
-                <li className="float-md-start p-4">
-                  <a className="text-white fw-bold" href="/about">
-                    About US
-                  </a>
-                </li>
-                <li className="float-md-start p-4">
-                  <a className="text-white fw-bold" href="/dashboard">
-                    Dashboard
-                  </a>
-                </li>
-                <li className="float-md-start p-4">
-                  <a className="text-white fw-bold" href="/contact">
-                    Contact US
-                  </a>
-                </li>
-              </ul>
+              <MenuItems/>
             </div>
           </div>
         </div>
@@ -79,9 +62,12 @@ function Home() {
                 making your accounts healthy.
               </p>
               <div className=" d-inline-block pt-4">
+                <Link to="/signup">
+               
                 <button className="btn btn-light shadow-md p-3 px-5 fs-7 fw-bold">
-                  <Link to="/login">SIGN IN</Link>
+                Get started
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -311,6 +297,7 @@ function Home() {
         </div>
       </div>
     </div>
+    <Footer/>
   </>
   </div>
   )

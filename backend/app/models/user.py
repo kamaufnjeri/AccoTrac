@@ -3,7 +3,7 @@ from datetime import datetime
 import uuid
 from .user_company import UserCompanyAssociation
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 
 
 class User(UserMixin, db.Model):
@@ -49,6 +49,8 @@ class User(UserMixin, db.Model):
         new_dict['firstname'] = self.firstname
         new_dict['lastname'] = self.lastname
         new_dict['email'] = self.email
+        new_dict['authenticated'] = current_user.is_authenticated
+        new_dict['selected_company_id'] = self.selected_company_id
         if self.selected_company_id:
             new_dict['selected_company'] = self.selected_company.to_dict()
         return new_dict

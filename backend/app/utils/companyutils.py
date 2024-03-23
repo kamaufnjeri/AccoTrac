@@ -65,6 +65,15 @@ def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
 def get_company_by_user_id(user_id:str) -> Tuple[Union[List, None], int]:
     """Return a list of companies associated with user_id
     or None"""
-    companies = UserCompanyAssociation.query.filter_by(user_id=user_id).all()
-    company_names = [company.company.name for company in companies]
-    return company_names
+    try:
+
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            raise ValueError(f"User Id {user_id} does not exist")
+        companies = user.user_companies
+        company_list = [company.to_dict() for company in companies]
+        return "Success fetching companies", 200, company_list
+    except ValueError as e:
+        return "Error fetching companies", 400, str(e)
+    except Exception as e:
+        return "Error fetching companies", 500, str(e)

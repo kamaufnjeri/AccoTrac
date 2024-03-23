@@ -10,33 +10,9 @@ axios.defaults.withCredentials = true
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [companyAccounts, setCompanyAccounts] = useState();
-  const [selectedCompany, setSelectedCompany] = useState();
-
-
+  
   useEffect(() => {
     fetchProtectedData();
-  }, []);
-  useEffect(() => {
-    const fetchSelectedCompany = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/getcurrentuser');
-        console.log(response);
-        if (response.status === 200) {
-          if (response.data && response.data.response && response.data.response.selected_company) {
-            setSelectedCompany(response.data.response.selected_company);
-            setCompanyAccounts(response.data.response.selected_company.accounts);
-          } else {
-            console.log("Selected company data not found");
-          }
-        } else {
-          console.log("Failed to fetch selected company:", response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching selected company:', error);
-      }
-    };
-    fetchSelectedCompany();
   }, []);
   const fetchProtectedData = async () => {
     try {
@@ -99,7 +75,7 @@ function Dashboard() {
      <UpperHeader />
       </div>
       <div className="slid-containerww bg-primary">
-       <LowerHeader logoutUser={logoutUser} companyAccounts={companyAccounts}/>
+       <LowerHeader/>
       </div>
       <div className="container-fluid vh-100 d-flex flex-column">
         <DashBoardBody/>

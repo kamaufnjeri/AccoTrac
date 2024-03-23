@@ -40,7 +40,6 @@ def create_user_company(company_name, user_email, username):
         db.session.add(user)
         db.session.add(company)
         company.set_user_role(user.id, is_admin=True)
-        print(company.id)
         
         for category, subcategories in chart_of_accounts.items():
             for subcategory, accounts in subcategories.items():
