@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const LowerHeader = () => {
@@ -47,28 +47,45 @@ const LowerHeader = () => {
               </Link>
               <ul className="dropdown-menu">
                 <li>
-                  <Link className="dropdown-item" to="#">
+                  <Link className="dropdown-item" to="/trialbalance">
                     Trial Balance
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item" to="#">
+                  <Link className="dropdown-item" to="/profitloss">
                     Profit/Loss
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item" to="#">
+                  <Link className="dropdown-item" to="/balancesheet">
                     Balance Sheet
                   </Link>
                 </li>
               </ul>
             </li>
             
-            <li className="float-md-start p-4">
-                <Link className="text-white fw-bold" to="/myprofile">
-                  Profile
-                </Link>
-              </li>
+            <li className="dropdown float-md-start p-4">
+              <Link
+                className="text-white fw-bold dropdown-toggle"
+                to="#"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Profile
+              </Link>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to="/myprofile">
+                    My profile
+                  </Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/companyprofile">
+                    Organization profile
+                  </Link>
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>

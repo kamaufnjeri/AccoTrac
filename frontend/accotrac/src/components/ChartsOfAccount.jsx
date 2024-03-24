@@ -30,7 +30,7 @@ const ChartsOfAccount = () => {
             } 
         }
         fetchData();
-    }, [setAccounts]);
+    }, []);
 
     const handleDelete = async (id, name) => {
         try {

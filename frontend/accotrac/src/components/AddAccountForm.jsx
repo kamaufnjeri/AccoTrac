@@ -63,7 +63,6 @@ const AddAccountForm = () => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
-
   return (
     <div className="container mt-5">
       <h2>Add Account</h2>
@@ -75,6 +74,7 @@ const AddAccountForm = () => {
             className="form-control"
             id="name"
             name="name"
+            
             value={formatName(formData.name)}
             onChange={handleInputChange}
             required

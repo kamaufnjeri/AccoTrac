@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Forgotpassword from './pages/Forgotpassword'
@@ -14,6 +14,11 @@ import UserProvider from './components/UserContext'
 import AddAccountPage from './pages/AddAccountPage'
 import ChartsOfAccountPage from './pages/ChartsOfAccountPage'
 import UserProfilePage from './pages/UserProfilePage'
+import TrialBalancePage from './pages/TrialBalancePage'
+import ProfitLossPage from './pages/ProfitLossPage'
+import BalanceSheetPage from './pages/BalanceSheetPage'
+import JournalEntriesPage from './pages/JournalEntriesPage'
+import OrganizationProfilePage from './pages/OrganizationProfilePage'
 
 function App() {
   return (
@@ -33,6 +38,11 @@ function App() {
       <Route path='/chartsofaccount' element={<ChartsOfAccountPage/>}/>
       <Route path='/generaljournal' element={<GeneralJournalPage/>}/>
       <Route path='/myprofile' element={<UserProfilePage/>}/>
+      <Route path='/companyprofile' element={<OrganizationProfilePage/>}/>
+      <Route path='/trialbalance' element={<TrialBalancePage/>}/>
+      <Route path='/profitloss' element={<ProfitLossPage/>}/>
+      <Route path='/balancesheet' element={<BalanceSheetPage/>}/>
+      <Route path='/journals' element={<JournalEntriesPage/>}/>
       <Route path='/forgotpassword' element={<Forgotpassword/>}/>
     </Routes>
     </BrowserRouter>

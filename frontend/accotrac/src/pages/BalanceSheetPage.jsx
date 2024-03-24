@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react'
-import UpdateUser from '../components/UpdateUser'
-import UpperHeader from '../components/UpperHeader'
 import LowerHeader from '../components/LowerHeader'
+import UpperHeader from '../components/UpperHeader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const UserProfilePage = () => {
+const BalanceSheetPage = () => {
     const navigate = useNavigate();
-    
     useEffect(() => {
         const fetchProtectedData = async () => {
             try {
@@ -28,7 +26,6 @@ const UserProfilePage = () => {
           };
       fetchProtectedData();
     }, [navigate]);
-   
   return (
     <div><>
     <meta charSet="utf-8" />
@@ -56,13 +53,11 @@ const UserProfilePage = () => {
      <LowerHeader/>
     </div>
     <div className="container-fluid vh-100 d-flex flex-column">
-      <div class="container">
-        <UpdateUser/>
-      </div>
+      
     </div>
   </>
   </div>
   )
 }
 
-export default UserProfilePage
+export default BalanceSheetPage

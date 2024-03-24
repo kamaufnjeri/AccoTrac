@@ -6,6 +6,8 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true
 const GeneralJournal = () => {
+  const currentDate = new Date().toISOString().split('T')[0];
+  console.log(currentDate)
   const [entries, setEntries] = useState([]);
 
   const [data, setData] = useState({
@@ -118,6 +120,7 @@ const GeneralJournal = () => {
           <div className="col-sm-4">
             <input type="date" className="form-control" id="date"
             value={data.date}
+            max={currentDate}
             onChange={(e) => setData({...data, date: e.target.value})}
              required/>
           </div>

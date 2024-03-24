@@ -10,27 +10,26 @@ axios.defaults.withCredentials = true
 
 function Dashboard() {
   const navigate = useNavigate();
-  
   useEffect(() => {
-    fetchProtectedData();
-  }, []);
-  const fetchProtectedData = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/protected');
-      if (response.status !== 200) {
-        navigate("/");
-      }
-      // Handle the response as needed
-    } catch (error) {
-      if (error.response && error.response.data) {
-        console.error('Error fetching protected data:', error.response.data);
-
-      } else {
-        console.error('Error fetching protected data:', error.message);
-      }
-      navigate('/');
-    }
-  };
+    const fetchProtectedData = async () => {
+        try {
+          const response = await axios.get('http://localhost:5000/protected');
+          if (response.status !== 200) {
+            navigate("/");
+          }
+          // Handle the response as needed
+        } catch (error) {
+          if (error.response && error.response.data) {
+            console.error('Error fetching protected data:', error.response.data);
+    
+          } else {
+            console.error('Error fetching protected data:', error.message);
+          }
+          navigate('/');
+        }
+      };
+  fetchProtectedData();
+}, [navigate]);
 
   const logoutUser = async () => {
     try {

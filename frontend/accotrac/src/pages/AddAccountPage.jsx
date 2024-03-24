@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AddAccountForm from '../components/AddAccountForm';
 import UpperHeader from '../components/UpperHeader';
 import LowerHeader from '../components/LowerHeader';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 function AddAccountPage() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const fetchProtectedData = async () => {
+        try {
+          const response = await axios.get('http://localhost:5000/protected');
+          if (response.status !== 200) {
+            navigate("/");
+          }
+          // Handle the response as needed
+        } catch (error) {
+          if (error.response && error.response.data) {
+            console.error('Error fetching protected data:', error.response.data);
+    
+          } else {
+            console.error('Error fetching protected data:', error.message);
+          }
+          navigate('/');
+        }
+      };
+  fetchProtectedData();
+}, [navigate]);
+  
 
   return (
     <div><>

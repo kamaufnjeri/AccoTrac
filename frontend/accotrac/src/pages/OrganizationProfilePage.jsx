@@ -4,8 +4,9 @@ import UpperHeader from '../components/UpperHeader'
 import LowerHeader from '../components/LowerHeader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import UpdateOrganization from '../components/UpdateOrganization'
 
-const UserProfilePage = () => {
+const OrganizationProfilePage = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
@@ -28,7 +29,7 @@ const UserProfilePage = () => {
           };
       fetchProtectedData();
     }, [navigate]);
-   
+    
   return (
     <div><>
     <meta charSet="utf-8" />
@@ -57,7 +58,7 @@ const UserProfilePage = () => {
     </div>
     <div className="container-fluid vh-100 d-flex flex-column">
       <div class="container">
-        <UpdateUser/>
+        <UpdateOrganization/>
       </div>
     </div>
   </>
@@ -65,4 +66,4 @@ const UserProfilePage = () => {
   )
 }
 
-export default UserProfilePage
+export default OrganizationProfilePage

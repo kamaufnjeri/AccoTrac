@@ -1,16 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
 import GeneralJournal from '../components/GeneralJournal';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../components/UserContext';
 import LowerHeader from '../components/LowerHeader';
 import UpperHeader from '../components/UpperHeader';
+import axios from 'axios';
 
 const GeneralJournalPage = () => {
   const navigate = useNavigate();
-  const {user} = useContext(UserContext);
-
+  useEffect(() => {
+    const fetchProtectedData = async () => {
+        try {
+          const response = await axios.get('http://localhost:5000/protected');
+          if (response.status !== 200) {
+            navigate("/");
+          }
+          // Handle the response as needed
+        } catch (error) {
+          if (error.response && error.response.data) {
+            console.error('Error fetching protected data:', error.response.data);
+    
+          } else {
+            console.error('Error fetching protected data:', error.message);
+          }
+          navigate('/');
+        }
+      };
+  fetchProtectedData();
+}, [navigate]);
 
   return (
+    
     <div><>
       <meta charSet="utf-8" />
       <meta

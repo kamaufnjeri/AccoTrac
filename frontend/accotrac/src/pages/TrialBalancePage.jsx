@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
-import UpperHeader from '../components/UpperHeader';
-import LowerHeader from '../components/LowerHeader';
-import ChartsOfAccount from '../components/ChartsOfAccount';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect } from 'react'
+import LowerHeader from '../components/LowerHeader'
+import UpperHeader from '../components/UpperHeader'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
-
-function ChartsOfAccountPage() {
-  const navigate = useNavigate()
-  useEffect(() => {
-    const fetchProtectedData = async () => {
+const TrialBalancePage = () => {
+    const navigate = useNavigate()
+    useEffect(() => {
+      const fetchProtectedData = async () => {
         try {
           const response = await axios.get('http://localhost:5000/protected');
           if (response.status !== 200) {
@@ -26,8 +24,9 @@ function ChartsOfAccountPage() {
           navigate('/');
         }
       };
-  fetchProtectedData();
-}, [navigate]);
+      fetchProtectedData();
+    }, [navigate]);
+    
   return (
     <div><>
     <meta charSet="utf-8" />
@@ -55,11 +54,11 @@ function ChartsOfAccountPage() {
      <LowerHeader/>
     </div>
     <div className="container-fluid vh-100 d-flex flex-column">
-      <ChartsOfAccount/>
+     
     </div>
   </>
   </div>
-  );
+  )
 }
 
-export default ChartsOfAccountPage;
+export default TrialBalancePage
