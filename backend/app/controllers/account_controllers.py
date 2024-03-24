@@ -33,7 +33,7 @@ class AccountControllers:
             if not company:
                 raise ValueError(f"The company ID {company_id} doesn't exist")
             
-            accounts = Account.query.all()
+            accounts = Account.query.filter_by(company_id=company_id).all()
 
             if not accounts:
                 raise ValueError(f"No accounts found associated to company ID {company_id}")

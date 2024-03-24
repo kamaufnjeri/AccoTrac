@@ -1,9 +1,33 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from './UserContext';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+
+axios.defaults.withCredentials = true;
 
 const JournalRow = ({ entry, index, handleChange, removeRow }) => {
-  const { company } = useContext(UserContext);
-  const accounts = company?.accounts;
+  const [accounts, setAccounts] = useState()
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/getallaccounts`);
+
+            if (response.status === 200) {
+                setAccounts(response.data.response);
+            }
+            else {
+                throw new Error(response.data.response);
+            }
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            if (error.response && error.response.data) {
+                console.error('Error deleting account: ' + error.response.data.response);
+            }
+            else {
+                console.error('Error deleting account: ' + error);
+            }
+        } 
+    }
+    fetchData();
+}, [setAccounts]);
 
   // Initialize options state with an empty array
   const [options, setOptions] = useState([]);

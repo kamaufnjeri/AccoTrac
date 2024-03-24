@@ -5,7 +5,6 @@ import Forgotpassword from './pages/Forgotpassword'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import AddUserOrganization from './pages/AddUserOrganization'
 import GeneralJournalPage from './pages/GeneralJournalPage'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +13,7 @@ import DashBoard from './pages/DashBoard'
 import UserProvider from './components/UserContext'
 import AddAccountPage from './pages/AddAccountPage'
 import ChartsOfAccountPage from './pages/ChartsOfAccountPage'
+import UserProfilePage from './pages/UserProfilePage'
 
 function App() {
   return (
@@ -29,10 +29,10 @@ function App() {
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
       <Route path='/dashboard' element={<DashBoard/>}/>
-      <Route path='/addorganization' element={<AddUserOrganization/>}/>
       <Route path='/addaccount' element={<AddAccountPage/>}/>
       <Route path='/chartsofaccount' element={<ChartsOfAccountPage/>}/>
       <Route path='/generaljournal' element={<GeneralJournalPage/>}/>
+      <Route path='/myprofile' element={<UserProfilePage/>}/>
       <Route path='/forgotpassword' element={<Forgotpassword/>}/>
     </Routes>
     </BrowserRouter>

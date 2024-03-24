@@ -64,28 +64,11 @@ const LowerHeader = () => {
               </ul>
             </li>
             
-            <li className="dropdown float-md-start p-4">
-              <Link
-                className="text-white fw-bold dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Profile
-              </Link>
-              <ul className="dropdown-menu">
-                <li>
-                  <Link className="dropdown-item" to="/userprofile">
-                    My Profile
-                  </Link>
-                  <Link className="dropdown-item" to="/addorganization">
-                    Add organization
-                  </Link>
-                  <Link className="dropdown-item" to="/userprofile">
-                    Change organization
-                  </Link>
-                </li>
-              </ul>
-            </li>
+            <li className="float-md-start p-4">
+                <Link className="text-white fw-bold" to="/myprofile">
+                  Profile
+                </Link>
+              </li>
           </ul>
         </div>
       </div>
