@@ -1,11 +1,12 @@
 from app.models.user import User
 from app.models.account import db
 from ..models.user_company import UserCompanyAssociation
+from .companyutils import create_new_company
 from typing import Tuple, Union
 
 
 """create a user"""
-def register_user(firstname: str, lastname:str, user_email:str, password:str) -> Tuple[Union[str, User], int]:
+def register_user(firstname: str, lastname:str, user_email:str, password:str, company_name:str) -> Tuple[Union[str, User], int]:
     """returns new user or error with appropriate status code"""
     try:
         user_exist = User.query.filter_by(email=user_email).first()
@@ -13,9 +14,13 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str) ->
             raise ValueError('User already exists')
         user = User(firstname=firstname, lastname=lastname, email=user_email)
         user.set_password(password)
-
         db.session.add(user)
         db.session.commit()
+        message, code = create_new_company(company_name=company_name,
+                                           company_email=None,
+                                           company_country=None,
+                                           company_currency=None,
+                                           user_id=user.id)
         newuser = user.to_dict()
         return newuser, 200
     except Exception as e:
