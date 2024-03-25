@@ -182,9 +182,9 @@ function Home() {
             <h2>About AccoTrac</h2>
             <p>
               AccoTrac is a web-based accounting application designed to
-              simplify business finances htmlFor small and medium-sized enterprices.
+              simplify business finances for small and medium-sized enterprices.
               The application provides an affordable and user-friendly solution
-              htmlFor managing accounts,recording transactions and generating
+              for managing accounts,recording transactions and generating
               financial reports. With AccoTrac,businesses can streamline their
               accounting processes,gain valuable insight into their financial
               performance and make informed decisions to drive growth and
@@ -221,12 +221,12 @@ function Home() {
               </div>
               <div className="det text-center">
                 <p className="fs-7 fst-italic">
-                  "AccoTrac has been a game-changer htmlFor my bakery. Before,
+                  "AccoTrac has been a game-changer for my bakery. Before,
                   managing finances was a time-consuming nightmare. Now,
                   everything is so much simpler. Transactions are recorded
                   automatically, reports are generated with a few clicks, and
                   tax season is a breeze. AccoTrac's user-friendly interface
-                  makes it easy htmlFor even someone with no accounting background
+                  makes it easy for even someone with no accounting background
                   like me to stay on top of things. I can finally focus on what
                   I love - baking delicious treats - instead of stressing about
                   numbers."{" "}
@@ -251,13 +251,13 @@ function Home() {
               </div>
               <div className="det text-center">
                 <p className="fs-7 fst-italic">
-                  "As the marketing manager htmlFor a growing tech startup,
+                  "As the marketing manager for a growing tech startup,
                   understanding our financial performance is crucial. AccoTrac's
                   insightful dashboards and reports give us a clear view of our
                   spending habits, profitability margins, and key financial
                   metrics. This data empowers us to make data-driven decisions
                   about marketing campaigns, resource allocation, and future
-                  investments. AccoTrac has become an essential tool htmlFor our
+                  investments. AccoTrac has become an essential tool for our
                   financial transparency and strategic planning."{" "}
                 </p>
               </div>
@@ -284,7 +284,7 @@ function Home() {
                   my trusted financial partner. The software scales perfectly
                   with my growing client base. I can easily manage multiple
                   projects, track invoices and payments, and generate
-                  professional reports htmlFor my clients. Whenever I've had
+                  professional reports for my clients. Whenever I've had
                   questions, AccoTrac's customer support team has been
                   incredibly helpful and responsive. Their dedication to user
                   satisfaction gives me peace of mind knowing I have a reliable
