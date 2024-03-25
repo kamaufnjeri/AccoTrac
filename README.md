@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 ## Base URL
 
-The base URL for all API endpoints is `http://yourdomain.com/`.
+The base URL for all API endpoints is `/`.
 
 ## Authentication
 
@@ -33,9 +33,9 @@ The AccoTrac API uses session-based authentication managed by Flask-Login. When 
 
 #### Table of Contents
 
-1. [Home](#home)
-2. [User Endpoints](#user-endpoints)
-   - [Create User](#create-user)
+1. [Home](#Home)
+2. [User Endpoints](#Create-User)
+   - [Create User](#Create-User)
    - [Verify Email](#verify-email)
    - [Update User](#update-user)
    - [Delete User](#delete-user)
@@ -325,7 +325,7 @@ The AccoTrac API uses session-based authentication managed by Flask-Login. When 
 
     {
         "password": "new_password123",
-              "confirm_password": "new_password123"
+        "confirm_password": "new_password123"
     }
     ```
 
