@@ -6,6 +6,7 @@ secret_key = Config.SECRET_KEY
 salt = Config.random_key
 safe_serializer = URLSafeSerializer(secret_key, salt)
 
+
 def create_token(**kwargs: dict) -> Tuple[Union[str, None], str, int]:
     """Returns a serialized string with data(kwargs) inside
     """
@@ -21,12 +22,13 @@ def create_token(**kwargs: dict) -> Tuple[Union[str, None], str, int]:
     except Exception as error:
         return None, str(error), 400
 
-def get_data_from_token(token: str) -> Tuple[Union[dict, None], str,]:
+def get_data_from_token(token: str) -> Tuple[Union[dict, None], str, int]:
     """returns dict with information from token
     or None
     """
     try:
         data = safe_serializer.loads(token)
+        print(data)
         if data:
             return data, 'Here is the data', 200
         else:

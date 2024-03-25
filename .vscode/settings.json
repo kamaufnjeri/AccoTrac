@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["accountsutils", "createuser", "jsonify", "userutils"]
+  "cSpell.words": [
+    "accountsutils",
+    "createuser",
+    "dotenv",
+    "jsonify",
+    "SQLALCHEMY",
+    "urandom",
+    "userutils"
+  ]
 }

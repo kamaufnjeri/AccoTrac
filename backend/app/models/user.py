@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     firstname = db.Column(db.String(256), nullable=False)
     lastname = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
+    valid_email = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(256), nullable=False)
     accounts = db.relationship('Account', backref='users', lazy=True, cascade="all,delete")
 
