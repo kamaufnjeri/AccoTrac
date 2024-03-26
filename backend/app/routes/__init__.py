@@ -23,20 +23,19 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
             return jsonify(message), 400
         if current_user and current_user.is_authenticated:
             message = {"message": "You need to be logged out for you to register a user"}
-            return jsonify(message), 400
+            return jsonify(message), 403
         # register a user
         data = request.get_json()
         required_fields = ["firstname", "lastname", "email", "password", "company_name"]
         if not data:
             message = {
-                'message': 'Missing Required fields',
-                "required_Fields" : required_fields
+                'message': f'Missing Required fields: {required_fields}'
                 }
-            return jsonify(message), 404
+            return jsonify(message), 400
         for field in required_fields:
             if field not in data:
                 message = {'message': f'{field} is Required'}
-                return jsonify(message), 404
+                return jsonify(message), 400
         firstname = data.get('firstname')
         lastname = data.get('lastname')
         email = data.get('email')
