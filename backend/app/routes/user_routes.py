@@ -1,19 +1,19 @@
 from app import app, db, send_email
 from app.utils.companyutils import create_new_company, get_company_by_user_id, update_companyinfo, get_company
 from app.utils.userutils import register_user, get_user, update_userinfo, delete_userinfo, get_user_by_company_association, verify_user_email
-from flask import request, jsonify, url_for
+from flask import request, jsonify, Blueprint
 from app.utils.apputils import create_token, get_data_from_token
 from flask_login import current_user, login_user, logout_user, login_required
 from typing import Tuple, Union
 from app.models import User
 
 
-
-@app.route('/', methods=['GET', 'POST'], strict_slashes=False)
+user_bp = Blueprint('user_bp', __name__)
+@user_bp.route('/', methods=['GET', 'POST'], strict_slashes=False)
 def home():
     return('<h1> AccoTrac Coming soon</h1>')
 
-@app.route('/user', methods=['GET', 'POST'], strict_slashes=False)
+@user_bp.route('/user', methods=['GET', 'POST'], strict_slashes=False)
 def create_user() -> Union[jsonify, Tuple[dict, int]]:
     """POST: Returns a json with a new user created or error message
     GET: Returns register page
@@ -51,25 +51,25 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
         if code != 201:
             message = {"message": message}
             return jsonify(message), code
-        url = request.url_root[:-1] + url_for('verify_email', token=token)
+        url = 'http://localhost:3000/user/verifyemail/' + token
         try:
-            send_email('[AccoTrac] Verify Your Email',
+            resp_msg, status = send_email('[AccoTrac] Verify Your Email',
                 sender=app.config['ADMINS'],
                 recipients=[email],
                 text_body=f"""
                 Dear {firstname},
                 Click on the Link below to verify your email
-
                 {url}
-
                 Sincerely,
                 The Accotrac Team
                 """)
-            print(app.config['ADMINS'])
-            message = {"message": "Check your email for a link to verify your email",
-                    "result": result}
-            db.session.commit()
-            return jsonify(message), code
+            if status == True:
+                message = {"message": "Check your email for a link to verify your email",
+                        "result": result}
+                db.session.commit()
+                return jsonify(message), code
+            else:
+                raise ValueError(resp_msg)
         except Exception as e:
             db.session.rollback()
             print(str(e))
@@ -83,7 +83,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
         message = {'message': 'Signup page coming soon'}
         return jsonify(message), 200
 
-@app.route('/user/verify_email/<token>', methods=['GET'], strict_slashes=False)
+@user_bp.route('/user/verifyemail/<string:token>', methods=['GET'], strict_slashes=False)
 def verify_email(token:str):
     print(token)
     if request.method == 'GET':
@@ -92,16 +92,22 @@ def verify_email(token:str):
             message = {'message': message}
             return jsonify(message), code
         user, code = get_user(user_email=data.get('email'))
-        if not user:
+        if code != 200:
             error = user
-            message = {'message': message}
-            return jsonify(error), code
+            message = {'message': error}
+            return jsonify(message), code
         message, code = verify_user_email(user)
+        if code == 200:
+            response = {
+                "message": message,
+                "user": user.to_dict(user.is_authenticated)
+            }
+            return jsonify()
         message = {"message" : message}
         return jsonify(message), code
 
 
-@app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
+@user_bp.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login()-> Union[jsonify, Tuple[dict, int]]:
     """Creates a session for a user if they exist and their
     credentials match
@@ -147,7 +153,7 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
         message = {"Message": "Login Page coming soon"}
         return (jsonify(message), 200)
 
-@app.route('/logout', methods=['POST'], strict_slashes=False)
+@user_bp.route('/logout', methods=['POST'], strict_slashes=False)
 def logout() -> Union[jsonify, Tuple[dict, int]]:
     """Destroys the Session of current logged in user
     Returns status of current login user
@@ -162,7 +168,7 @@ def logout() -> Union[jsonify, Tuple[dict, int]]:
                'userEmail': f'{userEmail}'}
     return jsonify(message), 200
 
-@app.route('/user/<id>', methods=['GET', 'PUT'], strict_slashes=False)
+@user_bp.route('/user/<id>', methods=['GET', 'PUT'], strict_slashes=False)
 @login_required
 def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
     """updates user information
@@ -190,7 +196,7 @@ def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
         message = {"Message": "Update Page coming soon"}
         return jsonify(message), 200
 
-@app.route('/createcompany', methods=['GET', 'POST'], strict_slashes=False)
+@user_bp.route('/createcompany', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
 def create_company():
     if request.method == 'POST':
@@ -213,7 +219,7 @@ def create_company():
         message = {"Message": companies}
         return jsonify(message), 200
 
-@app.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
+@user_bp.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
 @login_required
 def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
     """updates company information
@@ -236,14 +242,14 @@ def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
             return jsonify(message), code
         return jsonify({"response": company.to_dict()}), code
 
-@app.route('/<string:user_id>/getcompanies', methods=['GET'])
+@user_bp.route('/<string:user_id>/getcompanies', methods=['GET'])
 def get_companies_by_user_id(user_id):
     message, code, company_names = get_company_by_user_id(user_id=user_id)
     return jsonify({"message": message, "response": company_names}), code
 
 
 
-@app.route('/protected', methods=['GET'])
+@user_bp.route('/protected', methods=['GET'])
 def protected():
     if current_user.is_authenticated:
         user = current_user.to_dict(current_user.is_authenticated)
@@ -251,7 +257,7 @@ def protected():
     
     return jsonify({"message": "User not authenticated", "response": current_user.is_authenticated}), 401
 
-@app.route('/<string:company_id>/select_organization', methods=['PUT'])
+@user_bp.route('/<string:company_id>/select_organization', methods=['PUT'])
 @login_required
 def add_selected_organization(company_id):
     try:

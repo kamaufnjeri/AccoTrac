@@ -19,6 +19,7 @@ import ProfitLossPage from './pages/ProfitLossPage'
 import BalanceSheetPage from './pages/BalanceSheetPage'
 import JournalEntriesPage from './pages/JournalEntriesPage'
 import OrganizationProfilePage from './pages/OrganizationProfilePage'
+import VerifyEmail from './pages/VerifyEmail'
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
       <Route path='/profitloss' element={<ProfitLossPage/>}/>
       <Route path='/balancesheet' element={<BalanceSheetPage/>}/>
       <Route path='/journals' element={<JournalEntriesPage/>}/>
+      <Route path='/user/verifyemail/:token' element={<VerifyEmail/>}/>
       <Route path='/forgotpassword' element={<Forgotpassword/>}/>
     </Routes>
     </BrowserRouter>

@@ -33,14 +33,11 @@ def send_email():
         sender = f'Your Name <noreply@yourdomain.com>'  # Set your custom domain name
 
         try:
-            server = smtplib.SMTP(app.config['MAIL_SERVER'], app.config['MAIL_PORT'], local_hostname="outlook.com")
-            server.starttls()
-            server.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+            
 
             message = Message(subject, sender=sender, recipients=[recipient])
             message.body = body
             mail.send(message)
-            server.quit()  # Close the connection after sending
             return jsonify({'message': 'Email sent successfully'}), 200
         except Exception as e:
             print(f"Error sending email: {e}")
