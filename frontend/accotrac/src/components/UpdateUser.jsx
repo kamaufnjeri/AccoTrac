@@ -14,26 +14,27 @@ const UpdateUser = () => {
     }, [user])
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-
         try {
-          const response = await axios.put(`http://localhost:5000/updateuser/${user.id}`, data);
+          const response = await axios.put(`http://localhost:5000/user/${user.id}`, data);
+          console.log(response)
           if (response.status === 200) {
             toast.success("Success updating user information");
-            setData(response.data.response);
-            setUser(response.data.response);
+            setData(response.data);
+            setUser(response.data);
             console.log('user',user);
           } else {
             console.log(response.data);
             throw new Error(response.data.message)
           }
         } catch (error) {
+          console.log(error)
           if (error.response.data) {
             toast.error("Error updating user: " + error.response.data.message);
           }
           else {
             toast.error("Error updating: " + error);
           }
+          setData(user);
         }
       };
   return (

@@ -3,6 +3,7 @@ import LowerHeader from '../components/LowerHeader'
 import UpperHeader from '../components/UpperHeader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import BalanceSheet from '../components/BalanceSheet'
 
 const BalanceSheetPage = () => {
     const navigate = useNavigate();
@@ -53,7 +54,7 @@ const BalanceSheetPage = () => {
      <LowerHeader/>
     </div>
     <div className="container-fluid vh-100 d-flex flex-column">
-      
+      <BalanceSheet/>
     </div>
   </>
   </div>

@@ -13,20 +13,20 @@ const MenuItems = () => {
             const response = await axios.post('http://localhost:5000/logout');
             console.log(response.data);
             if (response.status === 200) {
-                toast.success('Successfully logged out');
+                toast.success(`${response.data.message} ${response.data.userEmail}`);
                 setUser(null);
                 setCompany(null);
                 console.log(user);
                 console.log(company);
                 navigate('/home');
             } else {
-                toast.error(response.data.error);
+                toast.error(response.data.message);
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                toast.error('Error logging out: ' + error.response.data.error);
+                toast.error('Error logging out: ' + error.response.data.message);
             } else {
-                toast.error('Error logging out: ' + error.message);
+                toast.error('Error logging out: ' + error);
             }
         }
     };
