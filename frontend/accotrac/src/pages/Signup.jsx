@@ -17,7 +17,6 @@ const Signup = () => {
     password: '',
     company_name: ""
   });
-  const { setUser, setCompany } = useContext(UserContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,27 +31,28 @@ const Signup = () => {
         if (response.status === 201) {
           if (response.data.result) {
             const user = response.data.result;
-            toast.success(`Success creating account ${user.email}`);
-            setUser(user);
-            setCompany(user.selected_company);
+            toast.success(response.data.message);
+            setData({
+              firstname: '',
+              lastname: '',
+              email: '',
+              password: '',
+              company_name: "" 
+            });
+            setConfirmPassword('');
           }
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-        else {
-          toast.error(response.data.error);
+        } else {
+          throw new Error (response.data.message);
         }
       } catch (error) {
           console.log("Error response:", error.response);
           if (error.response && error.response.data) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.message);
           } else {
-            toast.error("Unexpected error creating company: " + error);
+            toast.error("Unexpected error creating user: " + error);
           }
-        }
+      }
     }
-
   };
 
   return (

@@ -37,6 +37,11 @@ def create_new_company(company_name: str, company_email: str, company_country:st
             ).first()
             if company_exist:
                 raise ValueError('Company already exists')
+        company_by_name = Company.query.filter_by(
+            name=company_name
+        ).first()
+        if company_by_name:
+            raise ValueError(f'Company {company_name} already exists')
         company = Company(name=company_name,
                           email=company_email,
                           country=company_country,

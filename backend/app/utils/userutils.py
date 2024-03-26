@@ -35,10 +35,10 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
 def verify_user_email(user: User) -> Tuple[str, int]:
     """verify user email"""
     if user.valid_email:
-        return "Email is verified already", 201
+        return "Email is verified already", 200
     user.valid_email = True
     db.session.commit()
-    return "Email verified successfully", 201
+    return "Email verified successfully", 200
 
 def get_user(user_email:str, password:str = None) -> Tuple[Union[str, User], int]:
     """returns user if exist or error with appropriate status code"""
