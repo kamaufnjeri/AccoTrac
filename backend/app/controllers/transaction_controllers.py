@@ -1,4 +1,4 @@
-from app.models import Company, User
+from app.models import Transaction, Account
 from datetime import datetime
 from app import db
 from app.utils import TransactionUtils
@@ -22,3 +22,15 @@ class GeneralTransactionControllers:
         except Exception as e:
             db.session.rollback()
             return "Unexpected error when entering transaction", 500, str(e)
+
+    def get_all_journals(self, company_id, user_id):
+        try:
+            transactions = Transaction.query.filter_by(
+                company_id=company_id,
+                user_id=user_id
+            ).all()
+            sorted_transactions = sorted(reversed(transactions), key=lambda x: x.date, reverse=True)
+            return [transaction.to_dict() for transaction in sorted_transactions], 200
+        except Exception as e:
+            return str(e), 500
+        

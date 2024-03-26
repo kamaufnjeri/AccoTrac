@@ -1,5 +1,5 @@
 from app import app, db
-from app.utils.companyutils import create_new_company, get_company_by_user_id
+from app.utils.companyutils import create_new_company, get_company_by_user_id, update_companyinfo, get_company
 from app.utils.userutils import register_user, get_user, update_userinfo
 from flask import request, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
@@ -72,7 +72,7 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
             error = user
             message = {'message': error}
             return jsonify(message), code
-        user = {**current_user.to_dict(), **{"authenticated": current_user.is_authenticated}}
+        user = current_user.to_dict(current_user.is_authenticated)
         message = {"result": user}
         return jsonify(message), code
     
@@ -89,29 +89,38 @@ def logout() -> Union[jsonify, Tuple[dict, int]]:
     message = {'Logged in': f'{current_user.is_authenticated}'}
     return jsonify(message), 200
 
-
 @app.route('/updateuser/<id>', methods=['GET', 'PUT'], strict_slashes=False)
 @login_required
-def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
+def update_user(id: str) -> Union[jsonify, Tuple[dict, int]]:
     """updates user information
     PUT: Returns username and updated information
     GET: Returns update page
     """
+    data = request.get_json()
+    if current_user is None:
+        message = {'message': 'User not authenticated'}
+        return jsonify(message), 401
+
     if request.method == 'PUT':
-        if current_user.id == id:
-            user, code = get_user(user_email=current_user.email)
-            data = request.get_json()
+        if current_user.id == id and current_user.is_authenticated:
             if not data:
                 message = {'message': 'provide information to update'}
                 return jsonify(message), 400
-            user, code = update_userinfo(user, data)
-            return jsonify(user.to_dict()), code
+            user, code = update_userinfo(id, data)
+            print(code)
+            print(user)
+
+            if code == 200:
+                return jsonify({"response": current_user.to_dict(current_user.is_authenticated)}), code
+            error = user
+            return jsonify({"message": error}), code
         else:
             message = {'message': 'You are not allowed to update this user information'}
             return jsonify(message), 401
     elif request.method == 'GET':
         message = {"Message": "Update Page coming soon"}
         return jsonify(message), 200
+
 
 @app.route('/createcompany', methods=['GET', 'POST'], strict_slashes=False)
 @login_required
@@ -135,7 +144,29 @@ def create_company():
         # message = {"Message": "Create company Page coming soon"}
         message = {"Message": companies}
         return jsonify(message), 200
-    
+
+@app.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
+@login_required
+def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
+    """updates company information
+    PUT: Returns company and updated information
+    """
+    if request.method == 'PUT' and current_user.is_authenticated:
+        data = request.get_json()
+        if not data:
+            message = {"Message": "Provide fields to be updated"}
+            return jsonify(message), 400
+        company = get_company(company_id)
+        if not company:
+            message = {"Message": "Company does not exist"}
+            return jsonify(message), 400
+        company, code = update_companyinfo(company=company, user=current_user, data=data)
+        if isinstance(company, str):
+            # means its an error
+            error = company
+            message = {"message": error}
+            return jsonify(message), code
+        return jsonify({"response": company.to_dict()}), code
 
 @app.route('/<string:user_id>/getcompanies', methods=['GET'])
 def get_companies_by_user_id(user_id):
@@ -147,7 +178,7 @@ def get_companies_by_user_id(user_id):
 @app.route('/protected', methods=['GET'])
 def protected():
     if current_user.is_authenticated:
-        user = {**current_user.to_dict(), **{"authenticated": current_user.is_authenticated}}
+        user = current_user.to_dict(current_user.is_authenticated)
         return jsonify({"message": "User is authenticated", "response": user}), 200
     
     return jsonify({"message": "User not authenticated", "response": current_user.is_authenticated}), 401

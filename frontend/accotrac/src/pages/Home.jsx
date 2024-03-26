@@ -90,8 +90,10 @@ function Home() {
             <i className="bi fs-1 text-primary bi-currency-dollar" />
           </div>
           <div className="col-10">
-            <h4 className="fs-6 fw-bold mt-3">Account Tracking</h4>
-            <p>/*You can write the description here.*/</p>
+            <h4 className="fs-6 fw-bold mt-3">Double Entry Accouting</h4>
+            <p>
+              Our accounting app is built on the foundation of double-entry accounting, a tried-and-tested method for ensuring accurate financial records. With double-entry accounting, every transaction is recorded twice, once as a debit and once as a credit, ensuring that your books always balance. This approach provides a clear and comprehensive view of your financial transactions, making it easier to identify errors and track your financial health with confidence.
+            </p>
           </div>
         </div>
       </div>
@@ -101,8 +103,8 @@ function Home() {
             <i className="bi text-primary fs-1  bi-bar-chart-line" />
           </div>
           <div className="col-10">
-            <h4 className="fs-6 fw-bold mt-3">Account Planning</h4>
-            <p>/*You can write the description here.*/</p>
+            <h4 className="fs-6 fw-bold mt-3">Balance Sheet and Trial Balance Tracking</h4>
+            <p>This financial app helps you monitor your business's health with automatic features. It tracks your trial balance, summarizing debits and credits for a real-time view of your finances. This helps you identify issues, track trends, and make informed decisions. The app also generates balance sheets to show your assets, liabilities, and equity. This lets you assess your financial stability and make strategic choices to grow your business.</p>
           </div>
         </div>
       </div>
@@ -112,8 +114,9 @@ function Home() {
             <i className="bi text-primary fs-1 bi-calculator" />
           </div>
           <div className="col-10">
-            <h4 className="fs-6 fw-bold mt-3">Taxes &amp; Efficiency</h4>
-            <p>/*You can write the description here.*/</p>
+            <h4 className="fs-6 fw-bold mt-3">Profit &amp; Loss Statement</h4>
+            <p>Gain valuable insights into your business's financial performance with our comprehensive profit and loss statement feature. Our app generates detailed reports that summarize your revenues, expenses, and net income over a specific period, allowing you to analyze your profitability and identify areas for improvement. Whether you're assessing the success of a marketing campaign or evaluating the impact of cost-cutting measures, our profit and loss statements provide the clarity you need to make informed decisions.
+            </p>
           </div>
         </div>
       </div>
@@ -182,9 +185,9 @@ function Home() {
             <h2>About AccoTrac</h2>
             <p>
               AccoTrac is a web-based accounting application designed to
-              simplify business finances htmlFor small and medium-sized enterprices.
+              simplify business finances for small and medium-sized enterprices.
               The application provides an affordable and user-friendly solution
-              htmlFor managing accounts,recording transactions and generating
+              for managing accounts,recording transactions and generating
               financial reports. With AccoTrac,businesses can streamline their
               accounting processes,gain valuable insight into their financial
               performance and make informed decisions to drive growth and
@@ -221,12 +224,12 @@ function Home() {
               </div>
               <div className="det text-center">
                 <p className="fs-7 fst-italic">
-                  "AccoTrac has been a game-changer htmlFor my bakery. Before,
+                  "AccoTrac has been a game-changer for my bakery. Before,
                   managing finances was a time-consuming nightmare. Now,
                   everything is so much simpler. Transactions are recorded
                   automatically, reports are generated with a few clicks, and
                   tax season is a breeze. AccoTrac's user-friendly interface
-                  makes it easy htmlFor even someone with no accounting background
+                  makes it easy for even someone with no accounting background
                   like me to stay on top of things. I can finally focus on what
                   I love - baking delicious treats - instead of stressing about
                   numbers."{" "}
@@ -251,13 +254,13 @@ function Home() {
               </div>
               <div className="det text-center">
                 <p className="fs-7 fst-italic">
-                  "As the marketing manager htmlFor a growing tech startup,
+                  "As the marketing manager for a growing tech startup,
                   understanding our financial performance is crucial. AccoTrac's
                   insightful dashboards and reports give us a clear view of our
                   spending habits, profitability margins, and key financial
                   metrics. This data empowers us to make data-driven decisions
                   about marketing campaigns, resource allocation, and future
-                  investments. AccoTrac has become an essential tool htmlFor our
+                  investments. AccoTrac has become an essential tool for our
                   financial transparency and strategic planning."{" "}
                 </p>
               </div>
@@ -284,7 +287,7 @@ function Home() {
                   my trusted financial partner. The software scales perfectly
                   with my growing client base. I can easily manage multiple
                   projects, track invoices and payments, and generate
-                  professional reports htmlFor my clients. Whenever I've had
+                  professional reports for my clients. Whenever I've had
                   questions, AccoTrac's customer support team has been
                   incredibly helpful and responsive. Their dedication to user
                   satisfaction gives me peace of mind knowing I have a reliable

@@ -8,6 +8,9 @@ class Company(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     name = db.Column(db.String(128), nullable=False, unique=True)
+    email = db.Column(db.String(256), unique=True)
+    country = db.Column(db.String(128))
+    currency = db.Column(db.String(128))
     accounts = db.relationship('Account', backref='company', lazy=True)
     transactions = db.relationship('Transaction', backref='company', lazy=True)
     #stocks = db.relationship('Stock', backref='company', lazy=True)
@@ -48,7 +51,12 @@ class Company(db.Model):
         db.session.commit()
 
     def to_dict(self):
-        return {
-            "name": self.name,
-            "accounts": [account.to_dict() for account in self.accounts]
-        }
+        """Returns Company object with some of its attributes"""
+        new_dict = {}
+        new_dict['id'] = self.id
+        new_dict['name'] = self.name
+        new_dict['email'] = self.email
+        new_dict['country'] = self.country
+        new_dict['currency'] = self.currency
+        new_dict['accounts'] = [account.to_dict() for account in self.accounts]
+        return new_dict
