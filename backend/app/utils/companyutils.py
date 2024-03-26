@@ -28,21 +28,20 @@ chart_of_accounts = {
     }
 }
 
-
-
 """trial method to create a user, company and accounts"""
-def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
+def create_new_company(company_name: str, company_email: str, company_country:str, company_currency:str, user_id: str) -> Tuple[str, int]:
     try:
-        company_exist = Company.query.filter_by(
-            name=company_name
-        ).first()
-        if company_exist:
-            raise ValueError('Company already exists')
-        user = User.query.filter_by(id=user_id).first()
-        
-        company = Company(name=company_name)
+        if company_email is not None:
+            company_exist = Company.query.filter_by(
+                email=company_email
+            ).first()
+            if company_exist:
+                raise ValueError('Company already exists')
+        company = Company(name=company_name,
+                          email=company_email,
+                          country=company_country,
+                          currency=company_currency)
         db.session.add(company)
-        user.selected_company_id = company.id
         company.set_user_role(user_id, is_admin=True)
 
 
@@ -57,11 +56,10 @@ def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
                         sub_category=subcategory
                     )
                     db.session.add(account)
-        db.session.commit()
-        return "Successfully created company", 201, company
+        return company, 201
     except Exception as e:
         db.session.rollback()
-        return str(e), 400, None
+        return str(e), 400
 
 def get_company_by_user_id(user_id:str) -> Tuple[Union[List, None], int]:
     """Return a list of companies associated with user_id
@@ -115,4 +113,3 @@ def update_companyinfo(company, user, data: dict) -> Tuple[Union[str, User], int
     except Exception as e:
         db.session.rollback()
         return (str(e), 500)
-
