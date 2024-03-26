@@ -63,7 +63,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
                Sincerely,
                The Accotrac Team
                """)
-        message = {"message": "Check your email for a link to verify your email",
+        message = {"message": "Account created successfully. Check your email for a link to verify your email",
                    "result": result}
         return jsonify(message), code
 
@@ -333,8 +333,7 @@ def reset_password():
                Sincerely,
                The Accotrac Team
                """)
-        message = {'message': message,
-                    "Email": "Check your email for the reset link"}
+        message = {'message': message}
         return jsonify(message), code
 
 @app.route('/update_password/<token>', methods=['PUT', 'GET'], strict_slashes=False)
