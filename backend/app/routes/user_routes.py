@@ -102,7 +102,7 @@ def verify_email(token:str):
                 "message": message,
                 "user": user.to_dict(user.is_authenticated)
             }
-            return jsonify()
+            return jsonify(response), code
         message = {"message" : message}
         return jsonify(message), code
 

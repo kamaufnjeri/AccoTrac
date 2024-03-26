@@ -35,7 +35,7 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
 def verify_user_email(user: User) -> Tuple[str, int]:
     """verify user email"""
     if user.valid_email:
-        return "Email is verified already", 200
+        return "Email is verified already", 400
     user.valid_email = True
     db.session.commit()
     return "Email verified successfully", 200

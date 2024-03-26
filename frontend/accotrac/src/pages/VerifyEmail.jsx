@@ -19,8 +19,10 @@ const VerifyEmail = () => {
       try {
         const response = await axios.get(`http://localhost:5000/user/verifyemail/${token}`);
         if (response && response.status === 200 && response.data) {
-          const user = response.data.user;
-          navigate('/signin');
+            setMessage(response.data.message);
+        
+        const user = response.data.user;    
+        navigate('/login');
         } else {
           throw new Error(response.data.message);
         }
@@ -28,7 +30,7 @@ const VerifyEmail = () => {
         if (error.response && error.response.data) {
           setMessage(error.response.data.message);
         } else {
-          setMessage('Unknown error: ', error);
+          setMessage('Unknown error: ', error.message);
         }
         console.error(error);
       }

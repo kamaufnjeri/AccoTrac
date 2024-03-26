@@ -37,6 +37,7 @@ def send_email(subject, sender, recipients, text_body):
         return "Success sending email", True
     except Exception as e:
         return str(e), False
+    
 from app.routes import *
 app.register_blueprint(transaction_bp)
 app.register_blueprint(account_bp)
