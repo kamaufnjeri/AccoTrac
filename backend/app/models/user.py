@@ -3,24 +3,23 @@ from datetime import datetime
 import uuid
 from .user_company import UserCompanyAssociation
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    admin_id = db.Column(db.String(36), nullable=False, default='0')
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     firstname = db.Column(db.String(256), nullable=False)
     lastname = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
+    valid_email = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(256), nullable=False)
     selected_company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
-    accounts = db.relationship('Account', backref='user', lazy=True)
-    transactions = db.relationship('Transaction', backref='user', lazy=True)
-    #stocks = db.relationship('Stock', backref='user', lazy=True)
-    #stock_entry = db.relationship('StockEntry', backref='user', lazy=True)
-
-
+    accounts = db.relationship('Account', backref='users', lazy=True, cascade="all,delete")
+    transactions = db.relationship('Transaction', backref='user', lazy=True, cascade='all,delete')
+    
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
         super(User, self).__init__(**kwargs)

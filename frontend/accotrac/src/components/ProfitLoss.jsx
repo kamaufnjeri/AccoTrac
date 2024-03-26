@@ -7,7 +7,14 @@ axios.defaults.withCredentials = true;
 const ProfitLoss = () => {
   const [revenueAccounts, setRevenueAccounts] = useState([]);
   const [expenseAccounts, setExpenseAccounts] = useState([]);
-  const [netProfit, setNetProfit] = useState({});
+  const [totalRevenue, setTotalRevenue] = useState({ name: "Total Revenue", revenue: 0 });
+  const [totalExpenses, setTotalExpenses] = useState({ name: "Total Expenses", expense: 0 });
+  const [netProfit, setNetProfit] = useState({ name: 'Net Profit', profit: 0 });
+  const [salesAccounts, setSalesAccount] = useState([]);
+  const [totalSalesRevenue, setTotalSalesRevenue] = useState({ name: "Total Sales", sales: 0});
+  const [totalCogs, setTotalCogs] = useState({ name: "Total cost of goods sold", cogs: 0 });
+  const [cogsAccounts, setCogsAccounts] = useState([]);
+  const [grossProfit, setGrossProfit] = useState({ name: "Gross Profit", grossProfit: 0 });
   const { company } = useContext(UserContext);
   const currentDate = new Date().toISOString().split('T')[0];
 
@@ -16,19 +23,49 @@ const ProfitLoss = () => {
       try {
         const response = await axios.get('http://localhost:5000/profitloss');
         const accounts = response.data;
+
+        //filter gross profit
+
         
         // Filter revenue and expense accounts
-        const revenue = accounts.filter(account => account.category === 'revenue');
-        const expenses = accounts.filter(account => account.category === 'expense');
+        const revenue = accounts.filter(account => account.category === 'revenue' && account.sub_category === 'revenue');
+        const expenses = accounts.filter(account => account.category === 'expense' && account.sub_category === 'expense');
         
-        // Calculate net profit
-        const totalRevenue = revenue.reduce((acc, curr) => acc + curr.balance, 0);
-        const totalExpenses = expenses.reduce((acc, curr) => acc + curr.balance, 0);
-        const netProfitAmount = totalRevenue - totalExpenses;
+        //filter sales revenue accounts
+        const salesRevenue = accounts.filter(account => account.category === 'revenue' && account.sub_category === 'sales_revenue');
 
+        // filter cogs accounts
+        const cogs = accounts.filter(account => account.category === 'expense' && account.sub_category === 'cost_of_goods_sold');
+
+
+        // Calculate total revenue
+        const totalRevenueAmount = revenue.reduce((acc, curr) => acc + curr.balance, 0);
+        setTotalRevenue(prevState => ({ ...prevState, revenue: totalRevenueAmount }));
+
+        // Calculate total expenses
+        const totalExpensesAmount = expenses.reduce((acc, curr) => acc + curr.balance, 0);
+        setTotalExpenses(prevState => ({ ...prevState, expense: totalExpensesAmount }));
+
+        // total sales
+        const totalSales = salesRevenue.reduce((acc, curr) => acc + curr.balance, 0);
+        setTotalSalesRevenue(prevState => ({ ...prevState, sales: totalSales}));
+
+        // total cogs
+        const totalCogs = cogs.reduce((acc, curr) => acc + curr.balance, 0);
+        console.log(totalCogs);
+        setTotalCogs(prevState => ({ ...prevState, cogs: totalCogs }));
+
+        const grossProfit = totalSales - totalCogs;
+        setGrossProfit(prevState => ({ ...prevState, grossProfit: grossProfit }));
+
+        // Calculate net profit
+         const netProfitAmount = grossProfit + totalRevenueAmount - totalExpensesAmount;
+         setNetProfit(prevState => ({ ...prevState, profit: netProfitAmount }));
+
+        setCogsAccounts(cogs);
+        setSalesAccount(salesRevenue);
         setRevenueAccounts(revenue);
         setExpenseAccounts(expenses);
-        setNetProfit({ name: 'Net Profit', profit: netProfitAmount });
       } catch (error) {
         console.log(error);
       }
@@ -47,9 +84,48 @@ const ProfitLoss = () => {
             <tr>
               <th>Account Name</th>
               <th>Amount ({company.currency})</th>
+              <th>Total Amount ({company.currency})</th>
             </tr>
           </thead>
           <tbody>
+          <tr>
+              <td colSpan="2"><strong>Sales</strong></td>
+            </tr>
+            {salesAccounts.map((entry, index) => (
+              <tr key={index}>
+                <td>{entry.name}</td>
+                <td>{entry.balance}</td>
+                <td></td>
+              </tr>
+            ))}
+            <tr>
+              <td><strong>{totalSalesRevenue.name}</strong></td>
+              <td></td>
+              <td><strong>{totalSalesRevenue.sales}</strong></td>
+            </tr>
+            <tr>
+              <td colSpan="2"><strong>Cost of goods sold</strong></td>
+            </tr>
+            {cogsAccounts.map((entry, index) => (
+              <tr key={index}>
+                <td>{entry.name}</td>
+                <td>{entry.balance}</td>
+                <td></td>
+              </tr>
+            ))}
+            <tr>
+              <td><strong>{totalCogs.name}</strong></td>
+              <td></td>
+              <td><strong>({totalCogs.cogs})</strong></td>
+            </tr>
+            <tr>
+              <td colSpan="3" style={{ borderBottom: '2px solid black' }}></td>
+            </tr>
+            <tr>
+              <td><strong>{grossProfit.name}</strong></td>
+              <td></td>
+              <td><strong>{grossProfit.grossProfit}</strong></td>
+            </tr>
             <tr>
               <td colSpan="2"><strong>Revenue</strong></td>
             </tr>
@@ -57,8 +133,14 @@ const ProfitLoss = () => {
               <tr key={index}>
                 <td>{entry.name}</td>
                 <td>{entry.balance}</td>
+                <td></td>
               </tr>
             ))}
+            <tr>
+              <td><strong>{totalRevenue.name}</strong></td>
+              <td></td>
+              <td><strong>{totalRevenue.revenue}</strong></td>
+            </tr>
             <tr>
               <td colSpan="2"><strong>Expenses</strong></td>
             </tr>
@@ -66,12 +148,19 @@ const ProfitLoss = () => {
               <tr key={index}>
                 <td>{entry.name}</td>
                 <td>{entry.balance}</td>
+                <td></td> {/* Leave this cell blank for each expense entry */}
               </tr>
             ))}
+            <tr>
+              <td><strong>{totalExpenses.name}</strong></td>
+              <td></td> {/* Leave this cell blank for the total expense amount */}
+              <td><strong>({totalExpenses.expense})</strong></td>
+            </tr>
           </tbody>
           <tfoot>
             <tr>
               <td><strong>{netProfit.name}</strong></td>
+              <td></td>
               <td><strong>{netProfit.profit}</strong></td>
             </tr>
           </tfoot>

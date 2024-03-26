@@ -27,7 +27,7 @@ const Signup = () => {
 
     else {
       try {
-        const response = await axios.post('http://localhost:5000/createuser', data);
+        const response = await axios.post('http://localhost:5000/user', data);
 
         if (response.status === 201) {
           if (response.data.result) {
@@ -35,7 +35,6 @@ const Signup = () => {
             toast.success(`Success creating account ${user.email}`);
             setUser(user);
             setCompany(user.selected_company);
-            navigate(`/dashboard`);
           }
           if (response.data.message) {
             toast.error(response.data.message);
