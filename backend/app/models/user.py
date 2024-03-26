@@ -42,14 +42,14 @@ class User(UserMixin, db.Model):
         return association.role if association else None
     
 
-    def to_dict(self):
+    def to_dict(self, authenticated):
         """Returns User object with some of its attributes"""
         new_dict = {}
         new_dict['id'] = self.id
         new_dict['firstname'] = self.firstname
         new_dict['lastname'] = self.lastname
         new_dict['email'] = self.email
-        new_dict['authenticated'] = current_user.is_authenticated
+        new_dict['authenticated'] = authenticated
         new_dict['selected_company_id'] = self.selected_company_id
         if self.selected_company_id:
             new_dict['selected_company'] = self.selected_company.to_dict()

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import TransactionTable from './TransactionTable';
+import { UserContext } from './UserContext';
 
 axios.defaults.withCredentials = true;
 const JournalEntries = () => {
     const [transactions, setTransactions] = useState();
+    const { company } = useContext(UserContext);
+
     useEffect(() => {
         const fetchTransactions = async() => {
             try {
@@ -19,7 +22,7 @@ const JournalEntries = () => {
     }, [setTransactions])
   return (
     <div className='container m-3'>
-        <TransactionTable transactions={transactions}/>
+        <TransactionTable transactions={transactions} company={company}/>
     </div>
   )
 }

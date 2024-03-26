@@ -22,7 +22,7 @@ class Transaction(db.Model):
         return {
             "id": self.id,
             "description": self.description,
-            "date": self.date,
+            "date": self.date.strftime('%Y-%m-%d'),
             "user_id": self.user_id,
             "company_id": self.company_id,
             "entries": [entry.to_dict() for entry in self.journal_entries]

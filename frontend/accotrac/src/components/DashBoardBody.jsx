@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { UserContext } from './UserContext'
 
 const DashBoardBody = () => {
+  const { company } = useContext(UserContext);
+
   return (
     <main className="row flex-grow-1 overflow-auto">
           <div className="col-md-6 p-4">
@@ -17,7 +20,7 @@ const DashBoardBody = () => {
                         <i className="bi bi-cart-plus" /> Income
                       </h5>
                       <canvas id="chartjs-pie" width={500} height={200} />
-                      <p className="h2 mb-0">$10,000</p>
+                      <p className="h2 mb-0">{company.currency} 10,000</p>
                     </div>
                   </div>
                 </div>
@@ -28,7 +31,7 @@ const DashBoardBody = () => {
                         <i className="bi bi-cash-coin" /> Expenses
                       </h5>
                       <canvas id="chartjs-pie" width={500} height={200} />
-                      <p className="h2 mb-0">$15,000</p>
+                      <p className="h2 mb-0">{company.currency} 15,000</p>
                     </div>
                   </div>
                 </div>
@@ -39,7 +42,7 @@ const DashBoardBody = () => {
                         <i className="bi bi-graph-up" /> Net Profit
                       </h5>
                       <canvas id="chartjs-line" width={400} height={200} />
-                      <p className="h2 mb-0">$5,000</p>
+                      <p className="h2 mb-0">{company.currency} 5,000</p>
                     </div>
                   </div>
                 </div>

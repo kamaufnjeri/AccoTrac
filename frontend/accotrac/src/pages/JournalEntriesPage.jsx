@@ -54,6 +54,7 @@ const JournalEntriesPage = () => {
      <LowerHeader/>
     </div>
     <div className="container-fluid vh-100 d-flex flex-column">
+
      <JournalEntries/>
     </div>
   </>

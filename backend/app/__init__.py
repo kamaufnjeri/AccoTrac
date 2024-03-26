@@ -18,6 +18,7 @@ login = LoginManager(app)
 from app.routes import *
 app.register_blueprint(transaction_bp)
 app.register_blueprint(account_bp)
+app.register_blueprint(report_bp)
 
 # handle 401 error
 @app.errorhandler(401)

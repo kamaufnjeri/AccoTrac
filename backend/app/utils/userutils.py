@@ -1,7 +1,7 @@
 from app.models.user import User
 from app.models import Account, Company
 from app.models.account import db
-from flask_login import login_user
+from flask_login import login_user, current_user
 from .companyutils import chart_of_accounts
 from typing import Tuple, Union
 
@@ -40,8 +40,7 @@ def register_user(firstname: str, lastname:str, email:str, password:str, company
                     db.session.add(account)
         db.session.commit()
         login_user(user)
-        print(user.to_dict())
-        return user.to_dict(), 201
+        return user.to_dict(current_user.is_authenticated), 201
     
     except ValueError as e:
 
@@ -62,28 +61,38 @@ def get_user(user_email:str, password:str = None) -> Tuple[Union[str, User], int
             if not valid_password:
                 raise ValueError('Wrong password')
             login_user(user)
-            return user.to_dict(), 200
+            return user.to_dict(current_user.is_authenticated), 200
         
     except ValueError as e:
         return (str(e), 400)
     
     except Exception as e:
         return (str(e), 500)
-
-def update_userinfo(user: User, data: dict) -> Tuple[Union[str, User], int]:
+    
+    
+def update_userinfo(id: str, data: dict) -> Tuple[Union[str, User], int]:
     """updates user information
     Returns user or error with updated information and appropriate status code
     """
     try:
-        for key, value in data.items():
-            if key != 'id':
-                if key == 'password':
-                    user.set_password(value)
-                else:
-                    setattr(user, key, value)
+        if not all(key in data for key in ['firstname', 'lastname', 'email']):
+            raise ValueError('Fields firstname, lastname and email are required')
+
+        user = User.query.filter_by(id=id).first()
+        if not user:
+            raise ValueError("User ID {id} doesn't exist")
+        user_email = User.query.filter_by(email=data.get('email')).first()
+        if user_email and user_email.id != user.id:
+            raise ValueError(f"A user with email {data.get('email')} already exists")
+        user.firstname = data.get('firstname')
+        user.lastname = data.get('lastname')
+        user.email = data.get('email')
         db.session.commit()
         return (user, 200)
-    except Exception as e:
+    except ValueError as e:
         db.session.rollback()
         return (str(e), 400)
- 
+    except Exception as e:
+        db.session.rollback()
+        return (str(e), 500)
+
