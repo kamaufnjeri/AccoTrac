@@ -10,7 +10,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 const Login = () => {
   const navigate = useNavigate();
-  const { user, setUser, setCompany } = useContext(UserContext);
+  const { setUser, setCompany } = useContext(UserContext);
 
   const [data, setData] = useState({
     email: "",

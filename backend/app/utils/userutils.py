@@ -68,18 +68,25 @@ def update_userinfo(user: User, data: dict) -> Tuple[Union[str, User], int]:
     Returns user or error with updated information and appropriate status code
     """
     try:
-        if not all(key in data for key in ['firstname', 'lastname', 'email']):
-            raise ValueError('Fields firstname, lastname and email are required') 
-        user_email = User.query.filter_by(email=data.get('email')).first()
-        if user_email and user_email.id != user.id:
-            raise ValueError(f"User with email {data.get('email')} already exists")
-        if data.get('password'):
-            user.set_password('password')
-        user.firstname = data.get('firstname')
-        user.lastname = data.get('lastname')
-        user.email = data.get('email')
-        db.session.commit()
-        return (user, 200)
+        password = data.get('password', None)
+        print(password)
+        if password:
+            user.set_password(password)
+            db.session.commit()
+            return (user, 200)
+        else:
+            if not all(key in data for key in ['firstname', 'lastname', 'email']):
+                raise ValueError('Fields firstname, lastname and email are required') 
+            user_email = User.query.filter_by(email=data.get('email')).first()
+            if user_email and user_email.id != user.id:
+                raise ValueError(f"User with email {data.get('email')} already exists")
+            
+            user.firstname = data.get('firstname')
+            user.lastname = data.get('lastname')
+            user.email = data.get('email')
+            db.session.commit()
+            return (user, 200)
+        
     except ValueError as e:
         db.session.rollback()
         return (str(e), 400)

@@ -4,6 +4,8 @@ import UpperHeader from '../components/UpperHeader'
 import JournalEntries from '../components/JournalEntries'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 const JournalEntriesPage = () => {
     const navigate = useNavigate();
@@ -34,7 +36,7 @@ const JournalEntriesPage = () => {
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Dashboard</title>
+    <title>Journal Entries</title>
     <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
@@ -47,6 +49,7 @@ const JournalEntriesPage = () => {
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
     <div className="slid-containerww bg-primary">
    <UpperHeader />
     </div>
@@ -57,6 +60,7 @@ const JournalEntriesPage = () => {
 
      <JournalEntries/>
     </div>
+    <Footer></Footer>
   </>
   </div>
   )

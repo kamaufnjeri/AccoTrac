@@ -1,14 +1,12 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import UpperHeader from '../components/UpperHeader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { UserContext } from '../components/UserContext';
 
 const Signup = () => {
-  const navigate = useNavigate();
   const [confirmPassword, setConfirmPassword] = useState('');
   const [data, setData] = useState({
     firstname: '',
@@ -30,7 +28,6 @@ const Signup = () => {
 
         if (response.status === 201) {
           if (response.data.result) {
-            const user = response.data.result;
             toast.success(response.data.message);
             setData({
               firstname: '',

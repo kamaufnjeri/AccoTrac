@@ -205,7 +205,7 @@ def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
 def forgot_password():
     if request.method == 'POST':
         if not request.content_type == 'application/json':
-            message = {"Message": "expected json object"}
+            message = {"message": "expected json object"}
             return jsonify(message), 400
         data = request.get_json()
         if not data:
@@ -214,7 +214,7 @@ def forgot_password():
                 "required_Fields" : "user_email"
             }
             return jsonify(message), 400
-        user_email = data.get('user_email')
+        user_email = data.get('email')
         if not user_email:
             message = {
                 'message': 'Missing Some Fields',
@@ -229,7 +229,7 @@ def forgot_password():
             return jsonify(message), 400
         token, message, code = create_token(user_email=user.email)
         url = url = 'http://localhost:3000/user/resetpassword/' + token
-        resp, status = send_email('[AccoTrac] Reset Your Password',
+        send_email('[AccoTrac] Reset Your Password',
                     sender=app.config['ADMINS'],
                recipients=[user.email],
                text_body=f"""
@@ -240,10 +240,10 @@ def forgot_password():
                Sincerely,
                The Accotrac Team
                """)
-        message = {'message': message}
+        message = {'message': 'Check your email for link to reset password'}
         return jsonify(message), code
 
-@app.route('/reasetpassword/<token>', methods=['PUT', 'GET'], strict_slashes=False)
+@app.route('/resetpassword/<token>', methods=['PUT', 'GET'], strict_slashes=False)
 def reset_password(token:str):
     if request.method == 'PUT':
         if request.content_type != 'application/json':
@@ -252,42 +252,47 @@ def reset_password(token:str):
         required_fields = ["password", "confirm_password"]
         data = request.get_json()
         if not data:
-            message = {"Message": "Missing required fields",
+            message = {"message": "Missing required fields",
                        "Required": required_fields}
             return jsonify(message), 400
         for field in required_fields:
             if field not in data:
-                message = {"Message": f"{field} is required"}
+                message = {"message": f"{field} is required"}
                 return jsonify(message), 400
         password = data.get('password')
+       
         confirm_password = data.get('confirm_password')
         if password != confirm_password:
-            message = {"Message": "password must match with confirm_password"}
+            message = {"message": "password must match with confirm password"}
             return jsonify(message), 400
         token_data, message, code = get_data_from_token(token)
+        print(token_data)
+
         if not token_data:
             return jsonify(token_data), code
         user_email = token_data.get('user_email')
         if not user_email:
-            message = {"Message": "user_email data not found"}
+            message = {"message": "user_email data not found"}
             return jsonify(message), 400
         user, code = get_user(user_email=user_email)
         if code != 200:
             error = user
-            message = {"Message": "Something went wrong",
+            message = {"message": error,
                        "Error": error}
             return jsonify(message), code
-        data = {"password":password}
+        data = {"password": password}
         user, code = update_userinfo(user, data)
         if code != 200:
             error = user
-            message = {"Message": "Something went wrong",
+            message = {"message": error,
                        "Error": error}
             return jsonify(message), code
-        message = {"Message": "Password eas updated successfully"}
-        return jsonify(message), code
+        else:
+            message = {"message": "Password updated successfully"}
+            print(user)
+            return jsonify(message), code
     elif request.method == 'GET':
-        message = {"Message": "Change your password page coming up soon"}
+        message = {"message": "Change your password page coming up soon"}
         return jsonify(message), 200
 
 @user_bp.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)

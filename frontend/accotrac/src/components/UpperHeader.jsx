@@ -14,14 +14,6 @@ const UpperHeader = () => {
               <Link to="/home">
                 <img className="max-230" src="assets/images/logo.png" alt="" />
               </Link>
-              <Link
-                data-bs-toggle="collapse"
-                data-bs-target="#menu"
-                className="float-end text-white d-lg-none pt-1 ps-3"
-              >
-               
-                <CollapsibleMenu/>
-              </Link>
             </div>
             <div id="menu" className="col-lg-9 d-none d-lg-block">
               <MenuItems/>

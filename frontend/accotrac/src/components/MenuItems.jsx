@@ -78,13 +78,6 @@ const MenuItems = () => {
                     </Link>
                 </li>
             </ul>
-
-            {/* Conditionally render components based on authentication state */}
-            {user && user.authenticated === true && (
-                <>
-                    {/* Additional components to be displayed when authenticated */}
-                </>
-            )}
         </div>
     );
 };

@@ -4,6 +4,8 @@ import UpperHeader from '../components/UpperHeader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BalanceSheet from '../components/BalanceSheet'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const BalanceSheetPage = () => {
     const navigate = useNavigate();
@@ -34,7 +36,7 @@ const BalanceSheetPage = () => {
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Dashboard</title>
+    <title>Balance Sheet</title>
     <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
@@ -47,6 +49,7 @@ const BalanceSheetPage = () => {
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
     <div className="slid-containerww bg-primary">
    <UpperHeader />
     </div>
@@ -56,6 +59,7 @@ const BalanceSheetPage = () => {
     <div className="container-fluid vh-100 d-flex flex-column">
       <BalanceSheet/>
     </div>
+    <Footer/>
   </>
   </div>
   )

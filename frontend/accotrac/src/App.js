@@ -1,7 +1,7 @@
 import React from 'react'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import NewPassword from './pages/NewPassword'
+import ForgotPassword from './pages/ForgotPassword'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -20,11 +20,12 @@ import BalanceSheetPage from './pages/BalanceSheetPage'
 import JournalEntriesPage from './pages/JournalEntriesPage'
 import OrganizationProfilePage from './pages/OrganizationProfilePage'
 import VerifyEmail from './pages/VerifyEmail'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
     <div>
-      <UserProvider>
+    <UserProvider>
     <ToastContainer />
     <BrowserRouter>
     <Routes>
@@ -45,7 +46,8 @@ function App() {
       <Route path='/balancesheet' element={<BalanceSheetPage/>}/>
       <Route path='/journals' element={<JournalEntriesPage/>}/>
       <Route path='/user/verifyemail/:token' element={<VerifyEmail/>}/>
-      <Route path='/newpassword' element={<NewPassword/>}/>
+      <Route path='/forgotpassword' element={<ForgotPassword/>}/>
+      <Route path='/user/resetpassword/:token' element={<ResetPassword/>}/>
     </Routes>
     </BrowserRouter>
     </UserProvider>

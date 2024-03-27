@@ -26,3 +26,10 @@ def get_balance_sheet():
     resp, code = report_controllers.get_balance_sheet(current_user.selected_company_id, current_user.id)
     print(resp, code)
     return jsonify(resp), code
+
+@report_bp.route('/dashboard', methods=['GET'])
+@login_required
+def get_dashboard_data():
+    resp, code = report_controllers.dashboard_info(current_user.selected_company, current_user)
+    print(resp, code)
+    return jsonify(resp), code
