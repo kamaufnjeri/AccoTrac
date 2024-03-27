@@ -50,7 +50,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
             message = {"message": message}
             return jsonify(message), code
         url = request.url_root[:-1] + url_for('verify_email', token=token)
-        send_email('[AccoTrac] Verify Your Email',
+        completion_event = send_email('[AccoTrac] Verify Your Email',
                sender=app.config['ADMINS'],
                recipients=[email],
                text_body=f"""
@@ -62,7 +62,12 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
                Sincerely,
                The Accotrac Team
                """)
-        message = {"message": "Account created successfully. Check your email for a link to verify your email",
+        completion_event.wait()  # Wait until the email sending is completed
+        if completion_event.is_set():
+            email_message = "Email sent successfully!"
+        else:
+            email_message = "Failed to send email."
+        message = {"message": f"Account created successfully. {email_message}",
                    "result": result}
         return jsonify(message), code
 
@@ -321,7 +326,7 @@ def reset_password():
             return jsonify(message), 400
         token, message, code = create_token(user_email=user.email)
         url = request.url_root[:-1] + url_for('update_password', token=token)
-        send_email('[AccoTrac] Reset Your Password',
+        completion_event = send_email('[AccoTrac] Reset Your Password',
                sender=app.config['ADMINS'],
                recipients=[user.email],
                text_body=f"""
@@ -332,7 +337,12 @@ def reset_password():
                Sincerely,
                The Accotrac Team
                """)
-        message = {'message': message}
+        completion_event.wait()  # Wait until the email sending is completed
+        if completion_event.is_set():
+            email_message = "Email sent successfully!"
+        else:
+            email_message = "Failed to send email."
+        message = {'message': message + '. ' + email_message}
         return jsonify(message), code
 
 @app.route('/update_password/<token>', methods=['PUT', 'GET'], strict_slashes=False)

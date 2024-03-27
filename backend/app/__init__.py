@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 from config import Config
 from flask_login import LoginManager
 from flask_mail import Mail, Message
-from threading import Thread # send email asynchronously in the background
+from threading import Thread, Event # send email asynchronously in the background
 
 
 # load dot environment to get environment variables from .env file
@@ -26,14 +26,21 @@ login = LoginManager(app)
 mail = Mail(app)
 
 # send email
-def send_async_email(app, msg):
-    with app.app_context():
-        mail.send(msg)
+def send_async_email(app, msg, completion_event):
+    try:
+        with app.app_context():
+            mail.send(msg)
+        completion_event.set()  # Signal that email sending is completed successfully
+    except Exception as e:
+        completion_event.set()  # Signal that email sending failed
+
 
 def send_email(subject, sender, recipients, text_body):
+    completion_event = Event()  # Event to signal completion
     msg = Message(subject, sender=sender, recipients=recipients)
     msg.body = text_body
-    Thread(target=send_async_email, args=(app, msg)).start()
+    Thread(target=send_async_email, args=(app, msg, completion_event)).start()
+    return completion_event  # Return the event for the caller to wait on
 
 from app.routes import *
 # handle 401 error
