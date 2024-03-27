@@ -12,7 +12,7 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
         user_exist = User.query.filter_by(email=user_email).first()
         if user_exist:
             raise ValueError('User already exists')
-        user = User(firstname=firstname, lastname=lastname, email=user_email)
+        user = User(firstname=firstname, lastname=lastname, email=user_email, valid_email=False)
         user.set_password(password)
         db.session.add(user)
         
@@ -34,11 +34,9 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
 
 def verify_user_email(user: User) -> Tuple[str, int]:
     """verify user email"""
-    if user.valid_email:
-        return "Email is verified already", 400
     user.valid_email = True
     db.session.commit()
-    return "Email verified successfully", 200
+    return "Email verification successful", 200
 
 def get_user(user_email:str, password:str = None) -> Tuple[Union[str, User], int]:
     """returns user if exist or error with appropriate status code"""
@@ -75,6 +73,8 @@ def update_userinfo(user: User, data: dict) -> Tuple[Union[str, User], int]:
         user_email = User.query.filter_by(email=data.get('email')).first()
         if user_email and user_email.id != user.id:
             raise ValueError(f"User with email {data.get('email')} already exists")
+        if data.get('password'):
+            user.set_password('password')
         user.firstname = data.get('firstname')
         user.lastname = data.get('lastname')
         user.email = data.get('email')

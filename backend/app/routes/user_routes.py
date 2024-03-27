@@ -134,7 +134,6 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
             return jsonify(message), 400
         password = data.get('password')
 
-        print(data)
         if not password:
             message = {'message': 'password is Required'}
             return jsonify(message), 400
@@ -144,11 +143,17 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
             error = user
             message = {'message': error}
             return jsonify(message), code
-        login_user(user)
-        message = {'message': 'Logged in Successfully',
-                   'is_authenticated': f'{user.is_authenticated}',
-                    'user': user.to_dict(user.is_authenticated)}
-        return jsonify(message), code
+        if user.valid_email == True:
+            login_user(user)
+            message = {'message': 'Logged in Successfully',
+                    'is_authenticated': f'{user.is_authenticated}',
+                        'user': user.to_dict(user.is_authenticated)}
+            return jsonify(message), code
+        else:
+            message = {
+                "message": "Your email is not verified"
+            }
+            return jsonify(message), 400
     elif request.method == 'GET':
         message = {"Message": "Login Page coming soon"}
         return (jsonify(message), 200)
@@ -196,27 +201,93 @@ def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
         message = {"Message": "Update Page coming soon"}
         return jsonify(message), 200
 
-@user_bp.route('/createcompany', methods=['GET', 'POST'], strict_slashes=False)
-@login_required
-def create_company():
+@app.route('/forgotpassword', methods=['POST'], strict_slashes=False)
+def forgot_password():
     if request.method == 'POST':
-        data = request.get_json()
-        company_name = data.get('company_name')
-        user_id = current_user.id
-        if not company_name:
-            message = {'message': 'company_name is required'}
+        if not request.content_type == 'application/json':
+            message = {"Message": "expected json object"}
             return jsonify(message), 400
-        message, code, company = create_new_company(company_name, user_id)
+        data = request.get_json()
+        if not data:
+            message = {
+                'message': 'Missing Some Fields',
+                "required_Fields" : "user_email"
+            }
+            return jsonify(message), 400
+        user_email = data.get('user_email')
+        if not user_email:
+            message = {
+                'message': 'Missing Some Fields',
+                "required_Fields" : "user_email is required"
+            }
+            return jsonify(message), 400
+        user, code = get_user(user_email)
+        if code != 200:
+            message = {
+                'message': 'User does not exist'
+            }
+            return jsonify(message), 400
+        token, message, code = create_token(user_email=user.email)
+        url = url = 'http://localhost:3000/user/resetpassword/' + token
+        resp, status = send_email('[AccoTrac] Reset Your Password',
+                    sender=app.config['ADMINS'],
+               recipients=[user.email],
+               text_body=f"""
+               Dear {user.firstname},
+               To reset your password click on the following link:
+               {url}
+               If you have not requested a password reset simply ignore this message.
+               Sincerely,
+               The Accotrac Team
+               """)
+        message = {'message': message}
+        return jsonify(message), code
 
-        if company:
-
-            return jsonify({ "message": message, "response": company.to_dict()}), code
-        return jsonify({ "message": message}), code
+@app.route('/reasetpassword/<token>', methods=['PUT', 'GET'], strict_slashes=False)
+def reset_password(token:str):
+    if request.method == 'PUT':
+        if request.content_type != 'application/json':
+            message = {'message': "expected json object"}
+            return jsonify(message), 400
+        required_fields = ["password", "confirm_password"]
+        data = request.get_json()
+        if not data:
+            message = {"Message": "Missing required fields",
+                       "Required": required_fields}
+            return jsonify(message), 400
+        for field in required_fields:
+            if field not in data:
+                message = {"Message": f"{field} is required"}
+                return jsonify(message), 400
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+        if password != confirm_password:
+            message = {"Message": "password must match with confirm_password"}
+            return jsonify(message), 400
+        token_data, message, code = get_data_from_token(token)
+        if not token_data:
+            return jsonify(token_data), code
+        user_email = token_data.get('user_email')
+        if not user_email:
+            message = {"Message": "user_email data not found"}
+            return jsonify(message), 400
+        user, code = get_user(user_email=user_email)
+        if code != 200:
+            error = user
+            message = {"Message": "Something went wrong",
+                       "Error": error}
+            return jsonify(message), code
+        data = {"password":password}
+        user, code = update_userinfo(user, data)
+        if code != 200:
+            error = user
+            message = {"Message": "Something went wrong",
+                       "Error": error}
+            return jsonify(message), code
+        message = {"Message": "Password eas updated successfully"}
+        return jsonify(message), code
     elif request.method == 'GET':
-        # get companies associated with current user
-        companies = get_company_by_user_id(current_user.id)
-        # message = {"Message": "Create company Page coming soon"}
-        message = {"Message": companies}
+        message = {"Message": "Change your password page coming up soon"}
         return jsonify(message), 200
 
 @user_bp.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
