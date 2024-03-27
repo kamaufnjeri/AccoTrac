@@ -21,8 +21,11 @@ const VerifyEmail = () => {
         if (response && response.status === 200 && response.data) {
             setMessage(response.data.message);
         
-        const user = response.data.user;    
-        navigate('/login');
+        const user = response.data.user;
+        setTimeout(() => {
+          navigate('/login');
+        }, 10000);  
+        
         } else {
           throw new Error(response.data.message);
         }
@@ -40,25 +43,18 @@ const VerifyEmail = () => {
     
   return (
     <>
-      <div className="container-fluid">
-        <Header />
-        <div className="slid-containerww bg-primary">
-          <UpperHeader />
-        </div>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-8">
               <div className="card mt-5">
                 <div className="card-body">
                   <h2 className="text-center mb-4">Verify Your Email</h2>
-                  <div className="text-center mb-4">{message && <p>{message}</p>}</div>
+                  <div className="text-center mb-4">{message && <h2 style={{color: "blue", fontSize: '30px', fontWeight: '700'}}>{message}</h2>}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <Footer />
-      </div>
     </>
   );
 };
