@@ -33,16 +33,9 @@ function Home() {
         <div className="container">
           <div className="row">
             <div className="col-lg-3 pt-2 pb-2 align-items-center">
-              <a href="/home">
+              <Link to="/home">
                 <img className="max-230" src="assets/images/logo.png" alt="" />
-              </a>
-              <a
-                data-bs-toggle="collapse"
-                data-bs-target="#menu"
-                className="float-end text-white d-lg-none pt-1 ps-3"
-              >
-                <i className="bi pt-1 fs-1 cp bi-list" />
-              </a>
+              </Link>
             </div>
             <div id="menu" className="col-lg-9 d-none d-lg-block">
               <MenuItems/>
@@ -58,7 +51,7 @@ function Home() {
                 Track, Manage, Thrive. Simplified finances For your business!
               </h1>
               <p className="slogan">
-                AccoTrac is your one stop shop For managing your finances and
+                AccoTrac is your one stop shop for managing your finances and
                 making your accounts healthy.
               </p>
               <div className=" d-inline-block pt-4">

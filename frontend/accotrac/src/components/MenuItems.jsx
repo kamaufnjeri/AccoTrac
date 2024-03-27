@@ -62,7 +62,7 @@ const MenuItems = () => {
                         </li>
                         <li className="p-4">
                             <Link className="text-white fw-bold font-size-lg" to="/signup">
-                                Sign Up
+                                Get Started
                             </Link>
                         </li>
                     </>
@@ -78,13 +78,6 @@ const MenuItems = () => {
                     </Link>
                 </li>
             </ul>
-
-            {/* Conditionally render components based on authentication state */}
-            {user && user.authenticated === true && (
-                <>
-                    {/* Additional components to be displayed when authenticated */}
-                </>
-            )}
         </div>
     );
 };

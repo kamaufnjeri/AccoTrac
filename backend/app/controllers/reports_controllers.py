@@ -141,3 +141,45 @@ class ReportControllers:
             return str(e), 400
         except Exception as e:
             return str(e), 500
+        
+    def dashboard_info(self, company: Company, user: User):
+        try:
+            if not company:
+                raise ValueError(f'Company does not exist')
+            if not user:
+                raise ValueError(f'User does not exist')
+            accounts = Account.query.filter_by(
+                company_id=company.id,
+                user_id=user.id
+            ).all()
+            if not accounts:
+                raise ValueError('No accounts found for company')
+            profit_list, net_profit = self.get_profit(accounts)
+            total_revenue = 0
+            total_expense = 0
+            total_accounts_receivable = 0  # Corrected variable name
+            total_accounts_payable = 0
+
+            for account in accounts:
+                if account.sub_category == 'accounts_payable':
+                    total_accounts_payable += (account.credit_total - account.debit_total)
+                elif account.sub_category == 'accounts_receivable':
+                    total_accounts_receivable += (account.debit_total - account.credit_total)
+                elif account.sub_category == 'revenue':
+                    total_revenue += (account.credit_total - account.debit_total) 
+                elif account.sub_category == 'expense':
+                    total_expense += (account.debit_total - account.credit_total)
+                else:
+                    continue
+            dashboard_data = {
+                "net_profit": net_profit,
+                "total_revenue": total_revenue,
+                "total_expense": total_expense,
+                "total_accounts_payable": total_accounts_payable,
+                "total_accounts_receivable": total_accounts_receivable
+            }
+            return dashboard_data, 200
+        except ValueError as e:
+            return str(e), 400
+        except Exception as e:
+            return str(e), 500

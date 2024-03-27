@@ -1,8 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import axios from 'axios'
+import { toast } from 'react-toastify';
 
-function forgotpassword() {
+axios.defaults.withCredentials = true;
+const ForgotPassword = () => {
+  const [data, setData] = useState({
+    email: ''
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/forgotpassword', data);
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        setData({
+          email: ''
+        })
+      } else {
+        throw new Error(response.data.message);
+      }
+    } catch (error) {
+      if (error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Unknown error: ' + error.message);
+      }
+      console.log(error);
+    }
+  };
+
   return (
     <div><>
     <meta charSet="utf-8" />
@@ -11,7 +39,7 @@ function forgotpassword() {
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>Reset Password</title>
-    <link rel="shortcut icon" href="assets/images/fav.jpg" />
+    <link rel="shortcut icon" href="assets/images/logo.jpg" />
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
@@ -20,6 +48,7 @@ function forgotpassword() {
       <div className="container ">
         <div className="row cdvfdfd">
           <div className="col-lg-10 col-md-12 login-box">
+            <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-lg-6 col-md-6 log-det">
                 <div className="small-logo">
@@ -38,39 +67,14 @@ function forgotpassword() {
                       placeholder="Email Address"
                       aria-label="Email Address"
                       aria-describedby="basic-addon1"
-                    />
-                  </div>
-                  <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text" id="basic-addon1">
-                        <i className="fas fa-lock" />
-                      </span>
-                    </div>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Enter New Password"
-                      aria-label="Password"
-                      aria-describedby="basic-addon1"
-                    />
-                  </div>
-                  <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text" id="basic-addon1">
-                        <i className="fas fa-lock" />
-                      </span>
-                    </div>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Confirm New Password"
-                      aria-label="Password"
-                      aria-describedby="basic-addon1"
+                      value={data.email}
+                      onChange={(e) => setData({ ...data, email: e.target.value })}
+                      required
                     />
                   </div>
                   <div className="input-group center">
                     <button className="btn btn-danger btn-round">
-                      RESET PASSWORD
+                      SEND
                     </button>
                   </div>
                   <div className="row">
@@ -100,6 +104,7 @@ function forgotpassword() {
                 </div>
               </div>
             </div>
+            </form>
           </div>
         </div>
       </div>
@@ -110,4 +115,4 @@ function forgotpassword() {
   )
 }
 
-export default forgotpassword
+export default ForgotPassword

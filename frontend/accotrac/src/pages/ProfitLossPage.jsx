@@ -4,6 +4,8 @@ import UpperHeader from '../components/UpperHeader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import ProfitLoss from '../components/ProfitLoss'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const ProfitLossPage = () => {
     const navigate = useNavigate()
@@ -35,7 +37,7 @@ const ProfitLossPage = () => {
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Dashboard</title>
+    <title>Profit and Loss</title>
     <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
@@ -48,6 +50,7 @@ const ProfitLossPage = () => {
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
     <div className="slid-containerww bg-primary">
    <UpperHeader />
     </div>
@@ -57,6 +60,7 @@ const ProfitLossPage = () => {
     <div className="container-fluid vh-100 d-flex flex-column">
       <ProfitLoss/>
     </div>
+    <Footer/>
   </>
   </div>
   )

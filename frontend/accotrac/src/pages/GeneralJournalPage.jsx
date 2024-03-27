@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import LowerHeader from '../components/LowerHeader';
 import UpperHeader from '../components/UpperHeader';
 import axios from 'axios';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const GeneralJournalPage = () => {
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ const GeneralJournalPage = () => {
         name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
       />
-      <title>Dashboard</title>
+      <title>Add Journal Entry</title>
       <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon" />
       <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
@@ -49,6 +51,7 @@ const GeneralJournalPage = () => {
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
       />
       <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+      <Header/>
       <div className="slid-containerww bg-primary">
      <UpperHeader />
       </div>
@@ -58,6 +61,7 @@ const GeneralJournalPage = () => {
       <div className="container col-md-9 vh-100 d-flex flex-column">
         <GeneralJournal/>
       </div>
+      <Footer/>
     </>
     </div>
   );
