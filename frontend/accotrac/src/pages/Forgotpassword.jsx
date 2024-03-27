@@ -41,7 +41,7 @@ function forgotpassword() {
                     />
                   </div>
                   <div className="input-group center">
-                    <button className="btn btn-danger btn-round"><a href="/newpassword">
+                    <button className="btn btn-danger btn-round"><a href = "/newpassword">
                       SEND </a>
                     </button>
                   </div>

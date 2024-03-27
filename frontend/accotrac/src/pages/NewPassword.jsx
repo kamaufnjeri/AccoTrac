@@ -23,7 +23,7 @@ function NewPassword() {
             <div className="row">
               <div className="col-lg-6 col-md-6 log-det">
                 <div className="small-logo">
-                  <i className="fab fa-asymmetrik" /> New Password
+                  <i className="fab fa-asymmetrik" /> Enter New Password
                 </div>
                 <div className="text-box-cont">
                   <div className="input-group mb-3">
