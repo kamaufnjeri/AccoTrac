@@ -1,6 +1,7 @@
 import React from 'react'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import NewPassword from './pages/NewPassword'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -44,6 +45,7 @@ function App() {
       <Route path='/balancesheet' element={<BalanceSheetPage/>}/>
       <Route path='/journals' element={<JournalEntriesPage/>}/>
       <Route path='/user/verifyemail/:token' element={<VerifyEmail/>}/>
+      <Route path='/newpassword' element={<NewPassword/>}/>
     </Routes>
     </BrowserRouter>
     </UserProvider>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MenuItems from './MenuItems';
+import CollapsibleMenu from './CollapsibleMenu';
 
 
 const UpperHeader = () => {
@@ -18,7 +19,8 @@ const UpperHeader = () => {
                 data-bs-target="#menu"
                 className="float-end text-white d-lg-none pt-1 ps-3"
               >
-                <i className="bi pt-1 fs-1 cp bi-list" />
+               
+                <CollapsibleMenu/>
               </Link>
             </div>
             <div id="menu" className="col-lg-9 d-none d-lg-block">

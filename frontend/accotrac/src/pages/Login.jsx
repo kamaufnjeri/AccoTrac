@@ -51,7 +51,7 @@ const Login = () => {
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
       />
       <title>AccoTrac</title>
-      <link rel="shortcut icon" href="assets/images/fav.jpg" />
+      <link rel="shortcut icon" href="assets/images/logo.jpg" />
       <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
       <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
       <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
