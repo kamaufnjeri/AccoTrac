@@ -11,7 +11,7 @@ function forgotpassword() {
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>Reset Password</title>
-    <link rel="shortcut icon" href="assets/images/fav.jpg" />
+    <link rel="shortcut icon" href="assets/images/logo.jpg" />
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
@@ -40,37 +40,9 @@ function forgotpassword() {
                       aria-describedby="basic-addon1"
                     />
                   </div>
-                  <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text" id="basic-addon1">
-                        <i className="fas fa-lock" />
-                      </span>
-                    </div>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Enter New Password"
-                      aria-label="Password"
-                      aria-describedby="basic-addon1"
-                    />
-                  </div>
-                  <div className="input-group mb-3">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text" id="basic-addon1">
-                        <i className="fas fa-lock" />
-                      </span>
-                    </div>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Confirm New Password"
-                      aria-label="Password"
-                      aria-describedby="basic-addon1"
-                    />
-                  </div>
                   <div className="input-group center">
-                    <button className="btn btn-danger btn-round">
-                      RESET PASSWORD
+                    <button className="btn btn-danger btn-round"><a href="/newpassword">
+                      SEND </a>
                     </button>
                   </div>
                   <div className="row">
