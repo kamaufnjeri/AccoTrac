@@ -51,7 +51,7 @@ function Home() {
                 Track, Manage, Thrive. Simplified finances For your business!
               </h1>
               <p className="slogan">
-                AccoTrac is your one stop shop For managing your finances and
+                AccoTrac is your one stop shop for managing your finances and
                 making your accounts healthy.
               </p>
               <div className=" d-inline-block pt-4">
