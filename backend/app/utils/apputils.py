@@ -16,7 +16,7 @@ def create_token(**kwargs: dict) -> Tuple[Union[str, None], str, int]:
             for key, value in kwargs.items():
                 data[key] = value
             token = safe_serializer.dumps(data)
-            return token, 'Check your email for the link', 200
+            return token, 'Check your email for the link', 201
         else:
             return None, 'Data is missing', 400
     except Exception as error:

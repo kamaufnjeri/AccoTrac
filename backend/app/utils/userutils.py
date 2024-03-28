@@ -12,35 +12,38 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
         user_exist = User.query.filter_by(email=user_email).first()
         if user_exist:
             raise ValueError('User already exists')
-        user = User(firstname=firstname, lastname=lastname, email=user_email)
+        user = User(firstname=firstname, lastname=lastname, email=user_email, valid_email=False)
         user.set_password(password)
         db.session.add(user)
-        db.session.commit()
-        message, code = create_new_company(company_name=company_name,
+        
+        resp_item, comp_code = create_new_company(company_name=company_name,
                                            company_email=None,
                                            company_country=None,
                                            company_currency=None,
                                            user_id=user.id)
-        newuser = user.to_dict()
-        return newuser, 200
+        if comp_code == 201:
+            user.selected_company_id = resp_item.id
+            print(resp_item.to_dict())
+            newuser = user.to_dict(user.is_authenticated)
+            return newuser, 201
+        else:
+            raise ValueError(resp_item)
     except Exception as e:
         db.session.rollback()
         return (str(e), 400)
 
 def verify_user_email(user: User) -> Tuple[str, int]:
     """verify user email"""
-    if user.valid_email:
-        return "Email is verified already", 201
     user.valid_email = True
     db.session.commit()
-    return "Email verified successfully", 201
+    return "Email verification successful", 200
 
 def get_user(user_email:str, password:str = None) -> Tuple[Union[str, User], int]:
     """returns user if exist or error with appropriate status code"""
     try:
         user = User.query.filter_by(email=user_email).first()
         if not user:
-            raise ValueError('User does not exists')
+            raise ValueError(f'User {user_email} does not exists')
         if password:
             valid_password = user.check_password(password)
             if not valid_password:
@@ -65,17 +68,31 @@ def update_userinfo(user: User, data: dict) -> Tuple[Union[str, User], int]:
     Returns user or error with updated information and appropriate status code
     """
     try:
-        for key, value in data.items():
-            if key != 'id':
-                if key == 'password':
-                    user.set_password(value)
-                else:
-                    setattr(user, key, value)
-        db.session.commit()
-        return (user, 200)
-    except Exception as e:
+        password = data.get('password', None)
+        print(password)
+        if password:
+            user.set_password(password)
+            db.session.commit()
+            return (user, 200)
+        else:
+            if not all(key in data for key in ['firstname', 'lastname', 'email']):
+                raise ValueError('Fields firstname, lastname and email are required') 
+            user_email = User.query.filter_by(email=data.get('email')).first()
+            if user_email and user_email.id != user.id:
+                raise ValueError(f"User with email {data.get('email')} already exists")
+            
+            user.firstname = data.get('firstname')
+            user.lastname = data.get('lastname')
+            user.email = data.get('email')
+            db.session.commit()
+            return (user, 200)
+        
+    except ValueError as e:
         db.session.rollback()
         return (str(e), 400)
+    except Exception as e:
+        db.session.rollback()
+        return (str(e), 500)
 
 def delete_userinfo(admin_user_id: str, user_id:str) -> Tuple[str, int]:
     """admin delete a user, admin deletes themselves"""
@@ -101,3 +118,4 @@ def delete_userinfo(admin_user_id: str, user_id:str) -> Tuple[str, int]:
     except Exception as error:
         db.session.rollback()
         return str(error), 400
+    

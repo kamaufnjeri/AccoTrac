@@ -1,388 +1,56 @@
-# AccoTrac API Authentication Documentation
+AccoTrac: Simplified Accounting for Small Businesses
 
-## Overview
+AccoTrac is a web-based accounting application designed to streamline business finances for small and medium-sized enterprises (SMEs). It offers an affordable and user-friendly solution for managing accounts, recording transactions, and generating financial reports.
 
-AccoTrac provides a RESTful API for managing users, companies, authentication, and related functionalities. This documentation outlines the endpoints, request methods, payloads, and sample requests/responses for each endpoint
+Benefits:
 
-## Requirements
+Simplified Accounting: AccoTrac empowers businesses to streamline their accounting processes, saving valuable time and resources.
 
-.env file
+Financial Insights: Gain a clear picture of your financial health with comprehensive reports, enabling informed decision-making to drive growth and success.
 
-```
-MAIL_SERVER='your_mail_server'
-MAIL_PORT=587
-MAIL_USE_TLS=1
-MAIL_USERNAME='your_email@example.com'
-MAIL_PASSWORD='your_email_password'
-ADMINS='your_email@example.com'
-```
+User-Friendly Interface: The intuitive interface makes it easy for users of all technical abilities to manage their finances effectively.
 
-Installs
+Features:
 
-```python
-pip install -r requirements.txt
-```
+Profit & Loss Statement: Generate detailed reports summarizing revenues, expenses, and net income for specific periods. Analyze profitability and identify areas for improvement.
 
-## Base URL
+Balance Sheet and Trial Balance Tracking: Monitor your business's health with automatic features. Track trial balances for real-time financial insights and generate balance sheets to assess financial stability.
 
-The base URL for all API endpoints is `/`.
+Double-Entry Accounting: AccoTrac utilizes the double-entry accounting method for accurate and reliable financial records. Every transaction is recorded twice, ensuring balanced books and a clear view of your financial health.
 
-## Authentication
+Website Sections:
 
-The AccoTrac API uses session-based authentication managed by Flask-Login. When accessing protected endpoints, the frontend must maintain the user's session.
+User Area: The user area is dedicated to registered users. Users can access their personalized dashboard, enter account details, track account status, and interact with the platform.
 
-#### Table of Contents
+Public Area: The public area of the website is accessible to everyone. It includes landing pages, and the contact page. Users can explore the testimonials, about us, and get in touch with the admin through the contact page.
 
-1. [Home](#Home)
-2. [User Endpoints](#Create-User)
-   - [Create User](#Create-User)
-   - [Verify Email](#verify-email)
-   - [Update User](#update-user)
-   - [Delete User](#delete-user)
-   - [Login](#login)
-   - [Logout](#logout)
-3. [Company Endpoints](#company-endpoints)
-   - [Create Company](#create-company)
-   - [Update Company](#update-company)
-   - [Delete Company](#delete-company)
-4. [Password Management Endpoints](#password-management-endpoints)
-   - [Reset Password](#reset-password)
-   - [Update Password](#update-password)
+Work in Progress:
 
----
+AccoTrac is an ongoing project, and there are several features and enhancements planned for the future. Some of the upcoming features include:
 
-### Endpoints
+Significant improvement on the dashboard to add "stock items": This will allow users to manage their inventory more effectively within AccoTrac. (Note: This functionality includes additional features like adding, editing, and deleting stock items).
 
-1. **Home**
+Expanded User Registration and Application: Enhancements to the user registration and application process to provide more comprehensive information and streamline the application workflow.
 
-   - Method: `GET`, `POST`
-   - Path: `/`
-   - Description: Returns a simple message indicating that AccoTrac is coming soon.
-   - Response:
-     - `GET`: `<h1> AccoTrac Coming soon</h1>`
-     - `POST`: Not applicable
+Collaboration and Open Source: AccoTrac welcomes collaboration and is an open-source project. Developers can contribute to the project, suggest improvements, and help shape the future of the platform.
 
-   #### Sample Request:
-
-   ```
-   GET /
-   ```
+Technologies Used:
 
-   #### Sample Response:
+Python Flask: A Python web framework used for developing the back-end of the platform.
 
-   ```html
-   <h1>AccoTrac Coming soon</h1>
-   ```
+MySQL: A relational database management system used for storing application and user data.
 
-2. **Create User**
+HTML, CSS, JavaScript: Front-end technologies used for designing and creating the user interface.
 
-   - Method: `GET`, `POST`
-   - Path: `/user`
-   - Description:
-     - `POST`: Creates a new user. Expects JSON data including fields such as firstname, lastname, email, password, and company_name.
-     - `GET`: Returns a register page.
-   - Response:
-     - `POST`: Returns a JSON with a new user created or an error message.
-     - `GET`: Returns a message indicating the signup page is coming soon.
+Bootstrap: A popular CSS framework that provides responsive design and pre-built components to enhance the visual appearance of the platform.
 
-   #### Sample Request:
+FontAwesome: A comprehensive icon set used to add visually appealing icons to the platform.
 
-   ```json
-   POST /user
-   Content-Type: application/json
+SCSS: A CSS preprocessor that improves code maintainability and provides additional features such as variables and mixins.
 
-   {
-       "firstname": "John",
-       "lastname": "Doe",
-       "email": "john.doe@example.com",
-       "password": "password123",
-       "company_name": "Example Company"
-   }
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "message": "Check your email for a link to verify your email",
-     "result": "User created successfully"
-   }
-   ```
-
-3. **Verify Email**
+Author and Credits:
 
-   - Method: `GET`
-   - Path: `/user/verify_email/<token>`
-   - Description: Verifies user email based on the token provided.
-   - Response: Returns a message indicating whether the email was successfully verified or not.
-
-   #### Sample Request:
-
-   ```
-   GET /user/verify_email/<token>
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "message": "Email verified successfully"
-   }
-   ```
-
-4. **Update User**
-
-   - Method: `GET`, `PUT`
-   - Path: `/user/<id>`
-   - Description:
-     - `PUT`: Updates user information. Expects JSON data with fields to be updated.
-     - `GET`: Returns an update page.
-   - Response:
-     - `PUT`: Returns username and updated information.
-     - `GET`: Returns a message indicating the update page is coming soon.
-
-   #### Sample Request:
-
-   ```json
-   PUT /user/<id>
-   Content-Type: application/json
-
-   {
-       "firstname": "John",
-       "lastname": "Smith"
-   }
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "firstname": "John",
-     "lastname": "Smith",
-     "email": "john.doe@example.com",
-     "company_name": "Example Company"
-   }
-   ```
-
-5. **Delete User**
-
-   - Method: `DELETE`
-   - Path: `/user/<admin_id>`
-   - Description: Allows admin to delete users they invited.
-   - Response: Returns a message indicating whether the user was successfully deleted or not.
-
-   #### Sample Request:
-
-   ```
-   DELETE /user/<admin_id>
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "message": "User deleted successfully"
-   }
-   ```
-
-6. **Login**
-
-   - Method: `GET`, `POST`
-   - Path: `/login`
-   - Description:
-     - `POST`: Creates a session for a user if credentials match.
-     - `GET`: Returns a login page.
-   - Response:
-     - `POST`: Returns dict with current user authentication status.
-     - `GET`: Returns a message indicating the login page is coming soon.
-
-   #### Sample Request:
-
-   ```json
-   POST /login
-   Content-Type: application/json
-
-   {
-       "email": "john.doe@example.com",
-       "password": "password123"
-   }
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "message": "Logged in Successfully",
-     "is_authenticated": "True",
-     "user": {
-       "firstname": "John",
-       "lastname": "Doe",
-       "email": "john.doe@example.com",
-       "company_name": "Example Company"
-     }
-   }
-   ```
-
-7. **Logout**
-
-   - Method: `POST`
-   - Path: `/logout`
-   - Description: Destroys the session of the current logged-in user.
-   - Response: Returns the status of the current logged-in user.
-
-   #### Sample Request:
-
-   ```
-   POST /logout
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "message": "Logged out Successfully",
-     "is_authenticated": "False",
-     "userFirstName": "John"
-   }
-   ```
-
-8. **Create Company**
-
-   - Method: `GET`, `POST`
-   - Path: `/company`
-   - Description:
-     - `GET`: Retrieves companies associated with the current user.
-     - `POST`: Only admins can create a company (not currently implemented).
-   - Response:
-     - `GET`: Returns a list of companies associated with the current user.
-     - `POST`: Not implemented.
-
-   #### Sample Request:
-
-   ```
-   GET /company
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "Message": "Here is a list of your companies",
-     "companies": [
-       {
-         "company_name": "Example Company",
-         "company_email": "example@example.com",
-         "company_country": "Example Country",
-         "company_currency": "USD"
-       }
-     ]
-   }
-   ```
-
-9. **Reset Password**
-
-   - Method: `POST`
-   - Path: `/reset_password`
-   - Description: Sends a reset password link to the user's email.
-   - Response: Returns a message indicating whether the email was sent successfully or not.
-
-   #### Sample Request:
-
-   ```json
-   POST /reset_password
-   Content-Type: application/json
-
-   {
-       "user_email": "john.doe@example.com"
-   }
-   ```
-
-   #### Sample Response:
-
-   ```json
-   {
-     "message": "Check your email for the reset link",
-     "Email": "Check your email for the reset link"
-   }
-   ```
-
-10. **Update Password**
-
-    - Method: `PUT`, `GET`
-    - Path: `/update_password/<token>`
-    - Description:
-      - `PUT`: Updates user password based on the token provided. Expects JSON data with new password fields.
-      - `GET`: Returns a change password page.
-    - Response:
-      - `PUT`: Returns a message indicating whether the password was updated successfully or not.
-      - `GET`: Returns a message indicating the change password page is coming soon.
-
-    #### Sample Request:
-
-    ```json
-    PUT /update_password/<token>
-    Content-Type: application/json
-
-    {
-        "password": "new_password123",
-        "confirm_password": "new_password123"
-    }
-    ```
-
-    #### Sample Response:
-
-    ```json
-    {
-      "message": "Password updated successfully"
-    }
-    ```
-
-11. **Update Company**
-
-    - Method: `PUT`
-    - Path: `/company/<company_id>`
-    - Description: Updates company information based on the provided company ID.
-    - Response: Returns the updated company information.
-
-    #### Sample Request:
-
-    ```json
-    PUT /company/<company_id>
-    Content-Type: application/json
-
-    {
-        "company_name": "Updated Company Name"
-    }
-    ```
-
-    #### Sample Response:
-
-    ```json
-    {
-      "company_name": "Updated Company Name",
-      "company_email": "example@example.com",
-      "company_country": "Example Country",
-      "company_currency": "USD"
-    }
-    ```
-
-12. **Delete Company**
-
-    - Method: `DELETE`
-    - Path: `/company/<company_id>`
-    - Description: Deletes the company identified by the provided company ID.
-    - Response: Returns a message indicating whether the company was successfully deleted or not.
-
-    #### Sample Request:
-
-    ```
-    DELETE /company/<company_id>
-    ```
-
-    #### Sample Response:
-
-    ```json
-    {
-      "message": "Company deleted successfully"
-    }
-    ```
+Florence Kamau(Backend Developer)
+Joel Muhoho(Backend Developer)
+Innocent Akpoyibo(Frontend Developer)
+Michael Olatunbosun(Frontend Developer)

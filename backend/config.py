@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,4 +15,7 @@ class Config(object):
     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS') is not None
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = 'AccoTrac@outlook.com'  # Specify the default sender email address
+    MAIL_MAX_EMAILS = None  # Optional: specify the maximum number of emails to send in a single connection
+    MAIL_USE_SSL = False
     ADMINS = os.getenv('ADMINS')

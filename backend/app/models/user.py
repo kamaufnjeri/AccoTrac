@@ -16,9 +16,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), nullable=False, unique=True)
     valid_email = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(256), nullable=False)
+    selected_company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
     accounts = db.relationship('Account', backref='users', lazy=True, cascade="all,delete")
-
-
+    transactions = db.relationship('Transaction', backref='user', lazy=True, cascade='all,delete')
+    
+    
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
         super(User, self).__init__(**kwargs)
@@ -38,14 +40,19 @@ class User(UserMixin, db.Model):
             company_id=company_id
         ).first()
         return association.role if association else None
+    
 
-    def to_dict(self):
+    def to_dict(self, authenticated):
         """Returns User object with some of its attributes"""
         new_dict = {}
         new_dict['id'] = self.id
         new_dict['firstname'] = self.firstname
         new_dict['lastname'] = self.lastname
         new_dict['email'] = self.email
+        new_dict['authenticated'] = authenticated
+        new_dict['selected_company_id'] = self.selected_company_id
+        if self.selected_company_id:
+            new_dict['selected_company'] = self.selected_company.to_dict()
         return new_dict
 
 @login.user_loader
