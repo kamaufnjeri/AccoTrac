@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import axios from 'axios';
 
@@ -15,6 +14,7 @@ const DashBoardBody = () => {
     total_accounts_payable: 0
   });
 
+  // useEffect to fetch data from backend to display on the dashboard
   useEffect(() => {
     const fetchData = async () => {
       try {

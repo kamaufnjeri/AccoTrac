@@ -1,13 +1,40 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { UserContext } from './UserContext';
 import { toast } from 'react-toastify';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 
 axios.defaults.withCredentials = true;
 const ChartsOfAccount = () => {
+    // useState to manage accounts and selected account id for deletion
     const [accounts, setAccounts] = useState();
     const [selectedAccountId, setSelectedAccountId] = useState(null);
+    const [name, setName] = useState('');
 
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = (name, id) => {
+        setName(name);
+        setSelectedAccountId(id);
+        setShow(true);
+    }
+
+
+    // styles for modal
+    const customStyles = {
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+        },
+    };
+
+    // using useEffect to fetch all accounts from the backend
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,6 +59,7 @@ const ChartsOfAccount = () => {
         fetchData();
     }, []);
 
+    // fuction to handle delete of an account by id
     const handleDelete = async (id, name) => {
         try {
             console.log(id);
@@ -54,9 +82,12 @@ const ChartsOfAccount = () => {
                 toast.error('Error deleting account: ' + error);
             }
         }
+        handleClose();
     };
 
+    // format name for category and sub category
     const formatName = (name) => {
+        // first letter in a word with a capital and '_' with space
         return name
             .split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -65,6 +96,22 @@ const ChartsOfAccount = () => {
 
     return (
         <div className="container mt-5">
+            <div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>Delete Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete account {name} ID {selectedAccountId}?</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+                <Button variant="danger" onClick={() => handleDelete(selectedAccountId, name)}>
+                    Delete
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            </div>
             <h2>Charts of Account</h2>
             <table className="table">
                 <thead>
@@ -82,7 +129,7 @@ const ChartsOfAccount = () => {
                             <td>{formatName(account.category)}</td>
                             <td>{formatName(account.sub_category)}</td>
                             <td>
-                                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(account.id, account.name)}>Delete</button>
+                                <button className="btn btn-sm btn-danger" onClickCapture={() => handleShow(account.name, account.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

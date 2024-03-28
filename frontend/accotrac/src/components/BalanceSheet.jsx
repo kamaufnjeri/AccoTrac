@@ -5,6 +5,7 @@ import { UserContext } from './UserContext';
 axios.defaults.withCredentials = true;
 
 const BalanceSheet = () => {
+    // using useContext and useState to manage all information needed for the 
     const [balanceSheet, setBalanceSheet] = useState(null);
     const { company } = useContext(UserContext);
     const currentDate = new Date().toISOString().split('T')[0];
@@ -13,6 +14,7 @@ const BalanceSheet = () => {
     const [totalEquity, setTotalEquity] = useState(0);
     const [totalLiabilitiesAndEquity, setTotalLiabilitiesAndEquity] = useState(0);
 
+    // use useEffect to fetch from backend the balance sheet information
     useEffect(() => {
         const fetchBalanceSheet = async () => {
             try {
@@ -27,19 +29,24 @@ const BalanceSheet = () => {
         fetchBalanceSheet();
     }, []);
 
+    // useEffect to asign values needed for the balancesheet depending on balancesheet info from the backenf
     useEffect(() => {
         if (balanceSheet) {
+            // get the fixed assets and current assets total to find assets total
             const totalFixedAssets = balanceSheet.assets.fixed_assets.reduce((acc, curr) => acc + curr.balance, 0);
             const currentAssetsTotal = balanceSheet.assets.current_assets.reduce((acc, curr) => acc + curr.balance, 0);
             setTotalAssets(totalFixedAssets + currentAssetsTotal);
 
+            // get the liabilities total
             const totalLongTermLoans = balanceSheet.liabilities.long_term_loans.reduce((acc, curr) => acc + curr.balance, 0);
             const totalCurrentLiabilities = balanceSheet.liabilities.current_liabilities.reduce((acc, curr) => acc + curr.balance, 0);
             setTotalLiabilities(totalLongTermLoans + totalCurrentLiabilities);
 
+            // getting the equity total
             const totalEquityAmount = balanceSheet.equity.reduce((acc, curr) => acc + curr.balance, 0);
             setTotalEquity(totalEquityAmount);
 
+            // getting the total liabilities and equity
             setTotalLiabilitiesAndEquity(totalLiabilities + totalEquity);
             console.log(totalLiabilitiesAndEquity)
         }
@@ -55,19 +62,23 @@ const BalanceSheet = () => {
 
         data.forEach((entry) => {
             const { category, sub_category, name, balance } = entry;
+            // gropu all assets accounts
             if (category === 'asset') {
+                // group all fixed assets and current assets account separately
                 if (sub_category === 'fixed_asset') {
                     groupedData.assets.fixed_assets.push({ name, balance });
                 } else if (sub_category === 'bank' || sub_category === 'cash' || sub_category === 'inventory' || sub_category === 'accounts_receivable') {
                     groupedData.assets.current_assets.push({ name, balance });
                 }
             } else if (category === 'liability') {
+                // group all liabilities long term and accounts payable
                 if (sub_category === 'accounts_payable') {
                     groupedData.liabilities.current_liabilities.push({ name, balance });
                 } else if (sub_category === 'long_term_loan') {
                     groupedData.liabilities.long_term_loans.push({ name, balance });
                 }
             } else if (category === 'capital') {
+                // group capital together
                 groupedData.equity.push({ name, balance });
             }
         });

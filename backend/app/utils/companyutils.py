@@ -118,3 +118,19 @@ def update_companyinfo(company, user, data: dict) -> Tuple[Union[str, User], int
     except Exception as e:
         db.session.rollback()
         return (str(e), 500)
+
+def delete_companyinfo(company_id:str, user:User) -> Tuple[str, int]:
+    """delete a company"""
+    try:
+        # company = get_company(company_id)
+        company = UserCompanyAssociation.query.filter_by(company_id=company_id).first()
+        if not company:
+            return 'company not found', 400
+        if company.user_id != user.id:
+            return 'You are not allowed to delete this company', 404
+        db.session.delete(company)
+        db.session.commit()
+        return 'company  deleted successfully', 200
+    except Exception as error:
+        db.session.rollback()
+        return str(error), 400

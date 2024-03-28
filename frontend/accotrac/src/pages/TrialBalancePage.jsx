@@ -8,7 +8,9 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 const TrialBalancePage = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    // useEfect to ensure that user is authenticated to access this page
     useEffect(() => {
       const fetchProtectedData = async () => {
         try {
@@ -57,7 +59,7 @@ const TrialBalancePage = () => {
     <div className="slid-containerww bg-primary">
      <LowerHeader/>
     </div>
-    <div className="container-fluid vh-100 d-flex flex-column">
+    <div className="container-fluid vh-100 d-flex flex-column overflow-scroll">
      <TrialBalance/>
     </div>
     <Footer/>

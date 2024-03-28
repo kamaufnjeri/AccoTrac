@@ -9,6 +9,8 @@ import Footer from '../components/Footer'
 
 const BalanceSheetPage = () => {
     const navigate = useNavigate();
+
+    // use effect to ensure user is authenticated to access this route
     useEffect(() => {
         const fetchProtectedData = async () => {
             try {
@@ -56,7 +58,7 @@ const BalanceSheetPage = () => {
     <div className="slid-containerww bg-primary">
      <LowerHeader/>
     </div>
-    <div className="container-fluid vh-100 d-flex flex-column">
+    <div className="container-fluid vh-100 d-flex flex-column overflow-scroll">
       <BalanceSheet/>
     </div>
     <Footer/>

@@ -22,7 +22,9 @@ import OrganizationProfilePage from './pages/OrganizationProfilePage'
 import VerifyEmail from './pages/VerifyEmail'
 import ResetPassword from './pages/ResetPassword'
 
-function App() {
+
+//component for routing the page components.
+const App = () => {
   return (
     <div>
     <UserProvider>

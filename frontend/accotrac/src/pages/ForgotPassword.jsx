@@ -6,13 +6,16 @@ import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 const ForgotPassword = () => {
+  // initialize data as empty
   const [data, setData] = useState({
     email: ''
   });
+
+  // fuction to submit data input by user i.e email to send link
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('api/forgotpassword', data);
+      const response = await axios.post('http://localhost:5000/forgotpassword', data);
       if (response.status === 201) {
         toast.success(response.data.message);
         setData({
@@ -115,4 +118,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default ForgotPassword;

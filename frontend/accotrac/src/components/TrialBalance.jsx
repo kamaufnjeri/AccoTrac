@@ -5,11 +5,13 @@ import { UserContext } from './UserContext';
 axios.defaults.withCredentials = true;
 
 const TrialBalance = () => {
+  // initialize data needed to display the trial balance
   const [trialBalance, setTrialBalance] = useState([]);
   const [totals, setTotals] = useState({});
   const { company } = useContext(UserContext);
   const currenntDate = new Date().toISOString().split('T')[0];
 
+  // use useEffect to fetch data on the trial balnce from the backend
   useEffect(() => {
     const fetchTrialBalance = async () => {
       try {

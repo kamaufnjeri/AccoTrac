@@ -11,10 +11,7 @@ function Header() {
             <div className="col-lg-6 d-none d-lg-block">
               <ul className="text-dark fw-bold fs-8">
                 <li className="float-start p-3">
-                  <i className="bi bi-envelope" /> AccoTrac@outlook.com
-                </li>
-                <li className="float-start p-3">
-                  <i className="bi bi-telephone" /> For More Information: +2448100001122
+                  <i className="bi bi-envelope" />   AccoTrac@outlook.com
                 </li>
               </ul>
             </div>

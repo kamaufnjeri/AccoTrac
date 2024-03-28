@@ -9,6 +9,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 const Login = () => {
+  // initialize variables to be used for login user
   const navigate = useNavigate();
   const { setUser, setCompany } = useContext(UserContext);
 
@@ -23,7 +24,8 @@ const Login = () => {
       try {
         const response = await axios.post('api/login', data);
         if (response && response.status === 200 && response.data) {
-          const user = response.data.user
+          const user = response.data.user;
+          // set user and company componets on successfull login
           setUser(user);
           setCompany(user.selected_company);
           toast.success(`${response.data.message} ${user.email}`)

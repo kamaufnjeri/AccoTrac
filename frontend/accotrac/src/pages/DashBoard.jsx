@@ -79,7 +79,7 @@ function Dashboard() {
       <div className="slid-containerww bg-primary">
        <LowerHeader/>
       </div>
-      <div className="container-fluid vh-100 d-flex flex-column">
+      <div className="container vh-100 d-flex flex-column overflow-scroll">
         <DashBoardBody/>
       </div>
       <Footer/>

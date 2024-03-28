@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
     accounts = db.relationship('Account', backref='users', lazy=True, cascade="all,delete")
     transactions = db.relationship('Transaction', backref='user', lazy=True, cascade='all,delete')
     
+    
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
         super(User, self).__init__(**kwargs)

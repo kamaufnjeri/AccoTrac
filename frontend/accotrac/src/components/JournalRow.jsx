@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 axios.defaults.withCredentials = true;
 
 const JournalRow = ({ entry, index, handleChange, removeRow }) => {
-  const [accounts, setAccounts] = useState()
+  const [accounts, setAccounts] = useState();
+
+  // use effect to fetch accounts info/data from the backend
   useEffect(() => {
     const fetchData = async () => {
         try {
@@ -39,8 +41,8 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
   useEffect(() => {
     if (accounts) {
       const newOptions = accounts.map(account => ({
-        name: account.name,
-        value: account.id
+        name: `${account.name} (bal - ${account.balance})`,
+        value: account.id, 
       }));
       setOptions(newOptions);
       setSelectedOption('');

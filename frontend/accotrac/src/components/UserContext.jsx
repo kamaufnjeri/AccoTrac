@@ -1,10 +1,10 @@
 import React, { createContext, useState, useEffect } from 'react';
 import RequestHandler from '../methods/HandleApiRequests';
-import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext(null);
 
 const UserProvider = ({ children }) => {
+  // using useContext to set user, and company info to be accessed globally by all components
   const [user, setUser] = useState();
   const [company, setCompany] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -12,6 +12,7 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      // fetch from protected route to ensure user is authenticated and to set user and company
       try {
         setIsLoading(true); 
         const response = await RequestHandler.handleGetRequest('/protected');

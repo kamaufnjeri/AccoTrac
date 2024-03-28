@@ -5,6 +5,7 @@ axios.defaults.withCredentials = true;
 const URL = "api";
 
 class RequestHandler {
+  // function to get data fom backend using axios
   static handleGetRequest(newUrl) {
     const getUrl = `${URL}${newUrl}`;
     return axios
@@ -29,6 +30,7 @@ class RequestHandler {
       });
   }
 
+  // fuction to post data to the backend
   static handlePostRequest(newUrl, data) {
     const postUrl = `${URL}${newUrl}`;
     return axios

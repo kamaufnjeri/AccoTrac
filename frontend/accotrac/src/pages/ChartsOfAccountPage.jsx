@@ -9,7 +9,9 @@ import Header from '../components/Header';
 
 
 function ChartsOfAccountPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+// useEfect to ensure that user is authenticated to access this page
   useEffect(() => {
     const fetchProtectedData = async () => {
         try {
@@ -57,7 +59,7 @@ function ChartsOfAccountPage() {
     <div className="slid-containerww bg-primary">
      <LowerHeader/>
     </div>
-    <div className="container-fluid vh-100 d-flex flex-column">
+    <div className="container-fluid vh-100 d-flex flex-column overflow-scroll">
       <ChartsOfAccount/>
     </div>
     <Footer/>

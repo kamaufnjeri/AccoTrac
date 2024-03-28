@@ -19,6 +19,7 @@ const UpdateOrganization = () => {
     }
   }, [company]);
 
+  // function to submit data entered used by user to update organization info on the backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const LowerHeader = () => {
+  // get company info/data to use in displaying company name
   const { company } = useContext(UserContext);
 
   return (
