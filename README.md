@@ -2,7 +2,7 @@
 
 ## Overview
 
-AccoTrac provides a RESTful API for managing users, companies, authentication, and related functionalities. This documentation outlines the endpoints, request methods, payloads, and sample requests/responses for each endpoint.
+AccoTrac provides a RESTful API for managing users, companies, authentication, and related functionalities. This documentation outlines the endpoints, request methods, payloads, and sample requests/responses for each endpoint
 
 ## Requirements
 
