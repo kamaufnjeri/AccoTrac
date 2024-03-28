@@ -2,13 +2,21 @@ import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from './UserContext'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { useNavigate } from 'react-router-dom';
 
 
 axios.defaults.withCredentials = true;
 const UpdateUser = () => {
   // initialize data or get data needed for updating user info
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser, setCompany } = useContext(UserContext);
+    const navigate = useNavigate();
     const [data, setData] = useState({});
+    const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
     // using use Effect to set data depending on the user from UserContext
     useEffect(() => {
@@ -43,8 +51,52 @@ const UpdateUser = () => {
           setData(user);
         }
       };
+      
+    // fuction to handle delete of an account by id
+    const handleDelete = async () => {
+      try { 
+          const response = await axios.delete(`http://localhost:5000/user/${data.id}`);
+
+          if (response.status === 200) {
+              toast.success("Success deleting account");
+              setUser(null);
+              setCompany(null);
+              navigate('/home');
+          }
+          else {
+              throw new Error(response.data.response);
+          }
+      } catch (error) {
+          console.error('Error deleting account:', error);
+          if (error.response && error.response.data) {
+              toast.error('Error deleting account: ' + error.response.data.response);
+          }
+          else {
+              toast.error('Error deleting account: ' + error);
+          }
+      }
+      handleClose();
+  };
   return (
     <div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete user {data.email}?</Modal.Body>
+        <Modal.Body>
+          Warning! The company and transactions related to this user will be deleted.
+          This action can not be undone
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <h2>User details</h2>
         <form onSubmit={handleSubmit}>
           <div class="form-group">
@@ -77,7 +129,10 @@ const UpdateUser = () => {
             onChange={(e) => setData({...data, email: e.target.value})}
             />
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary mr-4">Submit</button>
+          <Button variant="danger" onClick={handleShow}>
+            Delete user
+          </Button>
         </form>
     </div>
   )

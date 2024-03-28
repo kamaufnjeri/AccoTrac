@@ -41,8 +41,8 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
   useEffect(() => {
     if (accounts) {
       const newOptions = accounts.map(account => ({
-        name: account.name,
-        value: account.id
+        name: `${account.name} (bal - ${account.balance})`,
+        value: account.id, 
       }));
       setOptions(newOptions);
       setSelectedOption('');
