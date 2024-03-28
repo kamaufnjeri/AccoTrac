@@ -89,8 +89,8 @@ function contact() {
             </div>
             <div className="row cont-row">
               <div className="col-sm-3">
-                <label>Email Address </label>
-                <span>:</span>
+                <label>Email Address<span>:</span></label>
+                
               </div>
               <div className="col-sm-8">
                 <input
@@ -103,8 +103,8 @@ function contact() {
             </div>
             <div className="row cont-row">
               <div className="col-sm-3">
-                <label>Mobile Number</label>
-                <span>:</span>
+                <label>Mobile Number<span>:</span></label>
+                
               </div>
               <div className="col-sm-8">
                 <input
@@ -117,8 +117,8 @@ function contact() {
             </div>
             <div className="row cont-row">
               <div className="col-sm-3">
-                <label>Enter Message</label>
-                <span>:</span>
+                <label>Enter Message<span>:</span></label>
+                
               </div>
               <div className="col-sm-8">
                 <textarea
