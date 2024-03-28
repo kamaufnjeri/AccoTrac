@@ -11,10 +11,10 @@ class Company(db.Model):
     email = db.Column(db.String(256), unique=True)
     country = db.Column(db.String(128))
     currency = db.Column(db.String(128))
-    accounts = db.relationship('Account', backref='company', lazy=True)
-    transactions = db.relationship('Transaction', backref='company', lazy=True)
+    accounts = db.relationship('Account', backref='company', lazy=True, cascade='all,delete')
+    transactions = db.relationship('Transaction', backref='company', lazy=True, cascade='all,delete')
     #stocks = db.relationship('Stock', backref='company', lazy=True)
-    selected_company = db.relationship('User', backref='selected_company', lazy=True)
+    selected_company = db.relationship('User', backref='selected_company', lazy=True, cascade='all,delete')
 
 
     def __init__(self, **kwargs):
@@ -28,10 +28,10 @@ class Company(db.Model):
             company_id=self.id
         ).first()
         return association.role if association else None
-    
-    
+
+
     def set_user_role(self, user_id, is_admin=False):
-        """get the association from database to see if it exists""" 
+        """get the association from database to see if it exists"""
         association = UserCompanyAssociation.query.filter_by(
             user_id=user_id,
             company_id=self.id

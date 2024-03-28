@@ -21,9 +21,9 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
                                            company_country=None,
                                            company_currency=None,
                                            user_id=user.id)
-        print(firstname)
         if comp_code == 201:
             user.selected_company_id = resp_item.id
+            print(resp_item.to_dict())
             newuser = user.to_dict(user.is_authenticated)
             return newuser, 201
         else:

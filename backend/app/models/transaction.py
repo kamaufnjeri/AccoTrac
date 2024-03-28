@@ -11,7 +11,7 @@ class Transaction(db.Model):
     description = db.Column(db.Text)
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
-    journal_entries = db.relationship('JournalEntry', backref='transaction', lazy=True)
+    journal_entries = db.relationship('JournalEntry', backref='transaction', lazy=True, cascade='all,delete')
     #stock_entries = db.relationship('StockEntry', backref='transaction', lazy=True)
     
     def __init__(self, **kwargs):

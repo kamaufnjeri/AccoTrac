@@ -66,6 +66,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
             if status == True:
                 message = {"message": "Check your email for a link to verify your email",
                         "result": result}
+                print(code)
                 db.session.commit()
                 return jsonify(message), code
             else:
@@ -366,3 +367,23 @@ def add_selected_organization(company_id):
         db.session.rollback()
         return jsonify({"message": str(e)}), 500
     
+@user_bp.route('/user/<admin_id>', methods=['DELETE'], strict_slashes=False)
+@login_required
+def delete_user(admin_id:str) -> Union[jsonify, Tuple[dict, int]]:
+    """admin can delete users who he invited"""
+    if request.method == 'DELETE':
+        if request.content_type == 'application/json':
+            data = request.get_json()
+            if not data:
+                message = {"Message": "Missing Required fields",
+                       "Required": "user_id"}
+                return jsonify(message), 400
+            user_id = data.get(user_id)
+            if not user_id:
+                message = {"Message": "You did not provide user_id"}
+                return jsonify(message), 400
+        else:
+            user_id = admin_id
+            result, code = delete_userinfo(admin_user_id=admin_id, user_id=user_id)
+            message = {"Message": result}
+            return jsonify(message), code
