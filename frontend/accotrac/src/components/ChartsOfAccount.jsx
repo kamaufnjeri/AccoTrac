@@ -1,13 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { UserContext } from './UserContext';
 import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 const ChartsOfAccount = () => {
+    // useState to manage accounts and selected account id for deletion
     const [accounts, setAccounts] = useState();
     const [selectedAccountId, setSelectedAccountId] = useState(null);
 
+    // using useEffect to fetch all accounts from the backend
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,6 +33,7 @@ const ChartsOfAccount = () => {
         fetchData();
     }, []);
 
+    // fuction to handle delete of an account by id
     const handleDelete = async (id, name) => {
         try {
             console.log(id);
@@ -56,7 +58,9 @@ const ChartsOfAccount = () => {
         }
     };
 
+    // format name for category and sub category
     const formatName = (name) => {
+        // first letter in a word with a capital and '_' with space
         return name
             .split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))

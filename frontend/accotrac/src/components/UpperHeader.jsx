@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import MenuItems from './MenuItems';
-import CollapsibleMenu from './CollapsibleMenu';
 
 
 const UpperHeader = () => {

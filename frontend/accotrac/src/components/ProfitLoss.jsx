@@ -5,6 +5,7 @@ import { UserContext } from './UserContext';
 axios.defaults.withCredentials = true;
 
 const ProfitLoss = () => {
+  // initialize or get data to be used for the profit loss info tobe displayed
   const [revenueAccounts, setRevenueAccounts] = useState([]);
   const [expenseAccounts, setExpenseAccounts] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState({ name: "Total Revenue", revenue: 0 });
@@ -18,14 +19,12 @@ const ProfitLoss = () => {
   const { company } = useContext(UserContext);
   const currentDate = new Date().toISOString().split('T')[0];
 
+  // use useeffect and axios to fetch profit/loss data from backend
   useEffect(() => {
     const fetchProfitLoss = async () => {
       try {
         const response = await axios.get('http://localhost:5000/profitloss');
         const accounts = response.data;
-
-        //filter gross profit
-
         
         // Filter revenue and expense accounts
         const revenue = accounts.filter(account => account.category === 'revenue' && account.sub_category === 'revenue');
@@ -148,12 +147,12 @@ const ProfitLoss = () => {
               <tr key={index}>
                 <td>{entry.name}</td>
                 <td>{entry.balance}</td>
-                <td></td> {/* Leave this cell blank for each expense entry */}
+                <td></td>
               </tr>
             ))}
             <tr>
               <td><strong>{totalExpenses.name}</strong></td>
-              <td></td> {/* Leave this cell blank for the total expense amount */}
+              <td></td>
               <td><strong>({totalExpenses.expense})</strong></td>
             </tr>
           </tbody>

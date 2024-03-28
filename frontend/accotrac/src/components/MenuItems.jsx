@@ -5,9 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const MenuItems = () => {
+    // get data for use by the component
     const navigate = useNavigate();
     const { setCompany, setUser, user, company } = useContext(UserContext);
-    console.log('menu', user);
+
+    // onclick signout button logout user and set company and user to null
     const logoutUser = async () => {
         try {
             const response = await axios.post('http://localhost:5000/logout');
@@ -16,8 +18,6 @@ const MenuItems = () => {
                 toast.success(`${response.data.message} ${response.data.userEmail}`);
                 setUser(null);
                 setCompany(null);
-                console.log(user);
-                console.log(company);
                 navigate('/home');
             } else {
                 toast.error(response.data.message);

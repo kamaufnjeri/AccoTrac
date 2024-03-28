@@ -1,17 +1,15 @@
 import React, { useContext, useState } from 'react';
 import JournalRow from './JournalRow'; // Import the JournalRow component
-import RequestHandler from '../methods/HandleApiRequests';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { UserContext } from './UserContext';
 
 axios.defaults.withCredentials = true
 const GeneralJournal = () => {
+  // data to use for adding a journa/transaction/double entry
   const {company} = useContext(UserContext);
   const currentDate = new Date().toISOString().split('T')[0];
-  console.log(currentDate)
   const [entries, setEntries] = useState([]);
-
   const [data, setData] = useState({
     date: '',
     description: '',
@@ -23,11 +21,13 @@ const GeneralJournal = () => {
   const [totalCredit, setTotalCredit] = useState(0);
 
 
+  // function to add a new row for the entries if needed
   const addRow = (e) => {
     e.preventDefault();
     setEntries([...entries, { account_id: '', debit: '', credit: '' }]);
   };
 
+  // function to remove a row for the entries
   const removeRow = (index) => {
     if (entries.length > 2 && index >= 2) {
       const updatedEntries = [...entries];
@@ -38,6 +38,8 @@ const GeneralJournal = () => {
     }
   };
 
+  // handle change on input of data by the user
+  // if debit is entered or credit set the viceversa to zero
   const handleChange = (index, key, value) => {
     const updatedEntries = [...entries];
     if (key === 'debit') {
@@ -66,6 +68,7 @@ const GeneralJournal = () => {
   };
   
 
+  // calculate totals of both the debit and credit
   const calculateTotals = (updatedEntries) => {
     let debitTotal = 0;
     let creditTotal = 0;
@@ -78,8 +81,10 @@ const GeneralJournal = () => {
   };
 
 
+  // get difference of the debit and credit. for a successful entry the difference should be zero
   const difference = totalDebit - totalCredit;
 
+  // submitting data to post to the backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);

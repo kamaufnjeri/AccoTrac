@@ -85,7 +85,6 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
 
 @user_bp.route('/user/verifyemail/<string:token>', methods=['GET'], strict_slashes=False)
 def verify_email(token:str):
-    print(token)
     if request.method == 'GET':
         data, message, code = get_data_from_token(token)
         if not data:
@@ -150,9 +149,27 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
                         'user': user.to_dict(user.is_authenticated)}
             return jsonify(message), code
         else:
-            message = {
-                "message": "Your email is not verified"
-            }
+            token, message, token_code= create_token(email=email)
+            if token_code != 201:
+                message = {"message": message}
+                return jsonify(message), code
+            url = 'http://localhost:3000/user/verifyemail/' + token
+            resp_msg, status = send_email('[AccoTrac] Verify Your Email',
+                sender=app.config['ADMINS'],
+                recipients=[email],
+                text_body=f"""
+                Dear {user.firstname},
+                Click on the Link below to verify your email
+                {url}
+                Sincerely,
+                The Accotrac Team
+                """)
+            if status == True:
+                message = {"message": "Check your email for a link to verify your email",
+                        "user": user.to_dict(user.is_authenticated)}
+                return jsonify(message), 400
+            else:
+                raise ValueError(resp_msg)
             return jsonify(message), 400
     elif request.method == 'GET':
         message = {"Message": "Login Page coming soon"}
@@ -201,8 +218,9 @@ def update_user(id:str) -> Union[jsonify, Tuple[dict, int]]:
         message = {"Message": "Update Page coming soon"}
         return jsonify(message), 200
 
-@app.route('/forgotpassword', methods=['POST'], strict_slashes=False)
+@user_bp.route('/forgotpassword', methods=['POST'], strict_slashes=False)
 def forgot_password():
+    """route to send email to reset password"""
     if request.method == 'POST':
         if not request.content_type == 'application/json':
             message = {"message": "expected json object"}
@@ -243,8 +261,9 @@ def forgot_password():
         message = {'message': 'Check your email for link to reset password'}
         return jsonify(message), code
 
-@app.route('/resetpassword/<token>', methods=['PUT', 'GET'], strict_slashes=False)
+@user_bp.route('/resetpassword/<token>', methods=['PUT', 'GET'], strict_slashes=False)
 def reset_password(token:str):
+    """route to reset password"""
     if request.method == 'PUT':
         if request.content_type != 'application/json':
             message = {'message': "expected json object"}
@@ -327,6 +346,7 @@ def get_companies_by_user_id(user_id):
 
 @user_bp.route('/protected', methods=['GET'])
 def protected():
+    """route to confirm a user is authenticated"""
     if current_user.is_authenticated:
         user = current_user.to_dict(current_user.is_authenticated)
         return jsonify({"message": "User is authenticated", "response": user}), 200

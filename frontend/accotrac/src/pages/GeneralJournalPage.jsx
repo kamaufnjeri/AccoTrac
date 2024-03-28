@@ -9,6 +9,8 @@ import Footer from '../components/Footer';
 
 const GeneralJournalPage = () => {
   const navigate = useNavigate();
+
+  // useEfect to ensure that user is authenticated to access this page
   useEffect(() => {
     const fetchProtectedData = async () => {
         try {
@@ -58,7 +60,7 @@ const GeneralJournalPage = () => {
       <div className="slid-containerww bg-primary">
        <LowerHeader/>
       </div>
-      <div className="container col-md-9 vh-100 d-flex flex-column">
+      <div className="container col-md-9 vh-100 d-flex flex-column overflow-scroll">
         <GeneralJournal/>
       </div>
       <Footer/>

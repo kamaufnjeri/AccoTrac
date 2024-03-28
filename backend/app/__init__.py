@@ -6,10 +6,11 @@ from flask_migrate import Migrate
 from config import Config
 from flask_login import LoginManager
 from flask_mail import Mail, Message
-from threading import Thread # send email asynchronously in the background
+"""send email asynchronously in the background"""
+from threading import Thread
 
 
-# load dot environment to get environment variables from .env file
+"""load dot environment to get environment variables from .env file"""
 load_dotenv()
 """Set up flask"""
 app = Flask(__name__)
@@ -21,10 +22,10 @@ cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http:/
 migrate = Migrate(app, db)
 login = LoginManager(app)
 
-# setup mail
+"""setup mail"""
 mail = Mail(app)
 
-# send email
+"""send email"""
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
@@ -37,14 +38,15 @@ def send_email(subject, sender, recipients, text_body):
         return "Success sending email", True
     except Exception as e:
         return str(e), False
-    
+
+"""import all routes and register them"""  
 from app.routes import *
 app.register_blueprint(transaction_bp)
 app.register_blueprint(account_bp)
 app.register_blueprint(report_bp)
 app.register_blueprint(user_bp)
 
-# handle 401 error
+"""handle 401 error"""
 @app.errorhandler(401)
 def custom_401(error):
     message = {'error': str(error)}

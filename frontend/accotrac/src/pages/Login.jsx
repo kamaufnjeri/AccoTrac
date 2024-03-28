@@ -9,6 +9,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 const Login = () => {
+  // initialize variables to be used for login user
   const navigate = useNavigate();
   const { setUser, setCompany } = useContext(UserContext);
 
@@ -21,9 +22,11 @@ const Login = () => {
     event.preventDefault();
     if (data) {
       try {
+        // post the data to login user
         const response = await axios.post('http://localhost:5000/login', data);
         if (response && response.status === 200 && response.data) {
-          const user = response.data.user
+          const user = response.data.user;
+          // set user and company componets on successfull login
           setUser(user);
           setCompany(user.selected_company);
           toast.success(`${response.data.message} ${user.email}`)

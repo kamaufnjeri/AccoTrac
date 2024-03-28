@@ -3,15 +3,21 @@ import { UserContext } from './UserContext'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+
 axios.defaults.withCredentials = true;
 const UpdateUser = () => {
+  // initialize data or get data needed for updating user info
     const { user, setUser } = useContext(UserContext);
     const [data, setData] = useState({});
+
+    // using use Effect to set data depending on the user from UserContext
     useEffect(() => {
         if (user !== undefined) {
             setData(user);
         }
     }, [user])
+
+    // submitting date on user that has been input for changing
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const TransactionTable = ({ transactions, company }) => {
+  // get curent date and initialize info needed to display journal entries/transactions
   const currentDate = new Date().toISOString().slice(0, 10);
   const [filterDate, setFilterDate] = useState('');
   const [filteredTransactions, setFilteredTransactions] = useState([]);

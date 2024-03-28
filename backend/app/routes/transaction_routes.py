@@ -9,6 +9,7 @@ general_transaction_controllers = GeneralTransactionControllers()
 @transaction_bp.route('/addtransaction', methods=['POST'])
 @login_required
 def add_general_transaction():
+    """route for entering a journal entry/transaction/double entry"""
     data = request.get_json()
 
     if not data:
@@ -20,6 +21,7 @@ def add_general_transaction():
 @transaction_bp.route('/alltransactions', methods=['GET'])
 @login_required
 def get_all_transactions():
+    """route to get all transactions related to a specific company"""
     resp, code = general_transaction_controllers.get_all_journals(current_user.selected_company_id, current_user.id)
     print(resp, code)
     return jsonify(resp), code

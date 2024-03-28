@@ -10,10 +10,12 @@ import { toast } from 'react-toastify';
 axios.defaults.withCredentials = true;
 
 function CollapsibleMenu() {
+  // navbar to be displayed when user is on a smaller screen
   const navigate = useNavigate();
   const { setCompany, setUser, user, company } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
 
+  // fuction to logout a user
   const logoutUser = async () => {
     try {
       const response = await axios.post('http://localhost:5000/logout');
@@ -37,6 +39,7 @@ function CollapsibleMenu() {
     }
   };
 
+  // to open or close Navbar
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (

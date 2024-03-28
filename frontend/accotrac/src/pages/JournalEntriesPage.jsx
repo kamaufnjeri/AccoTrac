@@ -9,6 +9,8 @@ import Header from '../components/Header'
 
 const JournalEntriesPage = () => {
     const navigate = useNavigate();
+
+    // useEfect to ensure that user is authenticated to access this page
     useEffect(() => {
         const fetchProtectedData = async () => {
             try {
@@ -56,7 +58,7 @@ const JournalEntriesPage = () => {
     <div className="slid-containerww bg-primary">
      <LowerHeader/>
     </div>
-    <div className="container-fluid vh-100 d-flex flex-column">
+    <div className="container-fluid vh-100 d-flex flex-column overflow-scroll">
 
      <JournalEntries/>
     </div>

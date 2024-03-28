@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Signup = () => {
+  // initialize the confirm password  and data to be input as empty
   const [confirmPassword, setConfirmPassword] = useState('');
   const [data, setData] = useState({
     firstname: '',
@@ -16,18 +17,22 @@ const Signup = () => {
     company_name: ""
   });
 
+  // sub,it data input by user to backend
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // show an error if confirm password and password are not equal
     if (confirmPassword !== data.password) {
       toast.error("The two passwords don't match")
     }
 
     else {
       try {
+        // send data and post it
         const response = await axios.post('http://localhost:5000/user', data);
 
         if (response.status === 201) {
           if (response.data.result) {
+            // successfull creation of user account
             toast.success(response.data.message);
             setData({
               firstname: '',

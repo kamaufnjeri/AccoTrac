@@ -5,18 +5,21 @@ import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 function ResetPassword() {
+  // access token from url to use to login user
   const { token } = useParams();
+  // initialize data to be inpput by user as empty
   const [data, setData] = useState({
     password: '',
     confirm_password: ''
   })
 
+  // submit the passwords input by user
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(data);
       const response = await axios.put(`http://localhost:5000/resetpassword/${token}`, data);
       if (response && response.status === 200 && response.data) {
+        // on successfull reset password
         toast.success(response.data.message);
         setData({
           password: '',

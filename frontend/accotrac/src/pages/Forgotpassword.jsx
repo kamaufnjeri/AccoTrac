@@ -6,9 +6,12 @@ import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 const ForgotPassword = () => {
+  // initialize data as empty
   const [data, setData] = useState({
     email: ''
   });
+
+  // fuction to submit data input by user i.e email to send link
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

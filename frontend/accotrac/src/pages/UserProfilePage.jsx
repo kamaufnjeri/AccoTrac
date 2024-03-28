@@ -10,6 +10,7 @@ import Footer from '../components/Footer'
 const UserProfilePage = () => {
     const navigate = useNavigate();
     
+    // useEfect to ensure that user is authenticated to access this page
     useEffect(() => {
         const fetchProtectedData = async () => {
             try {
@@ -58,7 +59,7 @@ const UserProfilePage = () => {
     <div className="slid-containerww bg-primary">
      <LowerHeader/>
     </div>
-    <div className="container-fluid vh-100 d-flex flex-column">
+    <div className="container-fluid vh-100 d-flex flex-column overflow-scroll">
       <div class="container">
         <UpdateUser/>
       </div>

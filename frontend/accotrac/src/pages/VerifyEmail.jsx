@@ -7,8 +7,11 @@ axios.defaults.withCredentials = true;
 const VerifyEmail = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
+  // get token from the url
   const { token } = useParams();
 
+  // verify email component
+  // using useEffect to verify email on the backend
   useEffect(() => {
     const verifyEmail = async () => {
       try {
