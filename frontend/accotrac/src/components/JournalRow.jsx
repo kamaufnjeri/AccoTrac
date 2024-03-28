@@ -8,7 +8,7 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/getallaccounts`);
+            const response = await axios.get(`api/getallaccounts`);
 
             if (response.status === 200) {
                 setAccounts(response.data.response);
@@ -24,7 +24,7 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
             else {
                 console.error('Error deleting account: ' + error);
             }
-        } 
+        }
     }
     fetchData();
 }, [setAccounts]);

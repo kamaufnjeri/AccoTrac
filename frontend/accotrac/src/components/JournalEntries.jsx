@@ -11,7 +11,7 @@ const JournalEntries = () => {
     useEffect(() => {
         const fetchTransactions = async() => {
             try {
-                const response = await axios.get('http://localhost:5000/alltransactions')
+                const response = await axios.get('api/alltransactions')
                 console.log(response)
                 setTransactions(response.data)
             } catch (error) {

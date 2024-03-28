@@ -15,7 +15,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchProtectedData = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/protected');
+          const response = await axios.get('api/protected');
           if (response.status !== 200) {
             navigate("/");
           }
@@ -23,7 +23,7 @@ function Dashboard() {
         } catch (error) {
           if (error.response && error.response.data) {
             console.error('Error fetching protected data:', error.response.data);
-    
+
           } else {
             console.error('Error fetching protected data:', error.message);
           }
@@ -35,7 +35,7 @@ function Dashboard() {
 
   const logoutUser = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/logout');
+      const response = await axios.post('api/logout');
       console.log(response.data);
       if (response.status === 200) {
         toast.success('Successfully logged out');

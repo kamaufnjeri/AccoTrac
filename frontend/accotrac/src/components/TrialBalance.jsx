@@ -13,7 +13,7 @@ const TrialBalance = () => {
   useEffect(() => {
     const fetchTrialBalance = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/trialbalance');
+        const response = await axios.get('api/trialbalance');
         setTrialBalance(response.data.slice(0, -1));
         setTotals(response.data[response.data.length - 1]);
       } catch (error) {

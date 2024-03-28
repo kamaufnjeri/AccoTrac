@@ -11,8 +11,8 @@ const ChartsOfAccount = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/getallaccounts`);
-    
+                const response = await axios.get(`api/getallaccounts`);
+
                 if (response.status === 200) {
                     setAccounts(response.data.response);
                 }
@@ -27,7 +27,7 @@ const ChartsOfAccount = () => {
                 else {
                     console.error('Error deleting account: ' + error);
                 }
-            } 
+            }
         }
         fetchData();
     }, []);
@@ -35,8 +35,8 @@ const ChartsOfAccount = () => {
     const handleDelete = async (id, name) => {
         try {
             console.log(id);
-            setSelectedAccountId(id); 
-            const response = await axios.delete(`http://localhost:5000/${id}/deleteaccount`);
+            setSelectedAccountId(id);
+            const response = await axios.delete(`api/${id}/deleteaccount`);
 
             if (response.status === 200) {
                 toast.success("Success deleting account " + name);

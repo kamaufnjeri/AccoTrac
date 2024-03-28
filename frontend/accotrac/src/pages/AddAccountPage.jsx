@@ -13,7 +13,7 @@ function AddAccountPage() {
   useEffect(() => {
     const fetchProtectedData = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/protected');
+          const response = await axios.get('api/protected');
           if (response.status !== 200) {
             navigate("/");
           }
@@ -21,7 +21,7 @@ function AddAccountPage() {
         } catch (error) {
           if (error.response && error.response.data) {
             console.error('Error fetching protected data:', error.response.data);
-    
+
           } else {
             console.error('Error fetching protected data:', error.message);
           }
@@ -30,7 +30,7 @@ function AddAccountPage() {
       };
   fetchProtectedData();
 }, [navigate]);
-  
+
 
   return (
     <div><>
@@ -54,7 +54,7 @@ function AddAccountPage() {
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <Header/>
     <div className="slid-containerww bg-primary">
-     
+
    <UpperHeader />
     </div>
     <div className="slid-containerww bg-primary">

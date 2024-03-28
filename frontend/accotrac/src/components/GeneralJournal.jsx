@@ -18,7 +18,7 @@ const GeneralJournal = () => {
     entries: []
   });
 
-  
+
   const [totalDebit, setTotalDebit] = useState(0);
   const [totalCredit, setTotalCredit] = useState(0);
 
@@ -58,13 +58,13 @@ const GeneralJournal = () => {
         account_id: value
       };
     }
-  
+
     setEntries(updatedEntries);
     setData({...data, entries: updatedEntries});
     console.log(data);
     calculateTotals(updatedEntries);
   };
-  
+
 
   const calculateTotals = (updatedEntries) => {
     let debitTotal = 0;
@@ -87,7 +87,7 @@ const GeneralJournal = () => {
     if (data && difference === 0) {
       try {
 
-        const response = await axios.post('http://localhost:5000/addtransaction', data);
+        const response = await axios.post('api/addtransaction', data);
         if (response.status === 201) {
           toast.success(response.data.message);
           setData({
@@ -182,7 +182,7 @@ const GeneralJournal = () => {
       </div>
     )
   );
-  
+
 }
 
 export default GeneralJournal;

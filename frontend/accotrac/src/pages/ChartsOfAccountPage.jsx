@@ -13,7 +13,7 @@ function ChartsOfAccountPage() {
   useEffect(() => {
     const fetchProtectedData = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/protected');
+          const response = await axios.get('api/protected');
           if (response.status !== 200) {
             navigate("/");
           }
@@ -21,7 +21,7 @@ function ChartsOfAccountPage() {
         } catch (error) {
           if (error.response && error.response.data) {
             console.error('Error fetching protected data:', error.response.data);
-    
+
           } else {
             console.error('Error fetching protected data:', error.message);
           }

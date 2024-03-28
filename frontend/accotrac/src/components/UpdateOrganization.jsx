@@ -23,7 +23,7 @@ const UpdateOrganization = () => {
     e.preventDefault();
     try {
       console.log(data);
-      const response = await axios.put(`http://localhost:5000/company/${company.id}`, data);
+      const response = await axios.put(`api/company/${company.id}`, data);
       if (response.status === 200) {
         toast.success("Success updating company information");
         setData(response.data.response);

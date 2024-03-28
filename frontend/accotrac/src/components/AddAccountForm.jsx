@@ -20,7 +20,7 @@ const AddAccountForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/createaccount', formData, { withCredentials: true });
+      const response = await axios.post('api/createaccount', formData, { withCredentials: true });
       if (response.status === 201) {
         console.log(response.data);
         toast.success("Success creating account");
@@ -74,7 +74,7 @@ const AddAccountForm = () => {
             className="form-control"
             id="name"
             name="name"
-            
+
             value={formatName(formData.name)}
             onChange={handleInputChange}
             required

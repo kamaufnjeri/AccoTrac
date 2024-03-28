@@ -16,7 +16,7 @@ function CollapsibleMenu() {
 
   const logoutUser = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/logout');
+      const response = await axios.post('api/logout');
       console.log(response.data);
       if (response.status === 200) {
         toast.success(`${response.data.message} ${response.data.userEmail}`);

@@ -9,11 +9,11 @@ import Footer from '../components/Footer'
 
 const UserProfilePage = () => {
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const fetchProtectedData = async () => {
             try {
-              const response = await axios.get('http://localhost:5000/protected');
+              const response = await axios.get('api/protected');
               if (response.status !== 200) {
                 navigate("/");
               }
@@ -21,7 +21,7 @@ const UserProfilePage = () => {
             } catch (error) {
               if (error.response && error.response.data) {
                 console.error('Error fetching protected data:', error.response.data);
-        
+
               } else {
                 console.error('Error fetching protected data:', error.message);
               }
@@ -30,7 +30,7 @@ const UserProfilePage = () => {
           };
       fetchProtectedData();
     }, [navigate]);
-   
+
   return (
     <div><>
     <meta charSet="utf-8" />

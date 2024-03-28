@@ -15,7 +15,7 @@ const UpdateUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.put(`http://localhost:5000/user/${user.id}`, data);
+          const response = await axios.put(`api/user/${user.id}`, data);
           console.log(response)
           if (response.status === 200) {
             toast.success("Success updating user information");

@@ -15,7 +15,7 @@ function ResetPassword() {
     e.preventDefault();
     try {
       console.log(data);
-      const response = await axios.put(`http://localhost:5000/resetpassword/${token}`, data);
+      const response = await axios.put(`api/resetpassword/${token}`, data);
       if (response && response.status === 200 && response.data) {
         toast.success(response.data.message);
         setData({

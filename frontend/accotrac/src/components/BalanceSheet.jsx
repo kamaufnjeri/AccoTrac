@@ -16,7 +16,7 @@ const BalanceSheet = () => {
     useEffect(() => {
         const fetchBalanceSheet = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/balancesheet');
+                const response = await axios.get('api/balancesheet');
                 const groupedBalanceSheet = groupByCategory(response.data);
                 setBalanceSheet(groupedBalanceSheet);
 
@@ -76,7 +76,7 @@ const BalanceSheet = () => {
     };
     return (
         <div className="container">
-            
+
             {company && balanceSheet && (<div>
                 <h2 className='m-0'>{company.name}</h2>
                 <h2 className='m-0'>Balance Sheet</h2>

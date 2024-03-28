@@ -21,16 +21,16 @@ const ProfitLoss = () => {
   useEffect(() => {
     const fetchProfitLoss = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/profitloss');
+        const response = await axios.get('api/profitloss');
         const accounts = response.data;
 
         //filter gross profit
 
-        
+
         // Filter revenue and expense accounts
         const revenue = accounts.filter(account => account.category === 'revenue' && account.sub_category === 'revenue');
         const expenses = accounts.filter(account => account.category === 'expense' && account.sub_category === 'expense');
-        
+
         //filter sales revenue accounts
         const salesRevenue = accounts.filter(account => account.category === 'revenue' && account.sub_category === 'sales_revenue');
 

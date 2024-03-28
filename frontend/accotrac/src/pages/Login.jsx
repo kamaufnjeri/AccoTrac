@@ -21,7 +21,7 @@ const Login = () => {
     event.preventDefault();
     if (data) {
       try {
-        const response = await axios.post('http://localhost:5000/login', data);
+        const response = await axios.post('api/login', data);
         if (response && response.status === 200 && response.data) {
           const user = response.data.user
           setUser(user);
@@ -40,7 +40,7 @@ const Login = () => {
         console.log(error);
       }
     }
-    
+
   };
 
   return (
