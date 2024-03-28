@@ -17,7 +17,9 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 db = SQLAlchemy(app)
-cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost"]}}, supports_credentials=True)
+# cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost"]}}, supports_credentials=True)
+# cors = CORS(app, resources={r"/protected": {"origins": "http://164.92.99.231"}})
+cors = CORS(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 
@@ -37,7 +39,7 @@ def send_email(subject, sender, recipients, text_body):
         return "Success sending email", True
     except Exception as e:
         return str(e), False
-    
+
 from app.routes import *
 app.register_blueprint(transaction_bp)
 app.register_blueprint(account_bp)
