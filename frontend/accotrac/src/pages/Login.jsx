@@ -2,15 +2,16 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UpperHeader from '../components/UpperHeader';
-import RequestHandler from '../methods/HandleApiRequests';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { UserContext } from '../components/UserContext';
+import axios from 'axios';
 
-
+axios.defaults.withCredentials = true;
 const Login = () => {
+  // initialize variables to be used for login user
   const navigate = useNavigate();
-  const { user, setUser, setCompany } = useContext(UserContext);
+  const { setUser, setCompany } = useContext(UserContext);
 
   const [data, setData] = useState({
     email: "",
@@ -19,31 +20,30 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (data) {
-      RequestHandler.handlePostRequest('/login', data)
-        .then(response => {
-          if (response && response.result) {
-            const user = response.result;
-            toast.success("Successfully logged in as " + user.email);
-            setUser(user);
-            setCompany(user.selected_company);
-            navigate(`/dashboard`);
-          } else if (response && response.message) {
-
-            toast.error(response.message);
-          }
-        })
-        .catch(error => {
-          if (error.message) {
-            console.error('Error logging in:', error);
-            toast.error('Error logging in:' + error.message);
-          } else {
-            console.error('Error logging in: ', error);
-            toast.error('Error logging in');
-          }
-        });
+      try {
+        // post the data to login user
+        const response = await axios.post('http://localhost:5000/login', data);
+        if (response && response.status === 200 && response.data) {
+          const user = response.data.user;
+          // set user and company componets on successfull login
+          setUser(user);
+          setCompany(user.selected_company);
+          toast.success(`${response.data.message} ${user.email}`)
+          navigate('/dashboard');
+        } else {
+          throw new Error('Invalid response from server');
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Unknown error: ', error);
+        }
+        console.log(error);
+      }
     }
+    
   };
 
   return (

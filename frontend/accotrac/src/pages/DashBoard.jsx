@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import UpperHeader from '../components/UpperHeader';
 import LowerHeader from '../components/LowerHeader';
 import DashBoardBody from '../components/DashBoardBody';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 axios.defaults.withCredentials = true
 
@@ -70,15 +72,17 @@ function Dashboard() {
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
       />
       <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+      <Header/>
       <div className="slid-containerww bg-primary">
      <UpperHeader />
       </div>
       <div className="slid-containerww bg-primary">
        <LowerHeader/>
       </div>
-      <div className="container-fluid vh-100 d-flex flex-column">
+      <div className="container vh-100 d-flex flex-column overflow-scroll">
         <DashBoardBody/>
       </div>
+      <Footer/>
     </>
     </div>
   )

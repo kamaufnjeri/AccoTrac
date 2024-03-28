@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 axios.defaults.withCredentials = true;
 
 const JournalRow = ({ entry, index, handleChange, removeRow }) => {
-  const [accounts, setAccounts] = useState()
+  const [accounts, setAccounts] = useState();
+
+  // use effect to fetch accounts info/data from the backend
   useEffect(() => {
     const fetchData = async () => {
         try {

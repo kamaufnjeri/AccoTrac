@@ -27,6 +27,7 @@ class AccountControllers:
             return str(e), 400
        
     def get_all_accounts(self, company_id):
+        """Getting all accounts of a company and user"""
         try:
             company = Company.query.filter_by(id=company_id).first()
 
@@ -47,6 +48,7 @@ class AccountControllers:
             return str(e), 500
         
     def update_account(self, company_id, account_id, data):
+        """Updating accounts info"""
         try:
             company = Company.query.filter_by(id=company_id).first()
             account = Account.query.filter_by(id=account_id).first()
@@ -83,6 +85,7 @@ class AccountControllers:
 
 
     def delete_account(self, company_id, account_id):
+        """deleting an account if no journal entries to it have been made"""
         try:
             company = Company.query.filter_by(id=company_id).first()
             account = Account.query.filter_by(id=account_id).first()
@@ -107,6 +110,7 @@ class AccountControllers:
 
     def get_account(self, company_id, account_id):
         try:
+            """gettig info about an individual account"""
             company = Company.query.filter_by(id=company_id).first()
             account = Account.query.filter_by(id=account_id).first()
             if not company:

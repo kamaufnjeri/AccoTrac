@@ -5,10 +5,13 @@ import LowerHeader from '../components/LowerHeader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import UpdateOrganization from '../components/UpdateOrganization'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 
 const OrganizationProfilePage = () => {
     const navigate = useNavigate();
     
+    // useEfect to ensure that user is authenticated to access this page
     useEffect(() => {
         const fetchProtectedData = async () => {
             try {
@@ -37,7 +40,7 @@ const OrganizationProfilePage = () => {
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Dashboard</title>
+    <title>Organization Profile</title>
     <link rel="shortcut icon" href="assets/images/fav.png" type="image/x-icon" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
@@ -50,17 +53,19 @@ const OrganizationProfilePage = () => {
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
     <div className="slid-containerww bg-primary">
    <UpperHeader />
     </div>
     <div className="slid-containerww bg-primary">
      <LowerHeader/>
     </div>
-    <div className="container-fluid vh-100 d-flex flex-column">
+    <div className="container-fluid vh-100 d-flex flex-column overflow-scroll">
       <div class="container">
         <UpdateOrganization/>
       </div>
     </div>
+    <Footer/>
   </>
   </div>
   )

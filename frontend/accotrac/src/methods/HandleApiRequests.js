@@ -5,8 +5,9 @@ axios.defaults.withCredentials = true;
 const URL = "http://localhost:5000";
 
 class RequestHandler {
+  // function to get data fom backend using axios
     static handleGetRequest(newUrl) {
-    const getUrl = `${URL}${newUrl}` 
+      const getUrl = `${URL}${newUrl}` 
       return axios.get(getUrl)
         .then(response => {
           if (response.data) {
@@ -28,8 +29,9 @@ class RequestHandler {
         });
     }
 
+    // fuction to post data to the backend
     static handlePostRequest(newUrl, data) {
-        const postUrl = `${URL}${newUrl}`;
+      const postUrl = `${URL}${newUrl}`;
         return axios.post(postUrl, data)
           .then(response => {
             console.log(response)

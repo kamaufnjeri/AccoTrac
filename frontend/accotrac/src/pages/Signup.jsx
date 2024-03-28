@@ -1,14 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import UpperHeader from '../components/UpperHeader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { UserContext } from '../components/UserContext';
 
 const Signup = () => {
-  const navigate = useNavigate();
+  // initialize the confirm password  and data to be input as empty
   const [confirmPassword, setConfirmPassword] = useState('');
   const [data, setData] = useState({
     firstname: '',
@@ -17,43 +16,45 @@ const Signup = () => {
     password: '',
     company_name: ""
   });
-  const { setUser, setCompany } = useContext(UserContext);
 
+  // sub,it data input by user to backend
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // show an error if confirm password and password are not equal
     if (confirmPassword !== data.password) {
       toast.error("The two passwords don't match")
     }
 
     else {
       try {
-        const response = await axios.post('http://localhost:5000/createuser', data);
+        // send data and post it
+        const response = await axios.post('http://localhost:5000/user', data);
 
         if (response.status === 201) {
           if (response.data.result) {
-            const user = response.data.result;
-            toast.success(`Success creating account ${user.email}`);
-            setUser(user);
-            setCompany(user.selected_company);
-            navigate(`/dashboard`);
+            // successfull creation of user account
+            toast.success(response.data.message);
+            setData({
+              firstname: '',
+              lastname: '',
+              email: '',
+              password: '',
+              company_name: "" 
+            });
+            setConfirmPassword('');
           }
-          if (response.data.message) {
-            toast.error(response.data.message);
-          }
-        }
-        else {
-          toast.error(response.data.error);
+        } else {
+          throw new Error (response.data.message);
         }
       } catch (error) {
           console.log("Error response:", error.response);
           if (error.response && error.response.data) {
-            toast.error(error.response.data.error);
+            toast.error(error.response.data.message);
           } else {
-            toast.error("Unexpected error creating company: " + error);
+            toast.error("Unexpected error creating user: " + error);
           }
-        }
+      }
     }
-
   };
 
   return (

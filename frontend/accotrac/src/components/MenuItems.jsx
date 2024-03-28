@@ -5,28 +5,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 const MenuItems = () => {
+    // get data for use by the component
     const navigate = useNavigate();
     const { setCompany, setUser, user, company } = useContext(UserContext);
-    console.log('menu', user);
+
+    // onclick signout button logout user and set company and user to null
     const logoutUser = async () => {
         try {
             const response = await axios.post('http://localhost:5000/logout');
             console.log(response.data);
             if (response.status === 200) {
-                toast.success('Successfully logged out');
+                toast.success(`${response.data.message} ${response.data.userEmail}`);
                 setUser(null);
                 setCompany(null);
-                console.log(user);
-                console.log(company);
                 navigate('/home');
             } else {
-                toast.error(response.data.error);
+                toast.error(response.data.message);
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                toast.error('Error logging out: ' + error.response.data.error);
+                toast.error('Error logging out: ' + error.response.data.message);
             } else {
-                toast.error('Error logging out: ' + error.message);
+                toast.error('Error logging out: ' + error);
             }
         }
     };
@@ -78,13 +78,6 @@ const MenuItems = () => {
                     </Link>
                 </li>
             </ul>
-
-            {/* Conditionally render components based on authentication state */}
-            {user && user.authenticated === true && (
-                <>
-                    {/* Additional components to be displayed when authenticated */}
-                </>
-            )}
         </div>
     );
 };

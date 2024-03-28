@@ -28,21 +28,25 @@ chart_of_accounts = {
     }
 }
 
-
-
 """trial method to create a user, company and accounts"""
-def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
+def create_new_company(company_name: str, company_email: str, company_country:str, company_currency:str, user_id: str) -> Tuple[str, int]:
     try:
-        company_exist = Company.query.filter_by(
+        if company_email is not None:
+            company_exist = Company.query.filter_by(
+                email=company_email
+            ).first()
+            if company_exist:
+                raise ValueError('Company already exists')
+        company_by_name = Company.query.filter_by(
             name=company_name
         ).first()
-        if company_exist:
-            raise ValueError('Company already exists')
-        user = User.query.filter_by(id=user_id).first()
-        
-        company = Company(name=company_name)
+        if company_by_name:
+            raise ValueError(f'Company {company_name} already exists')
+        company = Company(name=company_name,
+                          email=company_email,
+                          country=company_country,
+                          currency=company_currency)
         db.session.add(company)
-        user.selected_company_id = company.id
         company.set_user_role(user_id, is_admin=True)
 
 
@@ -57,11 +61,10 @@ def create_new_company(company_name: str, user_id: str) -> Tuple[str, int]:
                         sub_category=subcategory
                     )
                     db.session.add(account)
-        db.session.commit()
-        return "Successfully created company", 201, company
+        return company, 201
     except Exception as e:
         db.session.rollback()
-        return str(e), 400, None
+        return str(e), 400
 
 def get_company_by_user_id(user_id:str) -> Tuple[Union[List, None], int]:
     """Return a list of companies associated with user_id
@@ -78,3 +81,40 @@ def get_company_by_user_id(user_id:str) -> Tuple[Union[List, None], int]:
         return "Error fetching companies", 400, str(e)
     except Exception as e:
         return "Error fetching companies", 500, str(e)
+
+def get_company(company_id: str) -> Union[Company, None]:
+    """returns a company or none"""
+    company = Company.query.filter_by(id=company_id).first()
+    return company
+
+def update_companyinfo(company, user, data: dict) -> Tuple[Union[str, User], int]:
+    """updates user information
+    Returns user or error with updated information and appropriate status code
+    """
+    try:
+        if not all(key in data for key in ['name']):
+            raise ValueError('Field name')
+
+        name_company = Company.query.filter_by(name=data.get('name')).first()
+        print(data)
+        if company.company_users[0].user_id != user.id:
+            print(company.company_users)
+            raise ValueError("Can't update this company is not registered under you")
+        if name_company and name_company.id != company.id:
+            raise ValueError(f"A Company with name {data.get('name')} already exists")
+        if data.get('email') != None:
+            email_company = Company.query.filter_by(email=data.get('email')).first()
+            if email_company and email_company.id != company.id:
+                raise ValueError(f"A Company with email {data.get('email')} already exists")
+        company.name = data.get('name')
+        company.currency = data.get('currency')
+        company.country = data.get('country')
+        company.email = data.get('email')
+        db.session.commit()
+        return (company, 200)
+    except ValueError as e:
+        db.session.rollback()
+        return (str(e), 400)
+    except Exception as e:
+        db.session.rollback()
+        return (str(e), 500)

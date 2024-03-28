@@ -3,12 +3,14 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const AddAccountForm = () => {
+  // using useState to manage information entered to the forms for creating account
   const [formData, setFormData] = useState({
     name: '',
     category: '',
     sub_category: '',
   });
 
+  // handling change when a user inputs info on the for
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -17,9 +19,11 @@ const AddAccountForm = () => {
     });
   };
 
+  // submitting information entered to user and connecting to the backend to save the dat
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // using axios to post to the backend
       const response = await axios.post('http://localhost:5000/createaccount', formData, { withCredentials: true });
       if (response.status === 201) {
         console.log(response.data);
@@ -41,6 +45,7 @@ const AddAccountForm = () => {
     }
   };
 
+  // categories to use fo select option of category
   const categories = {
     Asset: 'asset',
     Liability: 'liability',
@@ -49,6 +54,7 @@ const AddAccountForm = () => {
     Expense: 'expense'
   };
 
+  // sub_categories to be displayed depending on the category chosen for user to choose
   const subCategories = {
     asset: ['bank', 'accounts_receivable', 'cash', 'inventory', 'fixed_asset'],
     liability: ['accounts_payable', 'long_term_loan'],
@@ -57,7 +63,9 @@ const AddAccountForm = () => {
     expense: ['cost_of_goods_sold', 'expense'],
   };
 
+  // function to change how the select values are displayed to user
   const formatName = (name) => {
+    // change first letter of the word to capital and replace '_' with space
     return name
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))

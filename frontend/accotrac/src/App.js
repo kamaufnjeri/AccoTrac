@@ -1,8 +1,7 @@
 import React from 'react'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import Forgotpassword from './pages/Forgotpassword'
-import NewPassword from './pages/NewPassword'
+import ForgotPassword from './pages/ForgotPassword'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -20,11 +19,15 @@ import ProfitLossPage from './pages/ProfitLossPage'
 import BalanceSheetPage from './pages/BalanceSheetPage'
 import JournalEntriesPage from './pages/JournalEntriesPage'
 import OrganizationProfilePage from './pages/OrganizationProfilePage'
+import VerifyEmail from './pages/VerifyEmail'
+import ResetPassword from './pages/ResetPassword'
 
-function App() {
+
+//component for routing the page components.
+const App = () => {
   return (
     <div>
-      <UserProvider>
+    <UserProvider>
     <ToastContainer />
     <BrowserRouter>
     <Routes>
@@ -44,8 +47,9 @@ function App() {
       <Route path='/profitloss' element={<ProfitLossPage/>}/>
       <Route path='/balancesheet' element={<BalanceSheetPage/>}/>
       <Route path='/journals' element={<JournalEntriesPage/>}/>
-      <Route path='/forgotpassword' element={<Forgotpassword/>}/>
-      <Route path='/newpassword' element={<NewPassword/>}/>
+      <Route path='/user/verifyemail/:token' element={<VerifyEmail/>}/>
+      <Route path='/forgotpassword' element={<ForgotPassword/>}/>
+      <Route path='/user/resetpassword/:token' element={<ResetPassword/>}/>
     </Routes>
     </BrowserRouter>
     </UserProvider>

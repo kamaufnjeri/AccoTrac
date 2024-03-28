@@ -4,6 +4,7 @@ from app.models import Account, Company, db, User
 class AccountsUtils:
     @staticmethod
     def validate_data(category, sub_category, name, user_id, company_id):
+        """account to validate accounts being created or updated"""
         valid_sub_categories = {
             "asset": ['bank', 'accounts_receivable', 'cash', 'inventory', 'fixed_asset'],
             "liability": ['accounts_payable', 'long_term_loan'],
@@ -12,7 +13,7 @@ class AccountsUtils:
             "expense": ['cost_of_goods_sold', 'expense']
         }
         
-        
+        """get the specific account to see if it exists"""
         account = Account.query.filter_by(
             name=name,
             company_id=company_id,
@@ -21,16 +22,18 @@ class AccountsUtils:
         
         if account:
              raise ValueError(f"Account {name} already exists")
-        
+        """check category if valid"""
         if category not in valid_sub_categories:
             raise ValueError(f"Invalid category: {category}.")
         
+        """check sub_category valid depending on the caqtegory"""
         if sub_category not in valid_sub_categories[category]:
             raise ValueError(f"Invalid sub-category for category '{category}': {sub_category}. "
                              f"Valid options are: {', '.join(valid_sub_categories[category])}.")
 
     @staticmethod
     def validate_user_company(company_id, user_id):
+        """check company and user exist depending on the ids"""
         company = Company.query.filter_by(id=company_id).first()
         user = User.query.filter_by(id=user_id).first()
         if not user:
@@ -41,6 +44,7 @@ class AccountsUtils:
         
     @staticmethod
     def add_account(company_id, user_id, name, category, sub_category):
+        """create an account/ledger and add to database for the specific user or company"""
         try:
             AccountsUtils.validate_data(category, sub_category, name, user_id, company_id)
             AccountsUtils.validate_user_company(company_id, user_id)
