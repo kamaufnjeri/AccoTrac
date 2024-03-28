@@ -7,8 +7,11 @@ class Company(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
-    name = db.Column(db.String(128), nullable=False, unique=True)
-    accounts = db.relationship('Account', backref='company', lazy=True)
+    name = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(256), nullable=False, unique=True)
+    country = db.Column(db.String(128), nullable=False)
+    currency = db.Column(db.String(128), nullable=False)
+    accounts = db.relationship('Account', backref='company', lazy=True, cascade="all,delete")
 
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
@@ -21,10 +24,10 @@ class Company(db.Model):
             company_id=self.id
         ).first()
         return association.role if association else None
-    
-    
+
+
     def set_user_role(self, user_id, is_admin=False):
-        """get the association from database to see if it exists""" 
+        """get the association from database to see if it exists"""
         association = UserCompanyAssociation.query.filter_by(
             user_id=user_id,
             company_id=self.id
@@ -42,3 +45,14 @@ class Company(db.Model):
             )
         db.session.add(association)
         db.session.commit()
+
+    def to_dict(self):
+        """Returns Company object with some of its attributes"""
+        new_dict = {}
+        new_dict['id'] = self.id
+        new_dict['name'] = self.name
+        new_dict['email'] = self.email
+        new_dict['country'] = self.country
+        new_dict['currency'] = self.currency
+        new_dict['Accounts'] = [account.to_dict() for account in self.accounts]
+        return new_dict

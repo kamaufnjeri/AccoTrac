@@ -19,3 +19,11 @@ class Account(db.Model):
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
         super(Account, self).__init__(**kwargs)
+
+    def to_dict(self):
+        """Returns Account object with some of its attributes"""
+        new_dict = {}
+        new_dict['id'] = self.id
+        new_dict['name'] = self.name
+        new_dict['category'] = self.category
+        return new_dict
