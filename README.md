@@ -84,7 +84,7 @@ This section outlines the documentation for backend routes that are yet to have 
       {"stock_id": "789", "units": 10, "price": 120.00},
       {"stock_id": "101", "units": 5, "price": 150.00}
     ]
-  }```
+  }
 
 ### 2. Add Purchase:
 
@@ -111,9 +111,9 @@ This section outlines the documentation for backend routes that are yet to have 
       {"stock_id": "789", "units": 10, "price": 120.00},
       {"stock_id": "101", "units": 5, "price": 150.00}
     ]
-  }```
+  }
 
-  ### 3. Sales Return:
+### 3. Sales Return:
 
 - **Endpoint**: `/api/salesreturn`
 - **Method**: POST
@@ -132,7 +132,7 @@ This section outlines the documentation for backend routes that are yet to have 
     "category": "sales return",
     "units": 2,
     "stock_entry_id": "123"
-  }```
+  }
 
 ### 4. Purchase Return:
 
@@ -153,7 +153,7 @@ This section outlines the documentation for backend routes that are yet to have 
     "category": "purchase return",
     "units": 5,
     "stock_entry_id": "789"
-  }```
+  }
 
 ### 5. Add Stock:
 
@@ -166,7 +166,7 @@ This section outlines the documentation for backend routes that are yet to have 
   ```json
   {
     "name": "Product X"
-  }```
+  }
   
 ### 6. Update Stock:
 
@@ -181,7 +181,7 @@ This section outlines the documentation for backend routes that are yet to have 
   ```json
   {
     "name": "Updated Product X"
-  }```
+  }
 
 ### 7. Delete Stock:
 
@@ -211,5 +211,4 @@ This section outlines the documentation for backend routes that are yet to have 
   ```json
   {
     "category": "sales"
-  }```
-
+  }
