@@ -1,2 +1,6 @@
 from .transaction import TransactionUtils
 from .accounts_utils import AccountsUtils
+from .sales_return_transaction import SalesReturnUtils
+from .purchase_return_transaction import PurchaseReturnUtils
+from .sales_transaction import SalesUtils
+from .purchase_transaction import PurchaseUtils

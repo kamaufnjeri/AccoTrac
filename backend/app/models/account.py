@@ -15,7 +15,7 @@ class Account(db.Model):
     credit_total = db.Column(db.Integer, default=0)
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
-    #stock_entries =db.relationship('StockEntry', backref='account', lazy=True)
+    stock_entries =db.relationship('StockEntry', backref='account', lazy=True)
     journal_entries = db.relationship('JournalEntry', backref='account', lazy=True, cascade='all,delete')
 
     def __init__(self, **kwargs):

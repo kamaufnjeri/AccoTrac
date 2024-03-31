@@ -45,6 +45,7 @@ app.register_blueprint(transaction_bp)
 app.register_blueprint(account_bp)
 app.register_blueprint(report_bp)
 app.register_blueprint(user_bp)
+app.register_blueprint(backend_only_bp)
 
 """handle 401 error"""
 @app.errorhandler(401)

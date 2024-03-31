@@ -13,7 +13,7 @@ class Company(db.Model):
     currency = db.Column(db.String(128))
     accounts = db.relationship('Account', backref='company', lazy=True, cascade='all,delete')
     transactions = db.relationship('Transaction', backref='company', lazy=True, cascade='all,delete')
-    #stocks = db.relationship('Stock', backref='company', lazy=True)
+    stocks = db.relationship('Stock', backref='company', lazy=True)
     selected_company = db.relationship('User', backref='selected_company', lazy=True, cascade='all,delete')
 
 
