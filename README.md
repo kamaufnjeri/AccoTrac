@@ -57,7 +57,8 @@ AccoTrac is an ongoing project, and there are several features and enhancements 
 
 ## API Documentation (Backend Routes)
 
-This section outlines the documentation for backend routes that are yet to have frontend integration.
+- This section outlines the documentation for backend routes that are yet to have frontend integration.
+- Login in required to access this routes.
 
 ### 1. Add Sales:
 
