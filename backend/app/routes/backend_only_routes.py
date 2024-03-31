@@ -12,7 +12,7 @@ stock_controllers = StockControllers()
 stock_entries_controllers = StockEntriesControllers()
 
 
-@backend_only_bp.route('/addpurchase', methods=['POST'])
+@backend_only_bp.route('/api/addpurchase', methods=['POST'])
 @login_required
 def add_purchase_transaction():
     data = request.get_json()
@@ -24,7 +24,7 @@ def add_purchase_transaction():
         message, code, response_item = purchase_transacton_controllers.create_purchase_journal(company_id, user_id, data)
         return jsonify({"message": message, "response": response_item}), code
     
-@backend_only_bp.route('/addsales', methods=['POST'])
+@backend_only_bp.route('/api/addsales', methods=['POST'])
 @login_required
 def add_sales_transaction():
     data = request.get_json()
@@ -37,7 +37,7 @@ def add_sales_transaction():
         return jsonify({"message": message, "response": response_item}), code
     
     
-@backend_only_bp.route('/purchasereturn', methods=['POST'])
+@backend_only_bp.route('/api/purchasereturn', methods=['POST'])
 @login_required
 def purchase_return_transaction(company_id, user_id):
     data = request.get_json()
@@ -50,7 +50,7 @@ def purchase_return_transaction(company_id, user_id):
         return jsonify({"message": message, "response": response_item}), code
     
     
-@backend_only_bp.route('/salesreturn', methods=['POST'])
+@backend_only_bp.route('/api/salesreturn', methods=['POST'])
 @login_required
 def sales_return_transaction():
     data = request.get_json()
@@ -63,7 +63,7 @@ def sales_return_transaction():
         return jsonify({"message": message, "response": response_item}), code
     
 
-@backend_only_bp.route('/addstock', methods=['POST'])
+@backend_only_bp.route('/api/addstock', methods=['POST'])
 @login_required
 def create_stock():
     data = request.get_json()
@@ -76,7 +76,7 @@ def create_stock():
         return jsonify({"message": message, "response": response_item}), code
     
 
-@backend_only_bp.route('/stock/<string:stock_id>', methods=['PUT'])
+@backend_only_bp.route('/api/stock/<string:stock_id>', methods=['PUT'])
 @login_required
 def update_stock(stock_id):
     data = request.get_json()
@@ -88,7 +88,7 @@ def update_stock(stock_id):
         return jsonify({"message": message, "response": response_item}), code
     
 
-@backend_only_bp.route('/stock/<string:stock_id>', methods=['DELETE'])
+@backend_only_bp.route('/api/stock/<string:stock_id>', methods=['DELETE'])
 @login_required
 def delete_stock(stock_id):
     data = request.get_json()
@@ -99,14 +99,14 @@ def delete_stock(stock_id):
         message, code, response_item = stock_controllers.delete_stock(company_id, stock_id, data)
         return jsonify({"message": message, "response": response_item}), code
 
-@backend_only_bp.route('/stock/<string:stock_id>', methods=['GET'])
+@backend_only_bp.route('/api/stock/<string:stock_id>', methods=['GET'])
 @login_required
 def get_stock(stock_id):
     company_id = current_user.selected_company_id
     message, code, response_item = stock_controllers.get_stock(company_id, stock_id)
     return jsonify({"message": message, "response": response_item}), code
   
-@backend_only_bp.route('/stock', methods=['GET'])
+@backend_only_bp.route('/api/stock', methods=['GET'])
 @login_required
 def get_all_stocks():
     company_id = current_user.selected_company_id
@@ -114,7 +114,7 @@ def get_all_stocks():
     return jsonify({"message": message, "response": response_item}), code
     
     
-@backend_only_bp.route('/stockentries', methods=['GET'])
+@backend_only_bp.route('/api/stockentries', methods=['GET'])
 @login_required
 def get_all_stock_entries():
     data = request.get_json()
