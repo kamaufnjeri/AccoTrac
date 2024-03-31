@@ -85,6 +85,9 @@ This section outlines the documentation for backend routes that are yet to have 
       {"stock_id": "101", "units": 5, "price": 150.00}
     ]
   }
+- **Response**:
+  - Status: 201 Created
+  - Body: Confirmation message or error details.
 
 ### 2. Add Purchase:
 
@@ -112,6 +115,9 @@ This section outlines the documentation for backend routes that are yet to have 
       {"stock_id": "101", "units": 5, "price": 150.00}
     ]
   }
+- **Response**:
+  - Status: 201 Created
+  - Body: Confirmation message or error details.
 
 ### 3. Sales Return:
 
@@ -133,6 +139,9 @@ This section outlines the documentation for backend routes that are yet to have 
     "units": 2,
     "stock_entry_id": "123"
   }
+- **Response**:
+  - Status: 201 Created
+  - Body: Confirmation message or error details.
 
 ### 4. Purchase Return:
 
@@ -154,6 +163,9 @@ This section outlines the documentation for backend routes that are yet to have 
     "units": 5,
     "stock_entry_id": "789"
   }
+- **Response**:
+  - Status: 201 Created
+  - Body: Confirmation message or error details.
 
 ### 5. Add Stock:
 
@@ -167,7 +179,10 @@ This section outlines the documentation for backend routes that are yet to have 
   {
     "name": "Product X"
   }
-  
+- **Response**:
+  - Status: 201 Created
+  - Body: Confirmation message or error details.
+
 ### 6. Update Stock:
 
 - **Endpoint**: `/api/stock/:stock_id`
@@ -182,6 +197,9 @@ This section outlines the documentation for backend routes that are yet to have 
   {
     "name": "Updated Product X"
   }
+- **Response**:
+  - Status: 200 OK
+  - Body: Confirmation message or error details.
 
 ### 7. Delete Stock:
 
@@ -190,8 +208,10 @@ This section outlines the documentation for backend routes that are yet to have 
 - **Description**: Deletes an existing stock item in the database.
 - **Request Parameters**:
   - `stock_id`: ID of the stock item to update.
+- **Response**:
+  - Status: 200 OK
+  - Body: Confirmation message or error details.
 
-  
 ### 8. Get Stock:
 
 - **Endpoint**: `/api/stock/:stock_id`
@@ -199,8 +219,11 @@ This section outlines the documentation for backend routes that are yet to have 
 - **Description**: Get info of an existing stock item in the database.
 - **Request Parameters**:
   - `stock_id`: ID of the stock item to update.
+- **Response**:
+  - Status: 200 OK
+  - Body: Details of the stock item.
 
-### 5. Get Stock Entries by Category (With JSON Request Body):
+### 9. Get Stock Entries by Category (With JSON Request Body):
 
 - **Endpoint**: `/api/stockentries`
 - **Method**: GET
@@ -212,3 +235,7 @@ This section outlines the documentation for backend routes that are yet to have 
   {
     "category": "sales"
   }
+- **Response**:
+  - Status: 200 OK
+  - Body: Details of stock items matching the specified category.
+
