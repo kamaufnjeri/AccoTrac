@@ -47,6 +47,7 @@ const ForgotPassword = () => {
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <Header/>
+    
     <div className="container-fluid ">
       <div className="container ">
         <div className="row cdvfdfd">

@@ -14,7 +14,7 @@ const LowerHeader = () => {
           <ul className="float-end mul fs-7 text-white d-inline-block">
           <li className="float-md-start p-4">
               <Link className="text-white fw-bold" to="/dashboard">
-                Organization {company?.name}
+                {company?.name}
               </Link>
             </li>
               <li className="float-md-start p-4">

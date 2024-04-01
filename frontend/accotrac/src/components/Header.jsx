@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import CollapsibleMenu from './CollapsibleMenu'
 
 function Header() {
   return (
@@ -37,14 +36,7 @@ function Header() {
                   </button>
                 </li>
                 <li>
-                <Link
-                    data-bs-toggle="collapse"
-                    data-bs-target="#menu"
-                    className="float-end text-white d-lg-none pt-1 ps-3"
-                  >
-                  
-                    <CollapsibleMenu/>
-                  </Link>
+               
                 </li>
               </ul>
               
