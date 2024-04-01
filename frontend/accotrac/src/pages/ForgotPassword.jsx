@@ -15,7 +15,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/forgotpassword', data);
+      const response = await axios.post('api/forgotpassword', data);
       if (response.status === 201) {
         toast.success(response.data.message);
         setData({
