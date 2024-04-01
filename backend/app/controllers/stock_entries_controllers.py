@@ -1,8 +1,8 @@
-from app.models import StockEntries, Company
+from app.models import StockEntry, Company
 
 
 class StockEntriesControllers:
-    def get_entries_by_category(company_id, category):
+    def get_entries_by_category(self, company_id, category):
         try:
             company = Company.query.filter_by(id=company_id).first()
 
@@ -12,7 +12,7 @@ class StockEntriesControllers:
             if not company:
                 raise Exception(f"Company ID {company_id} doesn't exist")
 
-            stock_entries = StockEntries.query.all()
+            stock_entries = StockEntry.query.all()
 
             if not stock_entries:
                 raise Exception(f"Company 1D {company_id} has no stock entries")

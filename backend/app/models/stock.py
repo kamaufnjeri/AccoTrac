@@ -8,7 +8,6 @@ class Stock(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     name = db.Column(db.String(255))
-    
     total_quantity = db.Column(db.Integer, default=0)
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     company_id = db.Column(db.String(36), db.ForeignKey('company.id'))

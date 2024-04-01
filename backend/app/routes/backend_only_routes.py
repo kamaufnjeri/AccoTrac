@@ -118,10 +118,11 @@ def get_all_stocks():
 @login_required
 def get_all_stock_entries():
     data = request.get_json()
+    print(data)
     if not data:
         return "", 204
     else:
         company_id = current_user.selected_company_id
-        message, code, response_item = sales_transaction_controllers.sales_return_journal(company_id, data.get('category'))
+        message, code, response_item = stock_entries_controllers.get_entries_by_category(company_id, data.get('category'))
         return jsonify({"message": message, "response": response_item}), code
     

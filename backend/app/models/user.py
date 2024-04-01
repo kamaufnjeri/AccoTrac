@@ -19,9 +19,8 @@ class User(UserMixin, db.Model):
     selected_company_id = db.Column(db.String(36), db.ForeignKey('company.id'))
     accounts = db.relationship('Account', backref='users', lazy=True, cascade="all,delete")
     transactions = db.relationship('Transaction', backref='user', lazy=True, cascade='all,delete')
-    stock_entries = db.relationship('StockEntry', backref='transaction', lazy=True)
+    stock_entries = db.relationship('StockEntry', backref='user', lazy=True)
 
-    
     
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
