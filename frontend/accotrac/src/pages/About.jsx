@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import MenuItems from '../components/MenuItems'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import CollapsibleMenu from '../components/CollapsibleMenu'
 
 function about() {
   return (
@@ -39,6 +40,14 @@ function about() {
               <div id="menu" className="col-lg-9 d-none d-lg-block">
                 <MenuItems/>
               </div>
+              <Link
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu"
+                    className="float-end text-white d-lg-none pt-1 ps-3"
+                  >
+                  
+                    <CollapsibleMenu/>
+                  </Link>
             </div>
           </div>
         </div>

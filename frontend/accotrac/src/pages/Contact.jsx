@@ -3,6 +3,7 @@ import MenuItems from '../components/MenuItems'
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
+import CollapsibleMenu from '../components/CollapsibleMenu'
 
 function contact() {
   return (
@@ -39,6 +40,14 @@ function contact() {
               <div id="menu" className="col-lg-9 d-none d-lg-block">
                 <MenuItems/>
               </div>
+              <Link
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu"
+                    className="float-end text-white d-lg-none pt-1 ps-3"
+                  >
+                  
+                    <CollapsibleMenu/>
+              </Link>
             </div>
           </div>
         </div>
@@ -52,9 +61,9 @@ function contact() {
           <ul>
             <li>
               {" "}
-              <a href="/home">
+              <Link to="/home">
                 <i className="bi bi-house-door" /> Home
-              </a>
+              </Link>
             </li>
             <li>
               <i className="bi bi-chevron-double-right pe-2" />
@@ -75,8 +84,7 @@ function contact() {
             <h2 className="fs-4 fw-bold">Contact Form</h2> <br />
             <div className="row cont-row">
               <div className="col-sm-3">
-                <label>Enter Name </label>
-                <span>:</span>
+                <label>Enter Name<span>:</span></label>
               </div>
               <div className="col-sm-8">
                 <input

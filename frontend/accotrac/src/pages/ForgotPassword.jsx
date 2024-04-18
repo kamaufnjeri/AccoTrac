@@ -15,7 +15,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('api/forgotpassword', data);
+      const response = await axios.post('http://localhost:5000/forgotpassword', data);
       if (response.status === 201) {
         toast.success(response.data.message);
         setData({
@@ -47,6 +47,7 @@ const ForgotPassword = () => {
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <Header/>
+
     <div className="container-fluid ">
       <div className="container ">
         <div className="row cdvfdfd">

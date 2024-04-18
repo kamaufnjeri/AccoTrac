@@ -60,7 +60,7 @@ function CollapsibleMenu() {
               <Link to="/dashboard" className="nav-link" style={{ color: 'white' }}>Dashboard</Link>
               <Link to="/addaccount" className="nav-link" style={{ color: 'white' }}>Add Account</Link>
               <Link to="/chartsofaccount" className="nav-link" style={{ color: 'white' }}>Charts of Account</Link>
-              <Link to="/addjournal" className="nav-link" style={{ color: 'white' }}>Add Journal</Link>
+              <Link to="/generaljournal" className="nav-link" style={{ color: 'white' }}>Add Journal</Link>
               <Link to="/journals" className="nav-link" style={{ color: 'white' }}>View Journals</Link>
               <Link to="/trialbalance" className="nav-link" style={{ color: 'white' }}>Trial Balance</Link>
               <Link to="/profitloss" className="nav-link" style={{ color: 'white' }}>Profit/Loss</Link>
