@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
-
 const VerifyEmail = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
@@ -15,7 +15,7 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/verifyemail/${token}`);
+        const response = await axios.get(`${baseUrl}/user/verifyemail/${token}`);
         if (response && response.status === 200 && response.data) {
           setMessage(response.data.message);
 
@@ -36,7 +36,7 @@ const VerifyEmail = () => {
     };
     verifyEmail();
   }, [navigate, token, setMessage]);
-    
+
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="row">

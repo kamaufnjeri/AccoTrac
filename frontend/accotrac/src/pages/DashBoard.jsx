@@ -1,56 +1,22 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import UpperHeader from '../components/UpperHeader';
 import LowerHeader from '../components/LowerHeader';
 import DashBoardBody from '../components/DashBoardBody';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import fetchProtectedData from '../utils/protected';
 
 axios.defaults.withCredentials = true
 
 function Dashboard() {
   const navigate = useNavigate();
   useEffect(() => {
-    const fetchProtectedData = async () => {
-        try {
-          const response = await axios.get('http://localhost:5000/protected');
-          if (response.status !== 200) {
-            navigate("/");
-          }
-          // Handle the response as needed
-        } catch (error) {
-          if (error.response && error.response.data) {
-            console.error('Error fetching protected data:', error.response.data);
-    
-          } else {
-            console.error('Error fetching protected data:', error.message);
-          }
-          navigate('/');
-        }
-      };
   fetchProtectedData();
 }, [navigate]);
 
-  const logoutUser = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/logout');
-      console.log(response.data);
-      if (response.status === 200) {
-        toast.success('Successfully logged out');
-        navigate('/login'); // Redirect to login page after logout
-      } else {
-        toast.error(response.data.error);
-      }
-    } catch (error) {
-      if (error.response && error.response.data) {
-        toast.error('Error logging out: ' + error.response.data.error);
-      } else {
-        toast.error('Error logging out: ' + error.message);
-      }
-    }
-  };
+
 
   return (
     <div><>

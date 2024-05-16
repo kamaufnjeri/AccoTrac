@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from './UserContext';
 import axios from 'axios';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
@@ -18,8 +19,7 @@ const DashBoardBody = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/dashboard');
-        console.log(response);
+        const response = await axios.get(`${baseUrl}/dashboard`);
         if (response.status === 200) {
           if (response.data) {
             setData(response.data);

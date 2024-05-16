@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
@@ -23,15 +24,12 @@ const UpdateOrganization = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(data);
-      const response = await axios.put(`http://localhost:5000/company/${company.id}`, data);
+      const response = await axios.put(`${baseUrl}/company/${company.id}`, data);
       if (response.status === 200) {
         toast.success("Success updating company information");
         setData(response.data.response);
         setCompany(response.data.response);
-        console.log('company',company);
       } else {
-        console.log(response.data);
         throw new Error(response.data.message);
       }
     } catch (error) {
@@ -40,6 +38,7 @@ const UpdateOrganization = () => {
       } else {
         toast.error("Error updating: " + error);
       }
+      console.log(error);
     }
   };
 

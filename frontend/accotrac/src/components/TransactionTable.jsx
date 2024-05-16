@@ -35,11 +35,11 @@ const TransactionTable = ({ transactions, company }) => {
           <div className="filter-container row">
             <label htmlFor="filterDate" className="col-auto col-form-label">Filter by date:</label>
             <div className="col-auto">
-              <input 
-                type="date" 
-                id="filterDate" 
-                value={filterDate} 
-                onChange={handleDateChange} 
+              <input
+                type="date"
+                id="filterDate"
+                value={filterDate}
+                onChange={handleDateChange}
                 className="form-control"
               />
             </div>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
@@ -10,7 +11,7 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/getallaccounts`);
+            const response = await axios.get(`${baseUrl}/getallaccounts`);
 
             if (response.status === 200) {
                 setAccounts(response.data.response);
@@ -26,7 +27,7 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
             else {
                 console.error('Error deleting account: ' + error);
             }
-        } 
+        }
     }
     fetchData();
 }, [setAccounts]);
@@ -42,7 +43,7 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
     if (accounts) {
       const newOptions = accounts.map(account => ({
         name: `${account.name} (bal - ${account.balance})`,
-        value: account.id, 
+        value: account.id,
       }));
       setOptions(newOptions);
       setSelectedOption('');
@@ -58,7 +59,6 @@ const JournalRow = ({ entry, index, handleChange, removeRow }) => {
           onChange={(e) => {
             const selectedAccountId = e.target.value;
             handleChange(index, 'account_id', selectedAccountId);
-            console.log(e.target.value)
             setSelectedOption(selectedAccountId);
           }}
           className="form-select"

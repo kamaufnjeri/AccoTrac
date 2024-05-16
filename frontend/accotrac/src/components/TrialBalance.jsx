@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
@@ -15,7 +16,7 @@ const TrialBalance = () => {
   useEffect(() => {
     const fetchTrialBalance = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/trialbalance');
+        const response = await axios.get(`${baseUrl}/trialbalance`);
         setTrialBalance(response.data.slice(0, -1));
         setTotals(response.data[response.data.length - 1]);
       } catch (error) {

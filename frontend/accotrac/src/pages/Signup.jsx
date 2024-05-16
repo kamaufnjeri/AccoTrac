@@ -5,6 +5,7 @@ import axios from 'axios';
 import UpperHeader from '../components/UpperHeader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import baseUrl from '../utils/settings';
 
 const Signup = () => {
   // initialize the confirm password  and data to be input as empty
@@ -28,7 +29,7 @@ const Signup = () => {
     else {
       try {
         // send data and post it
-        const response = await axios.post('http://localhost:5000/user', data);
+        const response = await axios.post(`${baseUrl}/user`, data);
 
         if (response.status === 201) {
           if (response.data.result) {
@@ -39,7 +40,7 @@ const Signup = () => {
               lastname: '',
               email: '',
               password: '',
-              company_name: "" 
+              company_name: ""
             });
             setConfirmPassword('');
           }
@@ -77,7 +78,7 @@ const Signup = () => {
         <div className="container ">
           <div className="row cdvfdfd">
             <div className="col-lg-10 col-md-12 login-box">
-            
+
               <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="col-lg-6 col-md-6 log-det">

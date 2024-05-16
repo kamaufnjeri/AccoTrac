@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import baseUrl from '../utils/settings';
 
 
 axios.defaults.withCredentials = true;
@@ -20,7 +21,7 @@ const ChartsOfAccount = () => {
         setSelectedAccountId(id);
         setShow(true);
     }
-  
+
 
     // styles for modal
     const customStyles = {
@@ -38,8 +39,8 @@ const ChartsOfAccount = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/getallaccounts`);
-    
+                const response = await axios.get(`${baseUrl}/getallaccounts`);
+
                 if (response.status === 200) {
                     setAccounts(response.data.response);
                 }
@@ -54,15 +55,15 @@ const ChartsOfAccount = () => {
                 else {
                     console.error('Error deleting account: ' + error);
                 }
-            } 
+            }
         }
         fetchData();
     }, []);
 
     // fuction to handle delete of an account by id
     const handleDelete = async (id, name) => {
-        try { 
-            const response = await axios.delete(`http://localhost:5000/${selectedAccountId}/deleteaccount`);
+        try {
+            const response = await axios.delete(`${baseUrl}/${selectedAccountId}/deleteaccount`);
 
             if (response.status === 200) {
                 toast.success("Success deleting account " + name);
@@ -99,7 +100,7 @@ const ChartsOfAccount = () => {
                 <Modal.Header closeButton>
                 <Modal.Title>Delete Account</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete account {name} ID {selectedAccountId}?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete account {name} ?</Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close

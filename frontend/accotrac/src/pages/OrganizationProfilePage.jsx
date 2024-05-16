@@ -1,38 +1,21 @@
 import React, { useEffect } from 'react'
-import UpdateUser from '../components/UpdateUser'
 import UpperHeader from '../components/UpperHeader'
 import LowerHeader from '../components/LowerHeader'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import UpdateOrganization from '../components/UpdateOrganization'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import fetchProtectedData from '../utils/protected';
+
 
 const OrganizationProfilePage = () => {
     const navigate = useNavigate();
-    
+
     // useEfect to ensure that user is authenticated to access this page
     useEffect(() => {
-        const fetchProtectedData = async () => {
-            try {
-              const response = await axios.get('http://localhost:5000/protected');
-              if (response.status !== 200) {
-                navigate("/");
-              }
-              // Handle the response as needed
-            } catch (error) {
-              if (error.response && error.response.data) {
-                console.error('Error fetching protected data:', error.response.data);
-        
-              } else {
-                console.error('Error fetching protected data:', error.message);
-              }
-              navigate('/');
-            }
-          };
       fetchProtectedData();
     }, [navigate]);
-    
+
   return (
     <div><>
     <meta charSet="utf-8" />

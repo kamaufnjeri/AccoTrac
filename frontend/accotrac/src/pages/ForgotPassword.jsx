@@ -3,6 +3,8 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import baseUrl from '../utils/settings';
+
 
 axios.defaults.withCredentials = true;
 const ForgotPassword = () => {
@@ -15,7 +17,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/forgotpassword', data);
+      const response = await axios.post(`${baseUrl}/forgotpassword`, data);
       if (response.status === 201) {
         toast.success(response.data.message);
         setData({
@@ -47,7 +49,7 @@ const ForgotPassword = () => {
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <Header/>
-    
+
     <div className="container-fluid ">
       <div className="container ">
         <div className="row cdvfdfd">
@@ -103,7 +105,6 @@ const ForgotPassword = () => {
                       AccoTrac is your one stop shop for managing your finances
                       and making your accounts healthy.
                     </p>
-                    <a href="#"></a>
                   </div>
                 </div>
               </div>

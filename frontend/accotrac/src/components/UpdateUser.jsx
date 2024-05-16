@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
+import baseUrl from '../utils/settings';
 
 
 axios.defaults.withCredentials = true;
@@ -29,15 +30,12 @@ const UpdateUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.put(`http://localhost:5000/user/${user.id}`, data);
-          console.log(response)
+          const response = await axios.put(`${baseUrl}/user/${user.id}`, data);
           if (response.status === 200) {
             toast.success("Success updating user information");
             setData(response.data);
             setUser(response.data);
-            console.log('user',user);
           } else {
-            console.log(response.data);
             throw new Error(response.data.message)
           }
         } catch (error) {
@@ -51,14 +49,14 @@ const UpdateUser = () => {
           setData(user);
         }
       };
-      
+
     // fuction to handle delete of an account by id
     const handleDelete = async () => {
-      try { 
-          const response = await axios.delete(`http://localhost:5000/user/${data.id}`);
+      try {
+          const response = await axios.delete(`${baseUrl}/user/${data.id}`);
 
           if (response.status === 200) {
-              toast.success("Success deleting account");
+              toast.success("Success deleting User");
               setUser(null);
               setCompany(null);
               navigate('/home');
@@ -67,12 +65,12 @@ const UpdateUser = () => {
               throw new Error(response.data.response);
           }
       } catch (error) {
-          console.error('Error deleting account:', error);
+          console.error('Error deleting User:', error);
           if (error.response && error.response.data) {
-              toast.error('Error deleting account: ' + error.response.data.response);
+              toast.error('Error deleting User: ' + error.response.data.response);
           }
           else {
-              toast.error('Error deleting account: ' + error);
+              toast.error('Error deleting User: ' + error);
           }
       }
       handleClose();

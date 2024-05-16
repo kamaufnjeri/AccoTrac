@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { toast } from 'react-toastify';
 
 axios.defaults.withCredentials = true;
 function ResetPassword() {
+  const navigate = useNavigate()
   // access token from url to use to login user
   const { token } = useParams();
-  // initialize data to be inpput by user as empty
+  // initialize data to be input by user as empty
   const [data, setData] = useState({
     password: '',
     confirm_password: ''
@@ -17,14 +18,15 @@ function ResetPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:5000/resetpassword/${token}`, data);
+      const response = await axios.put(`https://accotrac.joelmuhoho.tech/api/resetpassword/${token}`, data);
       if (response && response.status === 200 && response.data) {
-        // on successfull reset password
+        // on successful reset password
         toast.success(response.data.message);
         setData({
           password: '',
           confirm_password: ''
         })
+        navigate('/login');
       } else {
         throw new Error(response.data.message);
       }
