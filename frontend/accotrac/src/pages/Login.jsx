@@ -66,8 +66,8 @@ const Login = () => {
           <UpperHeader />
         </div>
         <div className="container ">
-          <div className="row cdvfdfd">
-            <div className="col-lg-10 col-md-12 login-box">
+          <div className="row">
+            <div className="col-lg-10 col-md-12 login-box m-0 m-md-4">
               <div className="row">
                 <div className="col-lg-6 col-md-6 log-det">
                   <div className="small-logo">

@@ -52,8 +52,8 @@ const ForgotPassword = () => {
 
     <div className="container-fluid ">
       <div className="container ">
-        <div className="row cdvfdfd">
-          <div className="col-lg-10 col-md-12 login-box">
+        <div className="row">
+          <div className="col-lg-10 col-md-12 login-box m-0 m-md-4">
             <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-lg-6 col-md-6 log-det">
