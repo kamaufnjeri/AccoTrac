@@ -24,7 +24,7 @@ const JournalEntries = () => {
     }, [setTransactions])
 
   return (
-    <div className='container m-3'>
+    <div className='container'>
         <TransactionTable transactions={transactions} company={company}/>
     </div>
   )
