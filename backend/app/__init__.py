@@ -18,9 +18,9 @@ app = Flask(__name__)
 
 app.config.from_object(Config)
 db = SQLAlchemy(app)
-# cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost"]}}, supports_credentials=True)
+cors = CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost"]}}, supports_credentials=True)
 # cors = CORS(app, resources={r"/protected": {"origins": "http://164.92.99.231"}})
-cors = CORS(app)
+# cors = CORS(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 
