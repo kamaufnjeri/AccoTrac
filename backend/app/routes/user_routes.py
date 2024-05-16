@@ -7,8 +7,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from typing import Tuple, Union
 from app.models import User
 
-
 user_bp = Blueprint('user_bp', __name__)
+
 @user_bp.route('/', methods=['GET', 'POST'], strict_slashes=False)
 def home():
     return('<h1> AccoTrac Coming soon</h1>')
@@ -51,7 +51,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
         if code != 201:
             message = {"message": message}
             return jsonify(message), code
-        url = 'http://localhost:3000/user/verifyemail/' + token
+        url_verify_email = request.url_root + 'user/verifyemail/'
         try:
             resp_msg, status = send_email('[AccoTrac] Verify Your Email',
                 sender=app.config['ADMINS'],
@@ -59,7 +59,7 @@ def create_user() -> Union[jsonify, Tuple[dict, int]]:
                 text_body=f"""
                 Dear {firstname},
                 Click on the Link below to verify your email
-                {url}
+                {url_verify_email + token}
                 Sincerely,
                 The Accotrac Team
                 """)
@@ -143,35 +143,36 @@ def login()-> Union[jsonify, Tuple[dict, int]]:
             error = user
             message = {'message': error}
             return jsonify(message), code
-        if user.valid_email == True:
-            login_user(user)
-            message = {'message': 'Logged in Successfully',
+        login_user(user)
+        message = {'message': 'Logged in Successfully',
                     'is_authenticated': f'{user.is_authenticated}',
                         'user': user.to_dict(user.is_authenticated)}
-            return jsonify(message), code
-        else:
-            token, message, token_code= create_token(email=email)
-            if token_code != 201:
-                message = {"message": message}
-                return jsonify(message), code
-            url = 'http://localhost:3000/user/verifyemail/' + token
-            resp_msg, status = send_email('[AccoTrac] Verify Your Email',
-                sender=app.config['ADMINS'],
-                recipients=[email],
-                text_body=f"""
-                Dear {user.firstname},
-                Click on the Link below to verify your email
-                {url}
-                Sincerely,
-                The Accotrac Team
-                """)
-            if status == True:
-                message = {"message": "Check your email for a link to verify your email",
-                        "user": user.to_dict(user.is_authenticated)}
-                return jsonify(message), 400
-            else:
-                raise ValueError(resp_msg)
-            return jsonify(message), 400
+        return jsonify(message), code
+        # if user.valid_email == True:
+        # else:
+        #     token, message, token_code= create_token(email=email)
+        #     if token_code != 201:
+        #         message = {"message": message}
+        #         return jsonify(message), code
+            # url_verify_email = request.url_root + 'user/verifyemail/'
+        #     resp_msg, status = send_email('[AccoTrac] Verify Your Email',
+        #         sender=app.config['ADMINS'],
+        #         recipients=[email],
+        #         text_body=f"""
+        #         Dear {user.firstname},
+        #         Click on the Link below to verify your email
+        #         {url_verify_email + token}
+        #
+        #         Sincerely,
+        #         The Accotrac Team
+        #         """)
+        #     if status == True:
+        #         message = {"message": "Check your email for a link to verify your email",
+        #                 "user": user.to_dict(user.is_authenticated)}
+        #         return jsonify(message), 400
+        #     else:
+        #         raise ValueError(resp_msg)
+        #     return jsonify(message), 400
     elif request.method == 'GET':
         message = {"Message": "Login Page coming soon"}
         return (jsonify(message), 200)
@@ -247,14 +248,14 @@ def forgot_password():
             }
             return jsonify(message), 400
         token, message, code = create_token(user_email=user.email)
-        url = url = 'http://localhost:3000/user/resetpassword/' + token
+        url_reset_password = request.url_root + 'user/resetpassword/'
         send_email('[AccoTrac] Reset Your Password',
                     sender=app.config['ADMINS'],
                recipients=[user.email],
                text_body=f"""
                Dear {user.firstname},
                To reset your password click on the following link:
-               {url}
+               {url_reset_password + token}
                If you have not requested a password reset simply ignore this message.
                Sincerely,
                The Accotrac Team
@@ -280,7 +281,7 @@ def reset_password(token:str):
                 message = {"message": f"{field} is required"}
                 return jsonify(message), 400
         password = data.get('password')
-       
+
         confirm_password = data.get('confirm_password')
         if password != confirm_password:
             message = {"message": "password must match with confirm password"}
@@ -366,10 +367,7 @@ def add_selected_organization(company_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": str(e)}), 500
-<<<<<<< HEAD
 
-=======
-    
 @user_bp.route('/user/<admin_id>', methods=['DELETE'], strict_slashes=False)
 @login_required
 def delete_user(admin_id:str) -> Union[jsonify, Tuple[dict, int]]:
@@ -390,4 +388,3 @@ def delete_user(admin_id:str) -> Union[jsonify, Tuple[dict, int]]:
             result, code = delete_userinfo(admin_user_id=admin_id, user_id=user_id)
             message = {"Message": result}
             return jsonify(message), code
->>>>>>> main

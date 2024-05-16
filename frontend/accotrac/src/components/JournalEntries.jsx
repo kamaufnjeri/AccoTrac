@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import TransactionTable from './TransactionTable';
 import { UserContext } from './UserContext';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 const JournalEntries = () => {
@@ -13,8 +14,7 @@ const JournalEntries = () => {
     useEffect(() => {
         const fetchTransactions = async() => {
             try {
-                const response = await axios.get('api/alltransactions')
-                console.log(response)
+                const response = await axios.get(`${baseUrl}/alltransactions`)
                 setTransactions(response.data)
             } catch (error) {
                 console.log(error)
@@ -22,7 +22,7 @@ const JournalEntries = () => {
         }
         fetchTransactions();
     }, [setTransactions])
-    
+
   return (
     <div className='container m-3'>
         <TransactionTable transactions={transactions} company={company}/>

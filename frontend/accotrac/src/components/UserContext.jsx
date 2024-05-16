@@ -14,7 +14,7 @@ const UserProvider = ({ children }) => {
     const fetchUserData = async () => {
       // fetch from protected route to ensure user is authenticated and to set user and company
       try {
-        setIsLoading(true); 
+        setIsLoading(true);
         const response = await RequestHandler.handleGetRequest('/protected');
         setUser(response.response);
         setCompany(response.response.selected_company);
@@ -22,6 +22,7 @@ const UserProvider = ({ children }) => {
       } catch (error) {
         setError(error);
         setIsLoading(false);
+        console.log(error);
       }
     };
 

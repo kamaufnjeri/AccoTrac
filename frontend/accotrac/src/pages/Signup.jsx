@@ -5,6 +5,7 @@ import axios from 'axios';
 import UpperHeader from '../components/UpperHeader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import baseUrl from '../utils/settings';
 
 const Signup = () => {
   // initialize the confirm password  and data to be input as empty
@@ -27,7 +28,8 @@ const Signup = () => {
 
     else {
       try {
-        const response = await axios.post('api/user', data);
+        // send data and post it
+        const response = await axios.post(`${baseUrl}/user`, data);
 
         if (response.status === 201) {
           if (response.data.result) {

@@ -6,9 +6,11 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { UserContext } from '../components/UserContext';
 import axios from 'axios';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 const Login = () => {
+
   // initialize variables to be used for login user
   const navigate = useNavigate();
   const { setUser, setCompany } = useContext(UserContext);
@@ -22,7 +24,8 @@ const Login = () => {
     event.preventDefault();
     if (data) {
       try {
-        const response = await axios.post('api/login', data);
+        // post the data to login user
+        const response = await axios.post(`${baseUrl}/login`, data);
         if (response && response.status === 200 && response.data) {
           const user = response.data.user;
           // set user and company componets on successfull login

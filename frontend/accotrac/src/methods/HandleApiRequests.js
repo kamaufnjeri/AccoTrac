@@ -1,8 +1,9 @@
 import axios from "axios";
+import baseUrl from "../utils/settings";
 
 axios.defaults.withCredentials = true;
 
-const URL = "api";
+const URL = baseUrl;
 
 class RequestHandler {
   // function to get data fom backend using axios
@@ -36,10 +37,9 @@ class RequestHandler {
     return axios
       .post(postUrl, data)
       .then((response) => {
-        console.log(response);
         if (
           response.data &&
-          (response.status === 201 || response.status == 200)
+          (response.status === 201 || response.status === 200)
         ) {
           return response.data;
         } else {

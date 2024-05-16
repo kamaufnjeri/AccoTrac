@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import baseUrl from '../utils/settings';
 
 const AddAccountForm = () => {
   // using useState to manage information entered to the forms for creating account
@@ -23,9 +24,9 @@ const AddAccountForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('api/createaccount', formData, { withCredentials: true });
+      // using axios to post to the backend
+      const response = await axios.post(`${baseUrl}/createaccount`, formData, { withCredentials: true });
       if (response.status === 201) {
-        console.log(response.data);
         toast.success("Success creating account");
         setFormData({
           name: '',
@@ -33,7 +34,6 @@ const AddAccountForm = () => {
           sub_category: '',
         });
       } else {
-        console.log(response.data);
         throw new Error(response.data.response)
       }
     } catch (error) {
@@ -41,6 +41,7 @@ const AddAccountForm = () => {
         toast.error("Error adding account: " + error.response.data.response);
       }
       toast.error("Error adding account: " + error);
+      console.log(error);
     }
   };
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
-
 const VerifyEmail = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
@@ -15,7 +15,7 @@ const VerifyEmail = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const response = await axios.get(`api/user/verifyemail/${token}`);
+        const response = await axios.get(`${baseUrl}/user/verifyemail/${token}`);
         if (response && response.status === 200 && response.data) {
           setMessage(response.data.message);
 

@@ -3,6 +3,7 @@ import JournalRow from './JournalRow'; // Import the JournalRow component
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { UserContext } from './UserContext';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true
 const GeneralJournal = () => {
@@ -63,7 +64,6 @@ const GeneralJournal = () => {
 
     setEntries(updatedEntries);
     setData({...data, entries: updatedEntries});
-    console.log(data);
     calculateTotals(updatedEntries);
   };
 
@@ -87,12 +87,11 @@ const GeneralJournal = () => {
   // submitting data to post to the backend
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(data);
     setData({...data, entries: entries});
     if (data && difference === 0) {
       try {
 
-        const response = await axios.post('api/addtransaction', data);
+        const response = await axios.post(`${baseUrl}/addtransaction`, data);
         if (response.status === 201) {
           toast.success(response.data.message);
           setData({

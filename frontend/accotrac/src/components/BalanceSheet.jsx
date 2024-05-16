@@ -1,11 +1,12 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
 const BalanceSheet = () => {
-    // using useContext and useState to manage all information needed for the 
+    // using useContext and useState to manage all information needed for the
     const [balanceSheet, setBalanceSheet] = useState(null);
     const { company } = useContext(UserContext);
     const currentDate = new Date().toISOString().split('T')[0];
@@ -18,7 +19,7 @@ const BalanceSheet = () => {
     useEffect(() => {
         const fetchBalanceSheet = async () => {
             try {
-                const response = await axios.get('api/balancesheet');
+                const response = await axios.get(`${baseUrl}/balancesheet`);
                 const groupedBalanceSheet = groupByCategory(response.data);
                 setBalanceSheet(groupedBalanceSheet);
 
@@ -48,7 +49,6 @@ const BalanceSheet = () => {
 
             // getting the total liabilities and equity
             setTotalLiabilitiesAndEquity(totalLiabilities + totalEquity);
-            console.log(totalLiabilitiesAndEquity)
         }
     }, [balanceSheet]);
 

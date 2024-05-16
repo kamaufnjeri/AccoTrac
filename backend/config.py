@@ -19,6 +19,4 @@ class Config(object):
     MAIL_MAX_EMAILS = None  # Optional: specify the maximum number of emails to send in a single connection
     MAIL_USE_SSL = False
     ADMINS = os.getenv('ADMINS')
-    MAIL_DEFAULT_SENDER = 'AccoTrac@outlook.com'  # Specify the default sender email address
-    MAIL_MAX_EMAILS = None  # Optional: specify the maximum number of emails to send in a single connection
-    MAIL_USE_SSL = False
+    ENVIRONMENT = os.getenv('ENVIRONMENT')

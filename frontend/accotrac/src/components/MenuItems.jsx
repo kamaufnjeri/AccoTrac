@@ -1,19 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
+import baseUrl from '../utils/settings';
 
 const MenuItems = () => {
     // get data for use by the component
     const navigate = useNavigate();
-    const { setCompany, setUser, user, company } = useContext(UserContext);
+    const { setCompany, setUser, user } = useContext(UserContext);
 
     // onclick signout button logout user and set company and user to null
     const logoutUser = async () => {
         try {
-            const response = await axios.post('api/logout');
-            console.log(response.data);
+            const response = await axios.post(`${baseUrl}/logout`);
             if (response.status === 200) {
                 toast.success(`${response.data.message} ${response.data.userEmail}`);
                 setUser(null);
@@ -28,6 +28,7 @@ const MenuItems = () => {
             } else {
                 toast.error('Error logging out: ' + error);
             }
+            console.log(error);
         }
     };
 

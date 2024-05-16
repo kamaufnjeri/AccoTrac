@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserContext';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
@@ -23,7 +24,7 @@ const ProfitLoss = () => {
   useEffect(() => {
     const fetchProfitLoss = async () => {
       try {
-        const response = await axios.get('api/profitloss');
+        const response = await axios.get(`${baseUrl}/profitloss`);
         const accounts = response.data;
 
         // Filter revenue and expense accounts
@@ -51,7 +52,6 @@ const ProfitLoss = () => {
 
         // total cogs
         const totalCogs = cogs.reduce((acc, curr) => acc + curr.balance, 0);
-        console.log(totalCogs);
         setTotalCogs(prevState => ({ ...prevState, cogs: totalCogs }));
 
         const grossProfit = totalSales - totalCogs;

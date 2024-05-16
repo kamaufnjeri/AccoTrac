@@ -6,6 +6,7 @@ import { UserContext } from './UserContext';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import baseUrl from '../utils/settings';
 
 axios.defaults.withCredentials = true;
 
@@ -18,14 +19,11 @@ function CollapsibleMenu() {
   // fuction to logout a user
   const logoutUser = async () => {
     try {
-      const response = await axios.post('api/logout');
-      console.log(response.data);
+      const response = await axios.post(`${baseUrl}/logout`);
       if (response.status === 200) {
         toast.success(`${response.data.message} ${response.data.userEmail}`);
         setUser(null);
         setCompany(null);
-        console.log(user);
-        console.log(company);
         navigate('/home');
       } else {
         toast.error(response.data.message);
@@ -36,6 +34,7 @@ function CollapsibleMenu() {
       } else {
         toast.error('Error logging out: ' + error);
       }
+      console.log(error);
     }
   };
 
