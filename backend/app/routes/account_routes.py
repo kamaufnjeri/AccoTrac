@@ -13,10 +13,10 @@ def create_account():
     data = request.get_json()
     if not data:
         return "", 204
-    
+
     else:
         resp_item, code = account_controllers.create_account(
-            current_user.selected_company_id, 
+            current_user.selected_company_id,
             current_user.id,
             data
         )
@@ -55,7 +55,7 @@ def get_account(account_id):
 def delete_account(account_id):
     """route to delete an account"""
     resp_item, code = account_controllers.delete_account(
-        company_id=current_user.selected_company_id, 
+        company_id=current_user.selected_company_id,
         account_id=account_id
     )
     return jsonify({"response": resp_item}), code
