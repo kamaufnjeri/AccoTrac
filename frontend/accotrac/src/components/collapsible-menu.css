@@ -1,0 +1,25 @@
+.collapsible-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.btn-close-menu {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.collapsed-menu {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  transition: left 0.3s ease;
+  z-index: 100;
+}
+
+.collapsed-menu.active {
+  left: 0;
+}
