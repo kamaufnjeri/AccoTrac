@@ -8,10 +8,15 @@ import Footer from '../components/Footer'
 import fetchProtectedData from '../utils/protected';
 
 
+/**
+ * Renders the Trial Balance page.
+ *
+ * @return {JSX.Element} The rendered Trial Balance page.
+ */
 const TrialBalancePage = () => {
     const navigate = useNavigate();
 
-    // useEfect to ensure that user is authenticated to access this page
+    // useEffect to ensure that user is authenticated to access this page
     useEffect(() => {
       fetchProtectedData();
     }, [navigate]);
