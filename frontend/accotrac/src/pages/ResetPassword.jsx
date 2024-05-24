@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { toast } from 'react-toastify';
@@ -34,7 +36,7 @@ function ResetPassword() {
       if (error.response && error.response.data) {
         toast.error(error.response.data.message)
       } else {
-        toast.error("Unxepected error: ", error.message);
+        toast.error("Unexpected error: ", error.message);
       }
       console.error(error);
     }
@@ -42,17 +44,32 @@ function ResetPassword() {
 
 
   return (
-    <div className="container-fluid d-flex align-items-center justify-content-center vh-100">
-      <div className="container">
+    <div><>
+    <meta charSet="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Reset Password</title>
+    <link rel="shortcut icon" href="assets/images/logo.jpg" />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <Header/>
+
+    <div className="container-fluid ">
+      <div className="container ">
         <div className="row">
-          <div className="col-lg-10 col-md-12 login-box">
+          <div className="col-lg-10 col-md-12 login-box m-0 m-md-4">
+            <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-lg-6 col-md-6 log-det">
-                <div className="small-logo text-center mb-4">
-                  <i className="fab fa-asymmetrik" /> Enter New Password
+                <div className="small-logo">
+                  <i className="fab fa-asymmetrik" /> Reset Password
                 </div>
-                <form onSubmit={handleSubmit}>
-                  <div className="text-box-cont m-2">
+                <div className="text-box-cont">
+                  <div className="input-group mb-3">
+                    <div>
                     <input
                       type="password"
                       className="form-control"
@@ -63,9 +80,9 @@ function ResetPassword() {
                       onChange={(e) => setData({ ...data, password: e.target.value })}
                       required
                     />
-                  </div>
-                  <div className="text-box-cont m-2">
-                    <input
+                    </div>
+                    <div>
+                     <input
                       type="password"
                       className="form-control"
                       placeholder="Confirm New Password"
@@ -75,29 +92,47 @@ function ResetPassword() {
                       onChange={(e) => setData({ ...data, confirm_password: e.target.value })}
                       required
                     />
+                    </div>
                   </div>
-                  <div className="input-group d-flex justify-content-center m-2">
-                    <button type="submit" className="btn btn-danger btn-round">
+                  <div className="input-group center">
+                  <button type="submit" className="btn btn-danger btn-round">
                       RESET PASSWORD
                     </button>
                   </div>
-                </form> {/* Move the closing tag here */}
-                <div className="row mt-3">
-                  <p className="forget-p text-center">
+                  <div className="row">
+                    <p className="forget-p">
                     To go back{" "}
-                    <span>
+                      <span>
                       <Link className="signup" to="/login">
                         Click Here!
                       </Link>
-                    </span>
-                  </p>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 col-md-6 box-de">
+                <div className="inn-cover">
+                  <div className="ditk-inf">
+                    <div className="small-logo">
+                      <i className="fab fa-asymmetrik" /> AccoTrac
+                    </div>
+                    <p>
+                      AccoTrac is your one stop shop for managing your finances
+                      and making your accounts healthy.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
+  </>
+  <Footer/>
+  </div>
   );
 }
 
