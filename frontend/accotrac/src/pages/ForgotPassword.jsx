@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     email: ''
   });
 
-  // fuction to submit data input by user i.e email to send link
+  // function to submit data input by user i.e email to send link
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -43,7 +43,7 @@ const ForgotPassword = () => {
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Reset Password</title>
+    <title>Forgot Password</title>
     <link rel="shortcut icon" href="assets/images/logo.jpg" />
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/fontawsom-all.min.css" />
