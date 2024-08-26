@@ -15,7 +15,6 @@ def register_user(firstname: str, lastname:str, user_email:str, password:str, co
         user = User(firstname=firstname, lastname=lastname, email=user_email, valid_email=False)
         user.set_password(password)
         db.session.add(user)
-        
         resp_item, comp_code = create_new_company(company_name=company_name,
                                            company_email=None,
                                            company_country=None,
@@ -69,24 +68,23 @@ def update_userinfo(user: User, data: dict) -> Tuple[Union[str, User], int]:
     """
     try:
         password = data.get('password', None)
-        print(password)
         if password:
             user.set_password(password)
             db.session.commit()
             return (user, 200)
         else:
             if not all(key in data for key in ['firstname', 'lastname', 'email']):
-                raise ValueError('Fields firstname, lastname and email are required') 
+                raise ValueError('Fields firstname, lastname and email are required')
             user_email = User.query.filter_by(email=data.get('email')).first()
             if user_email and user_email.id != user.id:
                 raise ValueError(f"User with email {data.get('email')} already exists")
-            
+
             user.firstname = data.get('firstname')
             user.lastname = data.get('lastname')
             user.email = data.get('email')
             db.session.commit()
             return (user, 200)
-        
+
     except ValueError as e:
         db.session.rollback()
         return (str(e), 400)
@@ -118,4 +116,4 @@ def delete_userinfo(admin_user_id: str, user_id:str) -> Tuple[str, int]:
     except Exception as error:
         db.session.rollback()
         return str(error), 400
-    
+
