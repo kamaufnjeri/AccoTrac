@@ -316,6 +316,55 @@ def reset_password(token:str):
         message = {"message": "Change your password page coming up soon"}
         return jsonify(message), 200
 
+@user_bp.route('/user/<user_id>/change-password', methods=['PUT'])
+@login_required
+def change_password(user_id):
+    """
+    Change the password for a user.
+
+    This function updates the password for a user with the given user_id. The current user must be making the request.
+    The request body must contain the old password and the new password.
+
+    Parameters:
+    - user_id (str): The ID of the user whose password is being changed.
+
+    Returns:
+    - response (tuple): A tuple containing the JSON response and the HTTP status code.
+        - response (dict): The JSON response containing the message and error (if any).
+        - status_code (int): The HTTP status code.
+
+    Raises:
+    - 400: If the request body is missing the old password or the new password.
+    - 403: If the current user is not authorized to change the password.
+    - 200: If the password is successfully updated.
+    """
+    # Verify that the current user is making the request
+    if current_user.id != user_id:
+        return jsonify({"message": "Unauthorized"}), 403
+    # Get the JSON data from the request
+    data = request.json
+    old_password = data.get('oldPassword')
+    new_password = data.get('newPassword')
+
+    if not old_password or not new_password:
+        return jsonify({"message": "Old and new passwords are required"}), 400
+
+    # Fetch the user from the database
+    user, code = get_user(user_email=current_user.email, password=old_password)
+    if code != 200:
+        error = user
+        message = {"message": error,
+                   "Error": error}
+        return jsonify(message), code
+    new_data = {"password": new_password}
+    user, code = update_userinfo(user, new_data)
+    if code != 200:
+        error = user
+        message = {"message": error,
+                       "Error": error}
+        return jsonify(message), code
+    return jsonify({"message": "Password updated successfully"}), 200
+
 @user_bp.route('/company/<company_id>', methods=['PUT'], strict_slashes=False)
 @login_required
 def update_company(company_id:str) -> Union[jsonify, Tuple[dict, int]]:
