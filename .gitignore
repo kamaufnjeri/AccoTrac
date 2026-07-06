@@ -1,1 +1,25 @@
+# ide files
+.idea/
+.vscode/
 
+# python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# virtual environment
+venv/
+env/
+*.egg-info/
+.venv/
+.env
+.envrc
+
+# database files
+*.sqlite3
+*.db
+*.db-journal
+
+weekly_journal/*
+accotracServer/*
