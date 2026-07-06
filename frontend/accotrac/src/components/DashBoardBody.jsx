@@ -19,7 +19,8 @@ const DashBoardBody = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/dashboard`);
+        const response = await axios.get('/dashboard');
+        // const response = await axios.get(`${baseUrl}/dashboard`);
         if (response.status === 200) {
           if (response.data) {
             setData(response.data);
