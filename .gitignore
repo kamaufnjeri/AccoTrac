@@ -20,7 +20,16 @@ env/
 *.sqlite3
 *.db
 *.db-journal
+*.db~*
 
+# project files
 weekly_journal/*
 accotracServer/*
+
+# archives
 *.zip
+*.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
